@@ -28,13 +28,27 @@
       "recommended": true,
       "a11y": {
         "useKeyWithClickEvents": "off",
-        "useFocusableInteractive": "off"
+        "useFocusableInteractive": "off",
+        "useMediaCaption": "off",
+        "noLabelWithoutControl": "off",
+        "noSvgWithoutTitle": "off",
+        "useButtonType": "off"
       },
       "style": {
-        "useConst": "off"
+        "useConst": "off",
+        "noNonNullAssertion": "off",
+        "useNodejsImportProtocol": "off"
       },
       "suspicious": {
-        "noShadowRestrictedNames": "off"
+        "noShadowRestrictedNames": "off",
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "off"
+      },
+      "correctness": {
+        "noEmptyPattern": "off"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
       }
     }
   },

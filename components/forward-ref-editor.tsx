@@ -1,12 +1,12 @@
-"use client";
+'use client'
 
-import type { MDXEditorMethods, MDXEditorProps } from "@mdxeditor/editor";
-import dynamic from "next/dynamic";
-import { forwardRef } from "react";
+import type { MDXEditorMethods, MDXEditorProps } from '@mdxeditor/editor'
+import dynamic from 'next/dynamic'
+import { forwardRef } from 'react'
 
-const Editor = dynamic(() => import("./InitializedMDXEditor"), {
+const Editor = dynamic(() => import('./initialized-mdx-editor'), {
   ssr: false,
-});
+})
 
 // Wrap the dynamically loaded editor in a stable container so the
 // page doesn't shift when the editor JS bundles load. The container
@@ -15,18 +15,19 @@ const Editor = dynamic(() => import("./InitializedMDXEditor"), {
 export const ForwardRefEditor = forwardRef<MDXEditorMethods, MDXEditorProps>(
   (props, ref) => {
     const { className, ...rest } = props as MDXEditorProps & {
-      className?: string;
-    };
+      className?: string
+    }
 
     return (
       <div
-        className={className ?? "min-h-[600px]"}
+        className={className ?? 'min-h-[600px]'}
         aria-busy={true}
-        aria-live='polite'>
+        aria-live="polite"
+      >
         <Editor {...(rest as MDXEditorProps)} editorRef={ref} />
       </div>
-    );
-  }
-);
+    )
+  },
+)
 
-ForwardRefEditor.displayName = "ForwardRefEditor";
+ForwardRefEditor.displayName = 'ForwardRefEditor'

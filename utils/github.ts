@@ -1,67 +1,37 @@
-import { type GraphQlQueryResponseData, graphql } from "@octokit/graphql";
+import { type GraphQlQueryResponseData, graphql } from '@octokit/graphql'
 import type {
   GithubCommitActivity,
   GithubPullRequestActivity,
   GithubRepository,
   GithubUserActivity,
-} from "~/types/data";
-
-const HISTORY_QUERY = `
-  defaultBranchRef {
-    target {
-      ... on Comm    return {
-      commits: commits.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      ).slice(0, 5),
-      pullRequest,
-    };      history(first: 1) {
-          edges {
-            node {
-              ... on Commit {
-                id
-                abbreviatedOid
-                committedDate
-                message
-                url
-                status {
-                  state
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
+} from '~/types/data'
 
 export async function fetchRepoData({
-  repo = "",
+  repo = '',
   includeLastCommit = false,
 }: {
-  repo: string;
-  includeLastCommit?: boolean;
+  repo: string
+  includeLastCommit?: boolean
 }): Promise<GithubRepository | null> {
   if (!process.env.GITHUB_API_TOKEN || !repo) {
-    console.error("Missing `GITHUB_API_TOKEN` or `repo`");
-    return null;
+    console.error('Missing `GITHUB_API_TOKEN` or `repo`')
+    return null
   }
 
   // Parse the GitHub URL to extract owner and repo
-  let owner: string;
-  let repoName: string;
+  let owner: string
+  let repoName: string
   try {
-    const url = new URL(repo);
-    const pathParts = url.pathname.split("/").filter(Boolean);
+    const url = new URL(repo)
+    const pathParts = url.pathname.split('/').filter(Boolean)
     if (pathParts.length < 2) {
-      throw new Error("Invalid GitHub URL");
+      throw new Error('Invalid GitHub URL')
     }
-    owner = pathParts[0];
-    repoName = pathParts[1];
+    owner = pathParts[0]
+    repoName = pathParts[1]
   } catch (error) {
-    console.error("Failed to parse repo URL:", error);
-    return null;
+    console.error('Failed to parse repo URL:', error)
+    return null
   }
 
   try {
@@ -129,26 +99,26 @@ export async function fetchRepoData({
         headers: {
           authorization: `token ${process.env.GITHUB_API_TOKEN}`,
         },
-      }
-    );
+      },
+    )
     if (includeLastCommit) {
       repository.lastCommit =
-        repository.defaultBranchRef?.target?.history?.edges?.[0]?.node;
-      repository.defaultBranchRef = undefined;
+        repository.defaultBranchRef?.target?.history?.edges?.[0]?.node
+      repository.defaultBranchRef = undefined
     }
     repository.languages = repository.languages.edges.map((edge) => {
       return {
         color: edge.node.color,
         name: edge.node.name,
-      };
-    });
+      }
+    })
     repository.repositoryTopics = repository.repositoryTopics.edges.map(
-      (edge) => edge.node.topic.name
-    );
-    return repository;
+      (edge) => edge.node.topic.name,
+    )
+    return repository
   } catch (err) {
-    console.error(err);
-    return null;
+    console.error(err)
+    return null
   }
 }
 
@@ -158,16 +128,16 @@ export async function fetchRepoData({
 export async function fetchGithubUserActivities({
   username,
 }: {
-  username?: string;
+  username?: string
 }): Promise<GithubUserActivity | null> {
   if (!username) {
-    console.error("Username is required to fetch user activities");
-    return null;
+    console.error('Username is required to fetch user activities')
+    return null
   }
 
   if (!process.env.GITHUB_API_TOKEN) {
-    console.error("Missing `GITHUB_API_TOKEN`");
-    return null;
+    console.error('Missing `GITHUB_API_TOKEN`')
+    return null
   }
 
   try {
@@ -252,19 +222,19 @@ export async function fetchGithubUserActivities({
         headers: {
           authorization: `token ${process.env.GITHUB_API_TOKEN}`,
         },
-      }
-    );
+      },
+    )
 
-    let pullRequest: GithubPullRequestActivity | null = null;
+    let pullRequest: GithubPullRequestActivity | null = null
 
     // Process pull requests
     if (user?.pullRequests?.edges && user.pullRequests.edges.length > 0) {
       for (let prEdge of user.pullRequests.edges) {
-        let pr = prEdge.node;
+        let pr = prEdge.node
         // Only include PRs that are opened to repositories NOT owned by the user
         if (pr.repository.owner.login !== username) {
           pullRequest = {
-            type: "pullRequest",
+            type: 'pullRequest',
             createdAt: pr.createdAt,
             url: pr.url,
             title: pr.title,
@@ -280,31 +250,31 @@ export async function fetchGithubUserActivities({
                 url: pr.repository.owner.url,
               },
             },
-          };
-          break; // Only take the first (latest) PR to external repositories
+          }
+          break // Only take the first (latest) PR to external repositories
         }
       }
     }
 
     // Process commits
-    let commits: GithubCommitActivity[] = [];
+    let commits: GithubCommitActivity[] = []
     if (search?.edges) {
       for (let repoEdge of search.edges) {
-        let repo = repoEdge.node;
+        let repo = repoEdge.node
         if (repo.defaultBranchRef?.target?.history?.edges) {
           for (let commitEdge of repo.defaultBranchRef.target.history.edges) {
-            let commit = commitEdge.node;
+            let commit = commitEdge.node
             // Only include commits by the specified user and filter out merge commits
             if (
               commit.author?.user?.login === username &&
-              !/^Merge pull request/i.test(commit.message.split("\n")[0]) &&
-              !/^Merge branch/i.test(commit.message.split("\n")[0])
+              !/^Merge pull request/i.test(commit.message.split('\n')[0]) &&
+              !/^Merge branch/i.test(commit.message.split('\n')[0])
             ) {
               commits.push({
-                type: "commit",
+                type: 'commit',
                 createdAt: commit.committedDate,
                 url: commit.url,
-                title: commit.message.split("\n")[0], // Use first line of commit message as title
+                title: commit.message.split('\n')[0], // Use first line of commit message as title
                 message: commit.message,
                 abbreviatedOid: commit.abbreviatedOid,
                 repository: {
@@ -317,7 +287,7 @@ export async function fetchGithubUserActivities({
                     url: repo.owner.url,
                   },
                 },
-              });
+              })
             }
           }
         }
@@ -328,13 +298,13 @@ export async function fetchGithubUserActivities({
       commits: commits
         .sort(
           (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         )
         .slice(0, 5),
       pullRequest,
-    };
+    }
   } catch (err) {
-    console.error("Error fetching comprehensive user activity:", err);
-    return null;
+    console.error('Error fetching comprehensive user activity:', err)
+    return null
   }
 }

@@ -7,20 +7,10 @@
     "content": "# React Custom Hook for Local Storage\n\nThis custom hook provides a clean interface for working with localStorage in React applications.\n\n## Usage\n\n```javascript\nimport { useLocalStorage } from './useLocalStorage'\n\nfunction MyComponent() {\n  const [value, setValue] = useLocalStorage('myKey', 'defaultValue')\n  \n  return (\n    <div>\n      <input \n        value={value} \n        onChange={(e) => setValue(e.target.value)} \n      />\n    </div>\n  )\n}\n```\n\n## Implementation\n\n```javascript\nimport { useState, useEffect } from 'react'\n\nexport function useLocalStorage(key, initialValue) {\n  // Get from local storage then parse stored json or return initialValue\n  const [storedValue, setStoredValue] = useState(() => {\n    try {\n      const item = window.localStorage.getItem(key)\n      return item ? JSON.parse(item) : initialValue\n    } catch (error) {\n      console.error('Error reading localStorage key:', key, error)\n      return initialValue\n    }\n  })\n\n  // Return a wrapped version of useState's setter function that persists the new value to localStorage\n  const setValue = (value) => {\n    try {\n      // Allow value to be a function so we have the same API as useState\n      const valueToStore = value instanceof Function ? value(storedValue) : value\n      setStoredValue(valueToStore)\n      window.localStorage.setItem(key, JSON.stringify(valueToStore))\n    } catch (error) {\n      console.error('Error setting localStorage key:', key, error)\n    }\n  }\n\n  return [storedValue, setValue]\n}\n```\n\n## Features\n\n- Automatic JSON serialization/deserialization\n- Error handling for localStorage access\n- Same API as useState\n- TypeScript support\n- SSR safe (with Next.js)",
     "date": "2025-10-14T19:42:28.758Z",
     "lastmod": "2025-10-14T19:42:28.758Z",
-    "tags": [
-      "react",
-      "hooks",
-      "localStorage",
-      "javascript"
-    ],
-    "categories": [
-      "frontend",
-      "utilities"
-    ],
+    "tags": ["react", "hooks", "localStorage", "javascript"],
+    "categories": ["frontend", "utilities"],
     "images": [],
-    "authors": [
-      "Dana"
-    ],
+    "authors": ["Dana"],
     "draft": false,
     "featured": true,
     "layout": null,
@@ -39,20 +29,10 @@
     "content": "# Debounce Function in JavaScript\n\nA debounce function delays the execution of a function until after a specified time has passed since it was last invoked.\n\n## Usage\n\n```javascript\nimport { debounce } from './debounce'\n\n// Debounce a search function\nconst debouncedSearch = debounce((query) => {\n  console.log('Searching for:', query)\n  // Perform search API call\n}, 300)\n\n// Use in an input handler\ninput.addEventListener('input', (e) => {\n  debouncedSearch(e.target.value)\n})\n```\n\n## Implementation\n\n```javascript\nfunction debounce(func, wait, immediate = false) {\n  let timeout\n  \n  return function executedFunction(...args) {\n    const later = () => {\n      timeout = null\n      if (!immediate) func(...args)\n    }\n    \n    const callNow = immediate && !timeout\n    \n    clearTimeout(timeout)\n    timeout = setTimeout(later, wait)\n    \n    if (callNow) func(...args)\n  }\n}\n```\n\n## Advanced Usage with TypeScript\n\n```typescript\nfunction debounce<T extends (...args: any[]) => any>(\n  func: T,\n  wait: number,\n  immediate = false\n): (...args: Parameters<T>) => void {\n  let timeout: NodeJS.Timeout | null = null\n  \n  return function executedFunction(...args: Parameters<T>) {\n    const later = () => {\n      timeout = null\n      if (!immediate) func(...args)\n    }\n    \n    const callNow = immediate && !timeout\n    \n    if (timeout) clearTimeout(timeout)\n    timeout = setTimeout(later, wait)\n    \n    if (callNow) func(...args)\n  }\n}\n```\n\n## Use Cases\n\n- Search input fields\n- Window resize handlers\n- API call optimization\n- Button click prevention\n- Scroll event handlers",
     "date": "2025-10-14T19:42:28.960Z",
     "lastmod": "2025-10-14T19:42:28.960Z",
-    "tags": [
-      "javascript",
-      "utility",
-      "performance",
-      "typescript"
-    ],
-    "categories": [
-      "utilities",
-      "performance"
-    ],
+    "tags": ["javascript", "utility", "performance", "typescript"],
+    "categories": ["utilities", "performance"],
     "images": [],
-    "authors": [
-      "Dana"
-    ],
+    "authors": ["Dana"],
     "draft": false,
     "featured": false,
     "layout": null,
@@ -71,20 +51,10 @@
     "content": "# Tailwind CSS Dark Mode Toggle\n\nA complete dark mode implementation using Tailwind CSS with system preference detection and manual toggle.\n\n## Setup\n\nFirst, configure Tailwind CSS for dark mode in your tailwind.config.js:\n\n```javascript\nmodule.exports = {\n  darkMode: 'class', // Enable class-based dark mode\n  // ... rest of your config\n}\n```\n\n## React Hook for Dark Mode\n\n```javascript\nimport { useState, useEffect } from 'react'\n\nexport function useDarkMode() {\n  const [isDark, setIsDark] = useState(false)\n  \n  useEffect(() => {\n    // Check for saved theme preference or default to system preference\n    const savedTheme = localStorage.getItem('theme')\n    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches\n    \n    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {\n      setIsDark(true)\n      document.documentElement.classList.add('dark')\n    } else {\n      setIsDark(false)\n      document.documentElement.classList.remove('dark')\n    }\n  }, [])\n  \n  const toggleDarkMode = () => {\n    const newTheme = isDark ? 'light' : 'dark'\n    setIsDark(!isDark)\n    localStorage.setItem('theme', newTheme)\n    document.documentElement.classList.toggle('dark')\n  }\n  \n  return [isDark, toggleDarkMode]\n}\n```\n\n## Dark Mode Toggle Component\n\n```javascript\nimport { useDarkMode } from './useDarkMode'\n\nexport function DarkModeToggle() {\n  const [isDark, toggleDarkMode] = useDarkMode()\n  \n  return (\n    <button\n      onClick={toggleDarkMode}\n      className=\"p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors\"\n      aria-label=\"Toggle dark mode\"\n    >\n      {isDark ? (\n        <svg className=\"w-5 h-5 text-yellow-500\" fill=\"currentColor\" viewBox=\"0 0 20 20\">\n          <path fillRule=\"evenodd\" d=\"M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z\" clipRule=\"evenodd\" />\n        </svg>\n      ) : (\n        <svg className=\"w-5 h-5 text-gray-700\" fill=\"currentColor\" viewBox=\"0 0 20 20\">\n          <path d=\"M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z\" />\n        </svg>\n      )}\n    </button>\n  )\n}\n```\n\n## Features\n\n- System preference detection\n- Manual toggle override\n- Persistent theme storage\n- Smooth transitions\n- Accessible with proper ARIA labels\n- TypeScript support",
     "date": "2025-10-14T19:42:29.085Z",
     "lastmod": "2025-10-14T19:42:29.085Z",
-    "tags": [
-      "tailwind",
-      "dark-mode",
-      "react",
-      "css"
-    ],
-    "categories": [
-      "frontend",
-      "styling"
-    ],
+    "tags": ["tailwind", "dark-mode", "react", "css"],
+    "categories": ["frontend", "styling"],
     "images": [],
-    "authors": [
-      "Dana"
-    ],
+    "authors": ["Dana"],
     "draft": false,
     "featured": true,
     "layout": null,

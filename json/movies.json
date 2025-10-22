@@ -7,21 +7,13 @@
     "content": "<p>The Boondocks follows the Freeman family as they move from Chicago to the predominantly white suburb of Woodcrest.</p>",
     "date": "2005-11-06T00:00:00.000Z",
     "lastmod": "2025-10-21T13:40:07.895Z",
-    "tags": [
-      "Action & Adventure",
-      "Comedy",
-      "Animation"
-    ],
-    "categories": [
-      "tv"
-    ],
+    "tags": ["Action & Adventure", "Comedy", "Animation"],
+    "categories": ["tv"],
     "images": [
       "https://image.tmdb.org/t/p/w500/vAvT2RXjOpgH0COriRm9riPqA0m.jpg",
       "https://image.tmdb.org/t/p/w500/9bbUjObvMGTCzXaKZFypflVVjNW.jpg"
     ],
-    "authors": [
-      "Aaron McGruder"
-    ],
+    "authors": ["Aaron McGruder"],
     "draft": false,
     "featured": false,
     "layout": "MovieLayout",
@@ -59,17 +51,12 @@
       "Comedy",
       "Romance"
     ],
-    "categories": [
-      "film"
-    ],
+    "categories": ["film"],
     "images": [
       "https://image.tmdb.org/t/p/w500/dK9rNoC97tgX3xXg5zdxFisdfcp.jpg",
       "https://image.tmdb.org/t/p/w500/oG9dcGSSu13fjFp1Uly15ZXjRKV.jpg"
     ],
-    "authors": [
-      "Ron Clements",
-      "John Musker"
-    ],
+    "authors": ["Ron Clements", "John Musker"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",
@@ -99,20 +86,13 @@
     "content": "<p>The Big Bang Theory follows the lives of four geeky scientists and their attractive neighbor Penny.</p>",
     "date": "2007-09-24T00:00:00.000Z",
     "lastmod": "2025-10-21T13:40:16.511Z",
-    "tags": [
-      "Comedy"
-    ],
-    "categories": [
-      "tv"
-    ],
+    "tags": ["Comedy"],
+    "categories": ["tv"],
     "images": [
       "https://image.tmdb.org/t/p/w500/ooBGRQBdbGzBxAVfExiO8r7kloA.jpg",
       "https://image.tmdb.org/t/p/w500/sccDflItNho4OiHkzpiDxB2fUFw.jpg"
     ],
-    "authors": [
-      "Chuck Lorre",
-      "Bill Prady"
-    ],
+    "authors": ["Chuck Lorre", "Bill Prady"],
     "draft": false,
     "featured": false,
     "layout": "MovieLayout",
@@ -142,20 +122,13 @@
     "content": "<p>This is a placeholder content for The Shawshank Redemption. Two imprisoned men bond over a number of years.</p>",
     "date": "1994-09-23T00:00:00.000Z",
     "lastmod": "2025-10-21T13:40:29.431Z",
-    "tags": [
-      "Drama",
-      "Crime"
-    ],
-    "categories": [
-      "film"
-    ],
+    "tags": ["Drama", "Crime"],
+    "categories": ["film"],
     "images": [
       "https://image.tmdb.org/t/p/w500/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg",
       "https://image.tmdb.org/t/p/w500/zfbjgQE1uSd9wiPTX4VzsLi0rGG.jpg"
     ],
-    "authors": [
-      "Frank Darabont"
-    ],
+    "authors": ["Frank Darabont"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",
@@ -185,22 +158,13 @@
     "content": "<p>Based on George R.R. Martin's novels, this epic fantasy series features political intrigue, war, and dragons.</p>",
     "date": "2011-04-17T00:00:00.000Z",
     "lastmod": "2025-10-21T13:40:40.296Z",
-    "tags": [
-      "Sci-Fi & Fantasy",
-      "Drama",
-      "Action & Adventure"
-    ],
-    "categories": [
-      "tv"
-    ],
+    "tags": ["Sci-Fi & Fantasy", "Drama", "Action & Adventure"],
+    "categories": ["tv"],
     "images": [
       "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
       "https://image.tmdb.org/t/p/w500/2OMB0ynKlyIenMJWI2Dy9IWT4c.jpg"
     ],
-    "authors": [
-      "David Benioff",
-      "D.B. Weiss"
-    ],
+    "authors": ["David Benioff", "D.B. Weiss"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",
@@ -230,20 +194,13 @@
     "content": "<p>The beloved sitcom follows Rachel, Ross, Monica, Chandler, Joey, and Phoebe through their twenties and thirties.</p>",
     "date": "1994-09-22T00:00:00.000Z",
     "lastmod": "2025-10-21T13:40:45.176Z",
-    "tags": [
-      "Comedy"
-    ],
-    "categories": [
-      "tv"
-    ],
+    "tags": ["Comedy"],
+    "categories": ["tv"],
     "images": [
       "https://image.tmdb.org/t/p/w500/2koX1xLkpTQM4IZebYvKysFW1Nh.jpg",
       "https://image.tmdb.org/t/p/w500/l0qVZIpXtIo7km9u5Yqh0nKPOr5.jpg"
     ],
-    "authors": [
-      "David Crane",
-      "Marta Kauffman"
-    ],
+    "authors": ["David Crane", "Marta Kauffman"],
     "draft": false,
     "featured": false,
     "layout": "MovieLayout",
@@ -273,23 +230,13 @@
     "content": "<p>Rick Sanchez and Morty Smith embark on interdimensional adventures filled with dark humor and sci-fi concepts.</p>",
     "date": "2013-12-02T00:00:00.000Z",
     "lastmod": "2025-10-21T13:40:53.653Z",
-    "tags": [
-      "Animation",
-      "Comedy",
-      "Sci-Fi & Fantasy",
-      "Action & Adventure"
-    ],
-    "categories": [
-      "tv"
-    ],
+    "tags": ["Animation", "Comedy", "Sci-Fi & Fantasy", "Action & Adventure"],
+    "categories": ["tv"],
     "images": [
       "https://image.tmdb.org/t/p/w500/WGRQ8FpjkDTzivQJ43t94bOuY0.jpg",
       "https://image.tmdb.org/t/p/w500/Ao5pBFuWY32cVuh6iYjEjZMEscN.jpg"
     ],
-    "authors": [
-      "Justin Roiland",
-      "Dan Harmon"
-    ],
+    "authors": ["Justin Roiland", "Dan Harmon"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",
@@ -319,21 +266,13 @@
     "content": "<p>Naruto Uzumaki's journey from outcast to hero in the world of ninjas, filled with action, friendship, and growth.</p>",
     "date": "2002-10-03T00:00:00.000Z",
     "lastmod": "2025-10-21T13:41:01.206Z",
-    "tags": [
-      "Animation",
-      "Action & Adventure",
-      "Sci-Fi & Fantasy"
-    ],
-    "categories": [
-      "tv"
-    ],
+    "tags": ["Animation", "Action & Adventure", "Sci-Fi & Fantasy"],
+    "categories": ["tv"],
     "images": [
       "https://image.tmdb.org/t/p/w500/xppeysfvDKVx775MFuH8Z9BlpMk.jpg",
       "https://image.tmdb.org/t/p/w500/xuJ0F9RfKvVSJNDg2usurQ9WvY5.jpg"
     ],
-    "authors": [
-      "Masashi Kishimoto"
-    ],
+    "authors": ["Masashi Kishimoto"],
     "draft": false,
     "featured": false,
     "layout": "MovieLayout",
@@ -363,21 +302,13 @@
     "content": "<p>Ichigo Kurosaki's adventures as a Soul Reaper, battling Hollows and protecting both the living and dead worlds.</p>",
     "date": "2004-10-05T00:00:00.000Z",
     "lastmod": "2025-10-21T13:41:06.699Z",
-    "tags": [
-      "Action & Adventure",
-      "Animation",
-      "Sci-Fi & Fantasy"
-    ],
-    "categories": [
-      "tv"
-    ],
+    "tags": ["Action & Adventure", "Animation", "Sci-Fi & Fantasy"],
+    "categories": ["tv"],
     "images": [
       "https://image.tmdb.org/t/p/w500/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg",
       "https://image.tmdb.org/t/p/w500/o0NsbcIvsllg6CJX0FBFY8wWbsn.jpg"
     ],
-    "authors": [
-      "Tite Kubo"
-    ],
+    "authors": ["Tite Kubo"],
     "draft": false,
     "featured": false,
     "layout": "MovieLayout",
@@ -407,20 +338,13 @@
     "content": "<p>Lucifer Morningstar leaves his throne in Hell to open a piano bar in LA, where he helps the police solve crimes.</p>",
     "date": "2016-01-25T00:00:00.000Z",
     "lastmod": "2025-10-21T13:41:08.598Z",
-    "tags": [
-      "Crime",
-      "Sci-Fi & Fantasy"
-    ],
-    "categories": [
-      "tv"
-    ],
+    "tags": ["Crime", "Sci-Fi & Fantasy"],
+    "categories": ["tv"],
     "images": [
       "https://image.tmdb.org/t/p/w500/ekZobS8isE6mA53RAiGDG93hBxL.jpg",
       "https://image.tmdb.org/t/p/w500/ncftkNAjIz2PBbUMY7T0CHVJP8d.jpg"
     ],
-    "authors": [
-      "Tom Kapinos"
-    ],
+    "authors": ["Tom Kapinos"],
     "draft": false,
     "featured": false,
     "layout": "MovieLayout",
@@ -450,21 +374,13 @@
     "content": "<p>The outrageous adventures of Stan, Kyle, Cartman, and Kenny as they navigate life in their bizarre hometown.</p>",
     "date": "1997-08-13T00:00:00.000Z",
     "lastmod": "2025-10-21T13:41:17.146Z",
-    "tags": [
-      "Animation",
-      "Comedy"
-    ],
-    "categories": [
-      "tv"
-    ],
+    "tags": ["Animation", "Comedy"],
+    "categories": ["tv"],
     "images": [
       "https://image.tmdb.org/t/p/w500/6yrrTLsPeBXWZTJkc2vInwRturt.jpg",
       "https://image.tmdb.org/t/p/w500/3UviYOlhn8EgXMBuiT6MnUuo1w9.jpg"
     ],
-    "authors": [
-      "Trey Parker",
-      "Matt Stone"
-    ],
+    "authors": ["Trey Parker", "Matt Stone"],
     "draft": false,
     "featured": false,
     "layout": "MovieLayout",
@@ -494,22 +410,13 @@
     "content": "<p>Quentin Tarantino's nonlinear crime masterpiece featuring interwoven stories of crime, redemption, and pop culture.</p>",
     "date": "1994-10-14T00:00:00.000Z",
     "lastmod": "2025-10-21T13:41:28.433Z",
-    "tags": [
-      "Crime",
-      "Thriller",
-      "Comedy",
-      "Drama"
-    ],
-    "categories": [
-      "film"
-    ],
+    "tags": ["Crime", "Thriller", "Comedy", "Drama"],
+    "categories": ["film"],
     "images": [
       "https://image.tmdb.org/t/p/w500/vQWk5YBFWF4bZaofAbv0tShwBvQ.jpg",
       "https://image.tmdb.org/t/p/w500/suaEOtk1N1sgg2MTM7oZd2cfVp3.jpg"
     ],
-    "authors": [
-      "Quentin Tarantino"
-    ],
+    "authors": ["Quentin Tarantino"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",
@@ -539,21 +446,13 @@
     "content": "<p>The first installment of Peter Jackson's epic adaptation of J.R.R. Tolkien's masterpiece.</p>",
     "date": "2001-12-19T00:00:00.000Z",
     "lastmod": "2025-10-21T13:41:39.372Z",
-    "tags": [
-      "Adventure",
-      "Fantasy",
-      "Action"
-    ],
-    "categories": [
-      "film"
-    ],
+    "tags": ["Adventure", "Fantasy", "Action"],
+    "categories": ["film"],
     "images": [
       "https://image.tmdb.org/t/p/w500/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg",
       "https://image.tmdb.org/t/p/w500/z51Wzj94hvAIsWfknifKTqKJRwp.jpg"
     ],
-    "authors": [
-      "J.R.R. Tolkien"
-    ],
+    "authors": ["J.R.R. Tolkien"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",
@@ -583,21 +482,13 @@
     "content": "<p>The second film in Peter Jackson's Hobbit trilogy, featuring Smaug and the journey to the Lonely Mountain.</p>",
     "date": "2013-12-13T00:00:00.000Z",
     "lastmod": "2025-10-21T13:41:58.284Z",
-    "tags": [
-      "Fantasy",
-      "Adventure",
-      "Action"
-    ],
-    "categories": [
-      "film"
-    ],
+    "tags": ["Fantasy", "Adventure", "Action"],
+    "categories": ["film"],
     "images": [
       "https://image.tmdb.org/t/p/w500/xQYiXsheRCDBA39DOrmaw1aSpbk.jpg",
       "https://image.tmdb.org/t/p/w500/hwPnxzIgQFfXl5zP0Yh8bViCMzf.jpg"
     ],
-    "authors": [
-      "J.R.R. Tolkien"
-    ],
+    "authors": ["J.R.R. Tolkien"],
     "draft": false,
     "featured": false,
     "layout": "MovieLayout",
@@ -627,21 +518,13 @@
     "content": "<p>A beautiful animated film about body-swapping, time, and destiny in rural Japan.</p>",
     "date": "2016-08-26T00:00:00.000Z",
     "lastmod": "2025-10-21T13:42:59.132Z",
-    "tags": [
-      "Animation",
-      "Romance",
-      "Drama"
-    ],
-    "categories": [
-      "film"
-    ],
+    "tags": ["Animation", "Romance", "Drama"],
+    "categories": ["film"],
     "images": [
       "https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg",
       "https://image.tmdb.org/t/p/w500/8x9iKH8kWA0zdkgNdpAew7OstYe.jpg"
     ],
-    "authors": [
-      "Makoto Shinkai"
-    ],
+    "authors": ["Makoto Shinkai"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",
@@ -671,20 +554,13 @@
     "content": "<p>This animated film introduces the formation of the Justice League and their first major battle.</p>",
     "date": "2014-02-04T00:00:00.000Z",
     "lastmod": "2025-10-21T13:43:10.323Z",
-    "tags": [
-      "Animation",
-      "Action"
-    ],
-    "categories": [
-      "film"
-    ],
+    "tags": ["Animation", "Action"],
+    "categories": ["film"],
     "images": [
       "https://image.tmdb.org/t/p/w500/pdNprWYdgcB8z4FLD3BhRmhEys1.jpg",
       "https://image.tmdb.org/t/p/w500/uD6AG36ykWAwKfSrLBuaVmpRC0.jpg"
     ],
-    "authors": [
-      "Various"
-    ],
+    "authors": ["Various"],
     "draft": false,
     "featured": false,
     "layout": "MovieLayout",
@@ -714,22 +590,13 @@
     "content": "<p>Mark Grayson discovers he has superpowers and must balance normal teenage life with being a superhero.</p>",
     "date": "2021-03-26T00:00:00.000Z",
     "lastmod": "2025-10-21T13:43:12.595Z",
-    "tags": [
-      "Animation",
-      "Sci-Fi & Fantasy",
-      "Action & Adventure",
-      "Drama"
-    ],
-    "categories": [
-      "tv"
-    ],
+    "tags": ["Animation", "Sci-Fi & Fantasy", "Action & Adventure", "Drama"],
+    "categories": ["tv"],
     "images": [
       "https://image.tmdb.org/t/p/w500/jBn4LWlgdsf6xIUYhYBwpctBVsj.jpg",
       "https://image.tmdb.org/t/p/w500/dfmPbyeZZSz3bekeESvMJaH91gS.jpg"
     ],
-    "authors": [
-      "Robert Kirkman"
-    ],
+    "authors": ["Robert Kirkman"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",
@@ -759,21 +626,13 @@
     "content": "<p>The Wachowskis' groundbreaking sci-fi action film that questions the nature of reality and features groundbreaking effects.</p>",
     "date": "1999-03-31T00:00:00.000Z",
     "lastmod": "2025-10-21T13:43:25.568Z",
-    "tags": [
-      "Action",
-      "Science Fiction"
-    ],
-    "categories": [
-      "film"
-    ],
+    "tags": ["Action", "Science Fiction"],
+    "categories": ["film"],
     "images": [
       "https://image.tmdb.org/t/p/w500/p96dm7sCMn4VYAStA6siNz30G1r.jpg",
       "https://image.tmdb.org/t/p/w500/oMsxZEvz9a708d49b6UdZK1KAo5.jpg"
     ],
-    "authors": [
-      "Lana Wachowski",
-      "Lilly Wachowski"
-    ],
+    "authors": ["Lana Wachowski", "Lilly Wachowski"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",
@@ -803,20 +662,13 @@
     "content": "<p>Quentin Tarantino's Spaghetti Western set in the antebellum South, featuring Jamie Foxx and Christoph Waltz.</p>",
     "date": "2012-12-25T00:00:00.000Z",
     "lastmod": "2025-10-21T13:43:37.176Z",
-    "tags": [
-      "Drama",
-      "Western"
-    ],
-    "categories": [
-      "film"
-    ],
+    "tags": ["Drama", "Western"],
+    "categories": ["film"],
     "images": [
       "https://image.tmdb.org/t/p/w500/7oWY8VDWW7thTzWh3OKYRkWUlD5.jpg",
       "https://image.tmdb.org/t/p/w500/n2eUT4zQA2yYcKOgAFidgOyiFoH.jpg"
     ],
-    "authors": [
-      "Quentin Tarantino"
-    ],
+    "authors": ["Quentin Tarantino"],
     "draft": false,
     "featured": false,
     "layout": "MovieLayout",
@@ -846,21 +698,13 @@
     "content": "<p>Sung Jin-Woo becomes the strongest hunter in a world of monsters and dungeons through a mysterious system.</p>",
     "date": "2024-01-07T00:00:00.000Z",
     "lastmod": "2025-10-21T13:43:56.349Z",
-    "tags": [
-      "Animation",
-      "Action & Adventure",
-      "Sci-Fi & Fantasy"
-    ],
-    "categories": [
-      "tv"
-    ],
+    "tags": ["Animation", "Action & Adventure", "Sci-Fi & Fantasy"],
+    "categories": ["tv"],
     "images": [
       "https://image.tmdb.org/t/p/w500/geCRueV3ElhRTr0xtJuEWJt6dJ1.jpg",
       "https://image.tmdb.org/t/p/w500/xMNH87maNLt9n2bMDYeI6db5VFm.jpg"
     ],
-    "authors": [
-      "Chugong"
-    ],
+    "authors": ["Chugong"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",
@@ -890,22 +734,13 @@
     "content": "<p>Christopher Nolan's masterpiece featuring Christian Bale as Batman and Heath Ledger as the Joker.</p>",
     "date": "2008-07-18T00:00:00.000Z",
     "lastmod": "2025-10-21T13:44:07.772Z",
-    "tags": [
-      "Drama",
-      "Action",
-      "Crime",
-      "Thriller"
-    ],
-    "categories": [
-      "film"
-    ],
+    "tags": ["Drama", "Action", "Crime", "Thriller"],
+    "categories": ["film"],
     "images": [
       "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
       "https://image.tmdb.org/t/p/w500/cfT29Im5VDvjE0RpyKOSdCKZal7.jpg"
     ],
-    "authors": [
-      "Christopher Nolan"
-    ],
+    "authors": ["Christopher Nolan"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",
@@ -935,21 +770,13 @@
     "content": "<p>Marvel's Guardians of the Galaxy introduces Star-Lord, Gamora, Drax, Rocket, and Groot in this cosmic adventure.</p>",
     "date": "2014-08-01T00:00:00.000Z",
     "lastmod": "2025-10-21T13:45:10.034Z",
-    "tags": [
-      "Action",
-      "Science Fiction",
-      "Adventure"
-    ],
-    "categories": [
-      "film"
-    ],
+    "tags": ["Action", "Science Fiction", "Adventure"],
+    "categories": ["film"],
     "images": [
       "https://image.tmdb.org/t/p/w500/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg",
       "https://image.tmdb.org/t/p/w500/uLtVbjvS1O7gXL8lUOwsFOH4man.jpg"
     ],
-    "authors": [
-      "James Gunn"
-    ],
+    "authors": ["James Gunn"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",
@@ -979,21 +806,13 @@
     "content": "<p>The longest-running anime series follows Luffy and his Straw Hat Pirates on their grand adventure.</p>",
     "date": "1999-10-20T00:00:00.000Z",
     "lastmod": "2025-10-21T13:46:13.385Z",
-    "tags": [
-      "Action & Adventure",
-      "Comedy",
-      "Animation"
-    ],
-    "categories": [
-      "tv"
-    ],
+    "tags": ["Action & Adventure", "Comedy", "Animation"],
+    "categories": ["tv"],
     "images": [
       "https://image.tmdb.org/t/p/w500/cMD9Ygz11zjJzAovURpO75Qg7rT.jpg",
       "https://image.tmdb.org/t/p/w500/4Mt7WHox67uJ1yErwTBFcV8KWgG.jpg"
     ],
-    "authors": [
-      "Eiichiro Oda"
-    ],
+    "authors": ["Eiichiro Oda"],
     "draft": false,
     "featured": false,
     "layout": "MovieLayout",
@@ -1023,23 +842,13 @@
     "content": "<p>This is a placeholder content for Harry Potter and the Philosopher's Stone. The orphaned boy discovers his magical heritage and attends Hogwarts.</p>",
     "date": "2001-11-16T00:00:00.000Z",
     "lastmod": "2025-10-21T13:46:15.192Z",
-    "tags": [
-      "Fantasy",
-      "Adventure",
-      "Family",
-      "Magic",
-      "Wizardry"
-    ],
-    "categories": [
-      "film"
-    ],
+    "tags": ["Fantasy", "Adventure", "Family", "Magic", "Wizardry"],
+    "categories": ["film"],
     "images": [
       "https://image.tmdb.org/t/p/w500/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
       "https://image.tmdb.org/t/p/w500/bfh9Z3Ghz4FOJAfLOAhmc3ccnHU.jpg"
     ],
-    "authors": [
-      "J.K. Rowling"
-    ],
+    "authors": ["J.K. Rowling"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",
@@ -1069,21 +878,13 @@
     "content": "<p>A young girl, Chihiro, becomes trapped in a strange new world of spirits. When her parents undergo a mysterious transformation, she must call upon the courage she never knew she had to free her family.</p>",
     "date": "2001-07-20T00:00:00.000Z",
     "lastmod": "2025-10-21T13:46:26.019Z",
-    "tags": [
-      "Animation",
-      "Family",
-      "Fantasy"
-    ],
-    "categories": [
-      "film"
-    ],
+    "tags": ["Animation", "Family", "Fantasy"],
+    "categories": ["film"],
     "images": [
       "https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
       "https://image.tmdb.org/t/p/w500/ukfI9QkU1aIhOhKXYWE9n3z1mFR.jpg"
     ],
-    "authors": [
-      "Hayao Miyazaki"
-    ],
+    "authors": ["Hayao Miyazaki"],
     "draft": false,
     "featured": true,
     "layout": "MovieLayout",

@@ -7,34 +7,18 @@
     "content": "<h2 id=\"introducing-the-greek-myth-api-dive-into-the-world-of-gods-titans-monsters-and-heroes\">Introducing the Greek Myth API: Dive into the World of Gods, Titans, Monsters, and Heroes</h2><p>As a long-time enthusiast of Greek mythology, I've always been fascinated by the rich tapestry of stories, characters, and adventures from ancient Greece. Recently, I decided to combine this passion with my love for coding by creating a Greek Myth API. After some development and testing, I'm thrilled to announce that the API is now live on Vercel.</p><h4 id=\"why-i-created-the-greek-myth-api\">Why I Created the Greek Myth API</h4><p>The idea behind this API stemmed from my own passion and a practical need for a project I'm developing. I wanted a reliable source of Greek mythology data that I could integrate seamlessly. The more I thought about it, the more I realized that others might benefit from such a tool as well. Thus, I made the API publicly available for free, with no rate limits, allowing anyone to explore and utilize the data without restrictions.</p><h4 id=\"features-of-the-greek-myth-api\">Features of the Greek Myth API</h4><p>My Greek mythology API is packed with a wealth of information, organized into multiple endpoints for easy access:</p><ul><li><strong>Gods</strong> : Information about the major and minor gods of Greek mythology.<ul><li>Endpoint: <code>/api/gods</code></li></ul></li><li><strong>Titans</strong> : Details about the primordial beings and predecessors of the gods.<ul><li>Endpoint: <code>/api/titans</code></li></ul></li><li><strong>Monsters</strong> : Data on the various creatures that populate Greek myths.<ul><li>Endpoint: <code>/api/monsters</code></li></ul></li><li><strong>Heroes</strong> : Profiles of the legendary heroes renowned for their epic deeds.<ul><li>Endpoint: <code>/api/heroes</code></li></ul></li><li><strong>Main Data Endpoint</strong> : A comprehensive endpoint that aggregates all entries.<ul><li>Endpoint: <code>/api/data</code></li></ul></li></ul><p>Currently, the API houses 200 entries, each rich with details. For each entity, you can find:</p><ul><li><strong>Name</strong> : The name of the god, titan, monster, or hero.</li><li><strong>Description</strong> : A brief overview of their story and significance.</li><li><strong>Character Attributes</strong> : Origin, symbols, abode, and powers.</li><li><strong>Family Connections</strong> : Their relatives and notable relationships.</li><li><strong>Stories</strong> : Key myths and tales associated with them.</li><li><strong>Image</strong> : Visual representation to bring the myth to life (in progress).</li></ul><p>I'm still working on adding images for the entries to create for the API. I might use AI to generate these images, which would add a visual dimension to the mythological data.</p><h4 id=\"how-to-use-the-api\">How to Use the API</h4><p>Accessing the API is straightforward. Simply visit the main site at <a href=\"https://thegreekmythapi.vercel.app/\">thegreekmythapi.vercel.app</a> to get started. From there, you can explore the various endpoints to retrieve the data you need for your projects.<br>For instance, to get data on all gods, you would use the following endpoint:</p><pre><code class=\"language-bash\">GET /api/gods\n</code></pre><p>Similarly, for a comprehensive dataset that includes all entries, you can use:</p><pre><code class=\"language-bash\">GET /api/data\n</code></pre><h4 id=\"supporting-the-project\">Supporting the Project</h4><p>While the API is free to use, I've also included an option for donations on the site. If you find the API useful and would like to support its continued development and maintenance, any contributions would be greatly appreciated.</p><h4 id=\"conclusion\">Conclusion</h4><p>Creating this API has been a labor of love, blending my passion for Greek mythology with the excitement of developing a useful tool for others. Whether you're a developer, a mythology enthusiast, or someone working on a project that could benefit from this data, I hope you find the Greek Myth API as enjoyable and useful as I do.</p><p>Feel free to explore, integrate, and get inspired by the timeless stories of Greek mythology!<br><strong>Main site</strong> : <a href=\"https://thegreekmythapi.vercel.app/\">thegreekmythapi.vercel.app</a></p>",
     "date": "2024-06-22T17:23:55.000Z",
     "lastmod": "2025-06-09T03:18:30.021Z",
-    "tags": [
-      "API",
-      "Greek Mythology",
-      "Vercel",
-      "REST API",
-      "Node.js"
-    ],
-    "categories": [
-      "api"
-    ],
+    "tags": ["API", "Greek Mythology", "Vercel", "REST API", "Node.js"],
+    "categories": ["api"],
     "images": [
       "https://res.cloudinary.com/dfjq9qvoz/image/upload/v1749439089/egglogwfguvb4npphhu8.webp"
     ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": null,
     "github": null,
     "demo": "https://thegreekmythapi.vercel.app",
-    "technologies": [
-      "Node.js",
-      "Vercel",
-      "REST API",
-      "JSON",
-      "Express.js"
-    ],
+    "technologies": ["Node.js", "Vercel", "REST API", "JSON", "Express.js"],
     "createdAt": "2025-10-14T16:11:29.778Z",
     "updatedAt": "2025-10-14T16:11:29.778Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o"
@@ -54,15 +38,11 @@
       "Progressive Web App",
       "Personal Project"
     ],
-    "categories": [
-      "web-app"
-    ],
+    "categories": ["web-app"],
     "images": [
       "https://images.unsplash.com/photo-1501003878151-d3cb87799705?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHxwbGF5aW5nJTIwY2FyZHxlbnwwfHx8fDE3NDc2MTg0MjV8MA&ixlib=rb-4.1.0&q=80&w=2000"
     ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": null,
@@ -97,15 +77,11 @@
       "Anime",
       "Community Tool"
     ],
-    "categories": [
-      "discord-bot"
-    ],
+    "categories": ["discord-bot"],
     "images": [
       "https://images.unsplash.com/photo-1552308995-2baac1ad5490?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEzfHxqYXZhc2NyaXB0fGVufDB8fHx8fDE3MTkxNjQ4ODF8MA&ixlib=rb-4.0.3&q=80&w=2000"
     ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": false,
     "layout": null,
@@ -132,22 +108,12 @@
     "content": "<h1 id=\"building-my-rick-and-morty-inspired-citadel-project\">Building My Rick and Morty-Inspired \"Citadel\" Project</h1><p>Hey fellow dimension-hoppers!</p><p>I'm thrilled to share my latest passion project – a website I've dubbed \"Citadel.\" It's a tribute to the mind-bending universe of Rick and Morty, blending my love for the show with my passion for web development and AI.</p><h2 id=\"the-concept\">The Concept</h2><p>Inspired by the show's \"Citadel of Ricks,\" my Citadel aims to be a vast interdimensional repository of Rick and Morty information. I'm leveraging the Rick and Morty API and integrating various OpenAI endpoints to generate unique content that even the Council of Ricks would approve of.</p><h2 id=\"current-features\">Current Features</h2><h3 id=\"1-web-interface\">1. Web Interface</h3><ul><li>Built with Next.js and Next UI</li><li>Basic but functional design (more intuitive interface coming soon!)</li></ul><h3 id=\"2-discord-bot\">2. Discord Bot</h3><ul><li>Offers similar functionality to the website</li><li>Perfect for discussing infinite timelines with your Discord crew</li></ul><h3 id=\"3-character-based-story-generation\">3. Character-Based Story Generation</h3><ul><li>Click on any character from the Rick and Morty API</li><li>Instantly generates a unique story about that character</li></ul><h3 id=\"4-ai-generated-illustrations\">4. AI-Generated Illustrations</h3><ul><li>Uses DALL-E 3 to create images based on story context</li><li>Warning: This feature can be as expensive as Kalaxian crystals, so it's not always active!</li></ul><h2 id=\"upcoming-features\">Upcoming Features</h2><h3 id=\"1-audio-narration\">1. Audio Narration</h3><ul><li>Working on adding voice narration for generated stories</li><li>Hoping for future OpenAI voice cloning support (Imagine Rick narrating his own adventures!)</li></ul><h3 id=\"2-mongodb-integration\">2. MongoDB Integration</h3><ul><li>Plan to store and organize user-generated stories</li><li>Create a collection of alternate universe Rick and Morty tales</li></ul><h2 id=\"the-big-picture\">The Big Picture</h2><p>This project is my way of combining multiple technologies to create something as unique as Pickle Rick. It's ambitious, sure, but so is stealing from the Galactic Federation!</p><h2 id=\"wrapping-up\">Wrapping Up</h2><p>Have you ever crafted a project inspired by your favorite TV show or movie? Drop your interdimensional cable in the comments below – I'd love to hear about it!</p><p>Until our paths cross in another dimension</p><p>P.S. Wubba lubba dub dub!</p><hr><h2 id=\"tech-stack-highlight\">Tech Stack Highlight</h2><ul><li>Frontend: Next.js, Next UI</li><li>Backend: Node.js</li><li>APIs: Rick and Morty API, OpenAI (GPT, DALL-E)</li><li>Database (Planned): MongoDB</li><li>Bot Platform: Discord</li></ul><hr><p>Remember, the multiverse is vast, and so are the possibilities for this project. Stay tuned for more updates as Citadel evolves!</p><div class=\"kg-card kg-button-card kg-align-center\"><a href=\"https://citadel.vercel.app\" class=\"kg-btn kg-btn-accent\">Go check out my project!</a></div>",
     "date": "2022-12-19T16:48:18.000Z",
     "lastmod": "2024-06-23T13:47:58.000Z",
-    "tags": [
-      "Next.js",
-      "OpenAI",
-      "Rick and Morty",
-      "Discord Bot",
-      "AI Art"
-    ],
-    "categories": [
-      "web-app"
-    ],
+    "tags": ["Next.js", "OpenAI", "Rick and Morty", "Discord Bot", "AI Art"],
+    "categories": ["web-app"],
     "images": [
       "https://images.unsplash.com/photo-1592564630984-7410f94db184?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDJ8fHJpY2slMjBhbmQlMjBtb3J0eXxlbnwwfHx8fDE2NzM2NzA5NzE&ixlib=rb-4.0.3&q=80&w=2000"
     ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": null,
@@ -175,15 +141,9 @@
     "date": "2025-10-15T03:18:35.882Z",
     "lastmod": "2025-10-15T03:18:35.882Z",
     "tags": [],
-    "categories": [
-      "web-app"
-    ],
-    "images": [
-      "/static/images/votewise.jpg"
-    ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "categories": ["web-app"],
+    "images": ["/static/images/votewise.jpg"],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": "ProjectLayout",
@@ -208,15 +168,9 @@
     "date": "2025-10-15T03:18:36.405Z",
     "lastmod": "2025-10-15T03:18:36.405Z",
     "tags": [],
-    "categories": [
-      "web-app"
-    ],
-    "images": [
-      "/static/images/break-the-wall.jpg"
-    ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "categories": ["web-app"],
+    "images": ["/static/images/break-the-wall.jpg"],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": "ProjectLayout",
@@ -242,26 +196,15 @@
     "date": "2025-10-15T03:18:36.569Z",
     "lastmod": "2025-10-15T03:18:36.569Z",
     "tags": [],
-    "categories": [
-      "web-app"
-    ],
-    "images": [
-      "/static/images/steam-insight.jpg"
-    ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "categories": ["web-app"],
+    "images": ["/static/images/steam-insight.jpg"],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": "ProjectLayout",
     "github": "https://github.com/xi-Rick/steam-insight",
     "demo": null,
-    "technologies": [
-      "Next.js",
-      "TypeScript",
-      "React",
-      "Steam API"
-    ],
+    "technologies": ["Next.js", "TypeScript", "React", "Steam API"],
     "createdAt": "2025-10-15T03:18:36.617Z",
     "updatedAt": "2025-10-15T03:18:36.617Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o"
@@ -275,15 +218,9 @@
     "date": "2025-10-15T03:18:36.747Z",
     "lastmod": "2025-10-15T03:18:36.747Z",
     "tags": [],
-    "categories": [
-      "web-app"
-    ],
-    "images": [
-      "/static/images/captains-log.jpg"
-    ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "categories": ["web-app"],
+    "images": ["/static/images/captains-log.jpg"],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": "ProjectLayout",
@@ -313,26 +250,15 @@
     "date": "2025-10-15T03:18:36.923Z",
     "lastmod": "2025-10-15T03:18:36.923Z",
     "tags": [],
-    "categories": [
-      "web-app"
-    ],
-    "images": [
-      "/static/images/archgaming.jpg"
-    ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "categories": ["web-app"],
+    "images": ["/static/images/archgaming.jpg"],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": "ProjectLayout",
     "github": "https://github.com/xi-Rick/archgaming",
     "demo": null,
-    "technologies": [
-      "Bash",
-      "Linux",
-      "Gaming",
-      "Automation"
-    ],
+    "technologies": ["Bash", "Linux", "Gaming", "Automation"],
     "createdAt": "2025-10-15T03:18:36.983Z",
     "updatedAt": "2025-10-15T03:18:36.983Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o"
@@ -346,27 +272,15 @@
     "date": "2025-10-15T03:18:37.173Z",
     "lastmod": "2025-10-15T03:18:37.173Z",
     "tags": [],
-    "categories": [
-      "web-app"
-    ],
-    "images": [
-      "/static/images/devsetup.jpg"
-    ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "categories": ["web-app"],
+    "images": ["/static/images/devsetup.jpg"],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": "ProjectLayout",
     "github": "https://github.com/xi-Rick/devsetup",
     "demo": null,
-    "technologies": [
-      "Shell",
-      "Linux",
-      "Node.js",
-      "Docker",
-      "Automation"
-    ],
+    "technologies": ["Shell", "Linux", "Node.js", "Docker", "Automation"],
     "createdAt": "2025-10-15T03:18:37.223Z",
     "updatedAt": "2025-10-15T03:18:37.223Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o"
@@ -380,26 +294,15 @@
     "date": "2025-10-15T03:18:37.333Z",
     "lastmod": "2025-10-15T03:18:37.333Z",
     "tags": [],
-    "categories": [
-      "web-app"
-    ],
-    "images": [
-      "/static/images/dock-app-demo.jpg"
-    ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "categories": ["web-app"],
+    "images": ["/static/images/dock-app-demo.jpg"],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": "ProjectLayout",
     "github": "https://github.com/xi-Rick/dock-app-demo",
     "demo": null,
-    "technologies": [
-      "Next.js",
-      "TypeScript",
-      "PWA",
-      "UI Components"
-    ],
+    "technologies": ["Next.js", "TypeScript", "PWA", "UI Components"],
     "createdAt": "2025-10-15T03:18:37.389Z",
     "updatedAt": "2025-10-15T03:18:37.389Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o"
@@ -413,15 +316,9 @@
     "date": "2025-10-15T03:18:37.497Z",
     "lastmod": "2025-10-15T03:18:37.497Z",
     "tags": [],
-    "categories": [
-      "web-app"
-    ],
-    "images": [
-      "/static/images/my-sidebar-app.jpg"
-    ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "categories": ["web-app"],
+    "images": ["/static/images/my-sidebar-app.jpg"],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": "ProjectLayout",
@@ -446,26 +343,15 @@
     "date": "2025-10-15T03:18:37.655Z",
     "lastmod": "2025-10-15T03:18:37.655Z",
     "tags": [],
-    "categories": [
-      "web-app"
-    ],
-    "images": [
-      "/static/images/nextjs14-ghost-frontend.jpg"
-    ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "categories": ["web-app"],
+    "images": ["/static/images/nextjs14-ghost-frontend.jpg"],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": false,
     "layout": "ProjectLayout",
     "github": "https://github.com/xi-Rick/nextjs14-ghost-frontend",
     "demo": null,
-    "technologies": [
-      "Next.js",
-      "TypeScript",
-      "Ghost CMS",
-      "Aceternity UI"
-    ],
+    "technologies": ["Next.js", "TypeScript", "Ghost CMS", "Aceternity UI"],
     "createdAt": "2025-10-15T03:18:37.707Z",
     "updatedAt": "2025-10-15T03:18:37.707Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o"
@@ -479,27 +365,15 @@
     "date": "2025-10-15T03:18:37.825Z",
     "lastmod": "2025-10-15T03:18:37.825Z",
     "tags": [],
-    "categories": [
-      "web-app"
-    ],
-    "images": [
-      "/static/images/nextjs-pages-template.jpg"
-    ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "categories": ["web-app"],
+    "images": ["/static/images/nextjs-pages-template.jpg"],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": false,
     "layout": "ProjectLayout",
     "github": "https://github.com/xi-Rick/nextjs-pages-template",
     "demo": null,
-    "technologies": [
-      "Next.js",
-      "TypeScript",
-      "MongoDB",
-      "NextUI",
-      "PWA"
-    ],
+    "technologies": ["Next.js", "TypeScript", "MongoDB", "NextUI", "PWA"],
     "createdAt": "2025-10-15T03:18:37.871Z",
     "updatedAt": "2025-10-15T03:18:37.871Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o"
@@ -513,15 +387,9 @@
     "date": "2025-10-15T03:18:37.998Z",
     "lastmod": "2025-10-15T03:18:37.998Z",
     "tags": [],
-    "categories": [
-      "web-app"
-    ],
-    "images": [
-      "/static/images/what-if-anime.jpg"
-    ],
-    "authors": [
-      "Dana Davis"
-    ],
+    "categories": ["web-app"],
+    "images": ["/static/images/what-if-anime.jpg"],
+    "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": "ProjectLayout",

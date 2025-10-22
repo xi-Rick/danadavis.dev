@@ -1,6 +1,6 @@
-"use client";
-import type React from "react";
-import { useEffect } from "react";
+'use client'
+import type React from 'react'
+import { useEffect } from 'react'
 
 const asciiArt = `
                                                                                                                                                                    
@@ -28,14 +28,14 @@ DDDDDDDDDDDDD         aaaaaaaaaa  aaaa nnnnnn    nnnnnn  aaaaaaaaaa  aaaa     DD
                                                                                                                                                                    
                                                                                                                                                                    
                                                                                                                                                                    
-`;
+`
 
 const Ascii: React.FC = () => {
   useEffect(() => {
-    console.log(asciiArt);
-  }, []);
+    console.log(asciiArt)
+  }, [])
 
-  return null; // Or render something if needed
-};
+  return null // Or render something if needed
+}
 
-export default Ascii;
+export default Ascii

@@ -1,55 +1,55 @@
-"use client";
+'use client'
 
-import { useSearchParams } from "next/navigation";
-import { BookCard } from "~/components/cards/book";
-import { Image } from "~/components/ui/image";
-import { Link } from "~/components/ui/link";
-import type { SelectBook } from "~/db/schema";
-import { RateFilter, type RateType } from "./rate-filter";
-import { ShelveSelect, type ShelfType } from "./shelve-select";
+import { useSearchParams } from 'next/navigation'
+import { BookCard } from '~/components/cards/book'
+import { Image } from '~/components/ui/image'
+import { Link } from '~/components/ui/link'
+import type { SelectBook } from '~/db/schema'
+import { RateFilter, type RateType } from './rate-filter'
+import { type ShelfType, ShelveSelect } from './shelve-select'
 
 export function BooksList({ books }: { books: SelectBook[] }) {
-  const searchParams = useSearchParams();
-  const shelf = (searchParams.get("shelf") as ShelfType) || "all";
-  const rate = (searchParams.get("rate") as RateType) || "5";
+  const searchParams = useSearchParams()
+  const shelf = (searchParams.get('shelf') as ShelfType) || 'all'
+  const rate = (searchParams.get('rate') as RateType) || '5'
 
   // keep currently reading separated and always visible
   const currentlyReading = books.filter(
-    (book) => book.userShelves === "currently-reading"
-  );
+    (book) => book.userShelves === 'currently-reading',
+  )
 
   // other books are the rest; we apply shelf + rate filters to this list
   let otherBooks = books.filter(
-    (book) => book.userShelves !== "currently-reading"
-  );
+    (book) => book.userShelves !== 'currently-reading',
+  )
 
   // shelf filter (applies only to otherBooks)
-  if (shelf && shelf !== "all") {
-    otherBooks = otherBooks.filter((b) => b.userShelves === shelf);
+  if (shelf && shelf !== 'all') {
+    otherBooks = otherBooks.filter((b) => b.userShelves === shelf)
   }
 
   // rate filter (applies only to otherBooks)
   if (rate) {
-    if (rate === "1") {
-      otherBooks = otherBooks.filter((b) => Number(b.userRating) <= 1);
+    if (rate === '1') {
+      otherBooks = otherBooks.filter((b) => Number(b.userRating) <= 1)
     } else {
-      otherBooks = otherBooks.filter((b) => String(b.userRating) === rate);
+      otherBooks = otherBooks.filter((b) => String(b.userRating) === rate)
     }
   }
 
   return (
-    <div className='py-5 md:py-10 space-y-16'>
+    <div className="py-5 md:py-10 space-y-16">
       {currentlyReading.length > 0 && (
         <>
-          <div className='space-y-8'>
-            <h3 className='text-xl leading-9 font-bold tracking-tight md:text-2xl'>
+          <div className="space-y-8">
+            <h3 className="text-xl leading-9 font-bold tracking-tight md:text-2xl">
               Currently Reading
             </h3>
             <BookCard book={currentlyReading[0]} scale={1} />
           </div>
           {currentlyReading.length > 1 && (
-            <div className='mb-8'>
-              <ul className='space-y-4'>
+            <div className="mb-8">
+              <ul className="space-y-4">
                 {currentlyReading.slice(1).map((book) => (
                   <BookListItem key={book.guid} book={book} />
                 ))}
@@ -59,22 +59,22 @@ export function BooksList({ books }: { books: SelectBook[] }) {
         </>
       )}
 
-      <div className='w-1/3 mx-auto border-t border-gray-200 dark:border-gray-700 my-6' />
+      <div className="w-1/3 mx-auto border-t border-gray-200 dark:border-gray-700 my-6" />
 
-      <div className='space-y-4'>
-        <div className='flex flex-col-reverse items-center justify-between gap-5 md:flex-row md:gap-4'>
-          <div className='flex items-center gap-2 text-xl font-medium'>
+      <div className="space-y-4">
+        <div className="flex flex-col-reverse items-center justify-between gap-5 md:flex-row md:gap-4">
+          <div className="flex items-center gap-2 text-xl font-medium">
             <span>Books</span>
-            <span className='font-normal text-gray-600 dark:text-gray-400'>
+            <span className="font-normal text-gray-600 dark:text-gray-400">
               ({otherBooks.length} titles)
             </span>
           </div>
-          <div className='flex gap-5'>
-            <div className='flex items-center gap-2'>
+          <div className="flex gap-5">
+            <div className="flex items-center gap-2">
               <span>Shelf: </span>
               <ShelveSelect shelf={shelf} />
             </div>
-            <div className='flex items-center gap-2'>
+            <div className="flex items-center gap-2">
               <span>My rate: </span>
               <RateFilter shelf={shelf} rate={rate} />
             </div>
@@ -82,53 +82,53 @@ export function BooksList({ books }: { books: SelectBook[] }) {
         </div>
 
         {otherBooks.length > 0 ? (
-          <div className='space-y-8'>
-            <h3 className='text-xl leading-9 font-bold tracking-tight md:text-2xl'>
+          <div className="space-y-8">
+            <h3 className="text-xl leading-9 font-bold tracking-tight md:text-2xl">
               Other Books
             </h3>
-            <ul className='space-y-6'>
+            <ul className="space-y-6">
               {otherBooks.map((book) => (
                 <BookListItem key={book.guid} book={book} />
               ))}
             </ul>
           </div>
         ) : (
-          <div className='text-base'>No books found</div>
+          <div className="text-base">No books found</div>
         )}
       </div>
     </div>
-  );
+  )
 }
 
 function BookListItem({ book }: { book: SelectBook }) {
   const getShelfLabel = (shelf: string | null) => {
-    if (!shelf) return null;
+    if (!shelf) return null
     switch (shelf) {
-      case "currently-reading":
-        return "Currently reading";
-      case "read":
-        return "Read";
+      case 'currently-reading':
+        return 'Currently reading'
+      case 'read':
+        return 'Read'
       default:
-        return shelf.replace("-", " ");
+        return shelf.replace('-', ' ')
     }
-  };
+  }
 
   return (
-    <li className='flex items-start gap-3 rounded-lg'>
+    <li className="flex items-start gap-3 rounded-lg">
       <Image
         src={book.bookMediumImageUrl}
         alt={book.title}
         width={40}
         height={60}
-        className='object-cover rounded-r-md shadow-sm border border-gray-200 dark:border-gray-700'
+        className="object-cover rounded-r-md shadow-sm border border-gray-200 dark:border-gray-700"
       />
-      <div className='flex-1 min-w-0 flex justify-between gap-4'>
-        <div className='space-y-1'>
+      <div className="flex-1 min-w-0 flex justify-between gap-4">
+        <div className="space-y-1">
           {/* Title with shelf status */}
-          <div className='flex items-center gap-2 flex-wrap'>
-            <h4 className='font-bold text-lg'>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h4 className="font-bold text-lg">
               {book.link ? (
-                <Link href={book.link} className='hover:underline'>
+                <Link href={book.link} className="hover:underline">
                   {book.title}
                 </Link>
               ) : (
@@ -136,20 +136,20 @@ function BookListItem({ book }: { book: SelectBook }) {
               )}
             </h4>
             {book.userShelves && (
-              <span className='inline-block px-2 py-0.5 text-sm font-medium rounded-full bg-gray-200 dark:bg-gray-700'>
+              <span className="inline-block px-2 py-0.5 text-sm font-medium rounded-full bg-gray-200 dark:bg-gray-700">
                 {getShelfLabel(book.userShelves)}
               </span>
             )}
           </div>
 
           {/* Author */}
-          <p className='text-sm text-gray-600 dark:text-gray-400'>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             by {book.authorName}
           </p>
         </div>
 
         {/* Right side info */}
-        <div className='flex flex-col items-end justify-start gap-1 text-sm text-gray-500 dark:text-gray-400'>
+        <div className="flex flex-col items-end justify-start gap-1 text-sm text-gray-500 dark:text-gray-400">
           {book.bookPublished && <span>published {book.bookPublished}</span>}
           {book.numPages && <span>{book.numPages} pages</span>}
           {book.userRating && Number(book.userRating) > 0 && (
@@ -158,5 +158,5 @@ function BookListItem({ book }: { book: SelectBook }) {
         </div>
       </div>
     </li>
-  );
+  )
 }

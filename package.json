@@ -40,7 +40,6 @@
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.44.2",
     "drizzle-zod": "^0.8.2",
-    "esbuild": "0.25.11",
     "framer-motion": "^12.23.24",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.2",
@@ -92,6 +91,7 @@
     "cross-env": "^7.0.3",
     "csv-parser": "^3.2.0",
     "drizzle-kit": "^0.31.1",
+    "esbuild": "0.25.11",
     "eslint": "^9.38.0",
     "eslint-config-next": "15.5.6",
     "husky": "^9.1.7",
@@ -99,6 +99,7 @@
     "node-fetch": "^3.3.2",
     "prettier": "^3.6.2",
     "prisma": "^6.17.1",
+    "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   },

@@ -1,26 +1,27 @@
-import { clsx } from "clsx";
-import type { Blog } from "contentlayer/generated";
-import { GritBackground } from "~/components/ui/grit-background";
-import { GrowingUnderline } from "~/components/ui/growing-underline";
-import { Image } from "~/components/ui/image";
-import { Link } from "~/components/ui/link";
-import { SITE_METADATA } from "~/data/site-metadata";
-import type { CoreContent } from "~/types/data";
-import { formatDate } from "~/utils/misc";
+import { clsx } from 'clsx'
+import type { Blog } from 'contentlayer/generated'
+import { GritBackground } from '~/components/ui/grit-background'
+import { GrowingUnderline } from '~/components/ui/growing-underline'
+import { Image } from '~/components/ui/image'
+import { Link } from '~/components/ui/link'
+import { SITE_METADATA } from '~/data/site-metadata'
+import type { CoreContent } from '~/types/data'
+import { formatDate } from '~/utils/misc'
 
 export function PostCardGridView({ post }: { post: CoreContent<Blog> }) {
-  const { path, date, title, images, readingTime } = post;
+  const { path, date, title, images, readingTime } = post
   return (
     <article>
-      <div className='flex flex-col items-start justify-between gap-4 md:gap-6'>
+      <div className="flex flex-col items-start justify-between gap-4 md:gap-6">
         <Link
           href={`/${path}`}
           className={clsx([
-            "relative block shrink-0",
-            "h-auto w-full md:aspect-3/2",
-            "pt-0 pr-3 pb-3 pl-0",
-            "transition-all ease-in-out hover:pt-1 hover:pr-2 hover:pb-2 hover:pl-1",
-          ])}>
+            'relative block shrink-0',
+            'h-auto w-full md:aspect-3/2',
+            'pt-0 pr-3 pb-3 pl-0',
+            'transition-all ease-in-out hover:pt-1 hover:pr-2 hover:pb-2 hover:pl-1',
+          ])}
+        >
           <Image
             src={
               images && images.length > 0
@@ -30,23 +31,23 @@ export function PostCardGridView({ post }: { post: CoreContent<Blog> }) {
             alt={title}
             width={600}
             height={400}
-            className='aspect-video h-full w-full rounded-xl shadow-2xl'
+            className="aspect-video h-full w-full rounded-xl shadow-2xl"
           />
           <GritBackground
             className={clsx([
-              "top-3 right-0 bottom-0 left-3",
-              "rounded-xl border-2 border-gray-800 dark:border-gray-400",
+              'top-3 right-0 bottom-0 left-3',
+              'rounded-xl border-2 border-gray-800 dark:border-gray-400',
             ])}
           />
         </Link>
-        <div className='w-full space-y-3'>
-          <div className='flex items-center gap-x-1.5 text-sm text-gray-600 dark:text-gray-400'>
+        <div className="w-full space-y-3">
+          <div className="flex items-center gap-x-1.5 text-sm text-gray-600 dark:text-gray-400">
             <time dateTime={date}>{formatDate(date)}</time>
-            <span className='mx-1 text-gray-400'>/</span>
+            <span className="mx-1 text-gray-400">/</span>
             <span>{Math.ceil(readingTime.minutes)} mins read</span>
           </div>
-          <div className='group relative'>
-            <h3 className='text-xl leading-6 font-semibold'>
+          <div className="group relative">
+            <h3 className="text-xl leading-6 font-semibold">
               <Link href={`/${path}`}>
                 <GrowingUnderline>{title}</GrowingUnderline>
               </Link>
@@ -58,5 +59,5 @@ export function PostCardGridView({ post }: { post: CoreContent<Blog> }) {
         </div>
       </div>
     </article>
-  );
+  )
 }

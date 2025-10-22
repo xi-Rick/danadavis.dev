@@ -1,29 +1,30 @@
-"use client";
+'use client'
 
-import { FADE_IN_ANIMATION_VARIANTS } from "@/lib/animations";
-import { AnimatePresence, motion } from "framer-motion";
-import { usePathname } from "next/navigation";
+import { FADE_IN_ANIMATION_VARIANTS } from '@/lib/animations'
+import { AnimatePresence, motion } from 'framer-motion'
+import { usePathname } from 'next/navigation'
 
 interface PageTransitionWrapperProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 const PageTransitionWrapper = ({ children }: PageTransitionWrapperProps) => {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
-    <AnimatePresence mode='wait'>
+    <AnimatePresence mode="wait">
       <motion.div
         key={pathname}
-        initial='hidden'
-        animate='show'
-        exit='hidden'
+        initial="hidden"
+        animate="show"
+        exit="hidden"
         variants={FADE_IN_ANIMATION_VARIANTS}
-        transition={{ duration: 0.4, ease: "easeInOut" }}>
+        transition={{ duration: 0.4, ease: 'easeInOut' }}
+      >
         {children}
       </motion.div>
     </AnimatePresence>
-  );
-};
+  )
+}
 
-export default PageTransitionWrapper;
+export default PageTransitionWrapper

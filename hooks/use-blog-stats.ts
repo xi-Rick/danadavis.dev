@@ -1,7 +1,7 @@
-import useSWR from "swr";
-import useSWRMutation from "swr/mutation";
-import type { SelectStats, StatsType } from "~/db/queries";
-import { fetcher } from "~/utils/misc";
+import useSWR from 'swr'
+import useSWRMutation from 'swr/mutation'
+import type { SelectStats, StatsType } from '~/db/queries'
+import { fetcher } from '~/utils/misc'
 
 export function useBlogStats(type: StatsType, slug: string) {
   let { data, isLoading } = useSWR<SelectStats>(
@@ -11,9 +11,9 @@ export function useBlogStats(type: StatsType, slug: string) {
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-    }
-  );
-  let { views, loves, applauses, ideas, bullseyes } = data || {};
+    },
+  )
+  let { views, loves, applauses, ideas, bullseyes } = data || {}
   let stats: SelectStats = {
     type,
     slug,
@@ -22,19 +22,19 @@ export function useBlogStats(type: StatsType, slug: string) {
     applauses: applauses || 0,
     ideas: ideas || 0,
     bullseyes: bullseyes || 0,
-  };
-  return [stats, isLoading] as const;
+  }
+  return [stats, isLoading] as const
 }
 
 export function useUpdateBlogStats() {
   let { trigger } = useSWRMutation(
-    "/api/stats",
+    '/api/stats',
     async (url: string, { arg }: { arg: Partial<SelectStats> }) => {
       return fetch(url, {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(arg),
-      }).catch(console.error);
-    }
-  );
-  return trigger;
+      }).catch(console.error)
+    },
+  )
+  return trigger
 }
