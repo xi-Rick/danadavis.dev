@@ -25,7 +25,7 @@ export const RATES: {
   { label: '2', description: 'poor', value: '2', emoji: 'thumbs-down' },
   {
     label: '1',
-    description: 'very poor',
+    description: 'terrible',
     value: '1',
     emoji: 'loudly-crying-face',
   },
