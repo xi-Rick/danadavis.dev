@@ -1,0 +1,85 @@
+---
+title: "Debounce Function in JavaScript"
+heading: "Debounce Function in JavaScript"
+icon: "Javascript"
+date: "2025-10-14"
+summary: "A utility function to debounce function calls, useful for search inputs and API calls."
+tags: ["javascript", "utility", "performance", "typescript"]
+---
+
+# Debounce Function in JavaScript
+
+A debounce function delays the execution of a function until after a specified time has passed since it was last invoked.
+
+## Usage
+
+```javascript
+import { debounce } from './debounce'
+
+// Debounce a search function
+const debouncedSearch = debounce((query) => {
+  console.log('Searching for:', query)
+  // Perform search API call
+}, 300)
+
+// Use in an input handler
+input.addEventListener('input', (e) => {
+  debouncedSearch(e.target.value)
+})
+```
+
+## Implementation
+
+```javascript
+function debounce(func, wait, immediate = false) {
+  let timeout
+  
+  return function executedFunction(...args) {
+    const later = () => {
+      timeout = null
+      if (!immediate) func(...args)
+    }
+    
+    const callNow = immediate && !timeout
+    
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+    
+    if (callNow) func(...args)
+  }
+}
+```
+
+## Advanced Usage with TypeScript
+
+```typescript
+function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number,
+  immediate = false
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout | null = null
+  
+  return function executedFunction(...args: Parameters<T>) {
+    const later = () => {
+      timeout = null
+      if (!immediate) func(...args)
+    }
+    
+    const callNow = immediate && !timeout
+    
+    if (timeout) clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+    
+    if (callNow) func(...args)
+  }
+}
+```
+
+## Use Cases
+
+- Search input fields
+- Window resize handlers
+- API call optimization
+- Button click prevention
+- Scroll event handlers
