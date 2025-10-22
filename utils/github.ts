@@ -18,17 +18,26 @@ export async function fetchRepoData({
     return null
   }
 
-  // Parse the GitHub URL to extract owner and repo
+  // Parse the GitHub URL or owner/repo string to extract owner and repo
   let owner: string
   let repoName: string
   try {
-    const url = new URL(repo)
-    const pathParts = url.pathname.split('/').filter(Boolean)
-    if (pathParts.length < 2) {
-      throw new Error('Invalid GitHub URL')
+    if (repo.startsWith('http://') || repo.startsWith('https://')) {
+      const url = new URL(repo)
+      const pathParts = url.pathname.split('/').filter(Boolean)
+      if (pathParts.length < 2) {
+        throw new Error('Invalid GitHub URL')
+      }
+      owner = pathParts[0]
+      repoName = pathParts[1]
+    } else {
+      const parts = repo.split('/')
+      if (parts.length !== 2) {
+        throw new Error('Invalid repo format')
+      }
+      owner = parts[0]
+      repoName = parts[1]
     }
-    owner = pathParts[0]
-    repoName = pathParts[1]
   } catch (error) {
     console.error('Failed to parse repo URL:', error)
     return null

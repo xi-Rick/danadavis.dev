@@ -52,7 +52,10 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    // Run on everything but Next internals and static files
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest|json)).*)',
+    // Only run middleware for admin pages and auth API routes. This prevents
+    // the middleware from intercepting unknown (gibberish) paths so Next's
+    // custom 404 can render normally.
+    '/admin/:path*',
+    '/api/auth/:path*',
   ],
 }
