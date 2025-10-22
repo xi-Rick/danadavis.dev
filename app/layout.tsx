@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import clsx from 'clsx'
 import 'css/tailwind.css'
@@ -175,6 +176,7 @@ export default function RootLayout({
           <AuthProvider>
             <AutoPlayAudio />
             <Ascii />
+            <Analytics />
             <UmamiAnalytics
               websiteId={SITE_METADATA.analytics.umamiAnalytics.websiteId}
             />
