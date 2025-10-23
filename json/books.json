@@ -1127,8 +1127,8 @@
     "tags": ["Fiction"],
     "categories": ["fiction"],
     "images": [
-      "http://books.google.com/books/content?id=Ojqi8KbWuLwC&printsec=frontcover&img=1&zoom=1&source=gbs_api",
-      "http://books.google.com/books/content?id=Ojqi8KbWuLwC&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+      "https://books.google.com/books/content?id=Ojqi8KbWuLwC&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+      "https://books.google.com/books/content?id=Ojqi8KbWuLwC&printsec=frontcover&img=1&zoom=5&source=gbs_api"
     ],
     "authors": ["Orson Scott Card"],
     "draft": false,
