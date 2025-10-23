@@ -1,45 +1,31 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import matter from 'gray-matter'
 import { NextResponse } from 'next/server'
+import { prisma } from '../../../db'
 
 export async function GET() {
   try {
-    const postsDirectory = path.join(process.cwd(), 'data', 'blog')
+    const posts = await prisma.post.findMany({
+      orderBy: { date: 'desc' },
+      include: { author: true },
+    })
 
-    // Check if directory exists
-    if (!fs.existsSync(postsDirectory)) {
-      return NextResponse.json({ posts: [] })
-    }
+    const formattedPosts = posts.map((post) => ({
+      slug: post.slug,
+      title: post.title,
+      summary: post.summary || '',
+      tags: post.tags,
+      categories: post.categories,
+      images: post.images,
+      canonicalUrl: post.canonicalUrl,
+      layout: post.layout,
+      bibliography: post.bibliography,
+      draft: post.draft,
+      featured: post.featured,
+      date: post.date.toISOString(),
+      content: post.content,
+      authors: post.authors,
+    }))
 
-    const fileNames = fs.readdirSync(postsDirectory)
-    const posts = fileNames
-      .filter((fileName) => fileName.endsWith('.mdx'))
-      .map((fileName) => {
-        const slug = fileName.replace(/\.mdx$/, '')
-        const fullPath = path.join(postsDirectory, fileName)
-        const fileContents = fs.readFileSync(fullPath, 'utf8')
-        const { data, content } = matter(fileContents)
-
-        return {
-          slug,
-          title: data.title || 'Untitled',
-          summary: data.summary || '',
-          tags: data.tags || [],
-          categories: data.categories || [],
-          images: data.images || [],
-          canonicalUrl: data.canonicalUrl || null,
-          layout: data.layout || null,
-          bibliography: data.bibliography || null,
-          draft: data.draft || false,
-          featured: data.featured || false,
-          date: data.date || new Date().toISOString(),
-          content: content,
-        }
-      })
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-
-    return NextResponse.json({ posts })
+    return NextResponse.json({ posts: formattedPosts })
   } catch (error) {
     console.error('Error fetching posts:', error)
     return NextResponse.json(

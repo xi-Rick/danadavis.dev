@@ -1,13 +1,17 @@
-import { writeFileSync } from 'node:fs'
-import { join } from 'node:path'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { type NextRequest, NextResponse } from 'next/server'
+import { prisma } from '../../../db'
 
 export async function PUT(request: NextRequest) {
   try {
-    const { isAuthenticated } = getKindeServerSession()
+    const { getUser, isAuthenticated } = getKindeServerSession()
     if (!(await isAuthenticated())) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const user = await getUser()
+    if (!user || !user.id) {
+      return NextResponse.json({ error: 'User not found' }, { status: 401 })
     }
 
     const {
@@ -32,61 +36,26 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    // Create frontmatter
-    const frontmatter: string[] = []
-    frontmatter.push('---')
-    frontmatter.push(`title: "${title.replace(/"/g, '\\"')}"`)
-    frontmatter.push(`date: "${new Date().toISOString()}"`)
-    frontmatter.push(`lastmod: "${new Date().toISOString()}"`)
+    // Update post in database
+    const updatedPost = await prisma.post.update({
+      where: { slug },
+      data: {
+        title,
+        summary,
+        content,
+        tags: tags || [],
+        categories: categories || [],
+        images: images || [],
+        canonicalUrl,
+        layout,
+        bibliography,
+        draft: draft || false,
+        featured: featured || false,
+        lastmod: new Date(),
+      },
+    })
 
-    if (tags && tags.length > 0) {
-      frontmatter.push(
-        `tags: [${tags.map((tag: string) => `"${tag.replace(/"/g, '\\"')}"`).join(', ')}]`,
-      )
-    }
-
-    if (categories && categories.length > 0) {
-      frontmatter.push(
-        `categories: [${categories.map((cat: string) => `"${cat.replace(/"/g, '\\"')}"`).join(', ')}]`,
-      )
-    }
-
-    if (images && images.length > 0) {
-      frontmatter.push(
-        `images: [${images.map((img: string) => `"${img.replace(/"/g, '\\"')}"`).join(', ')}]`,
-      )
-    }
-
-    frontmatter.push(`authors: ["Dana Davis"]`)
-    frontmatter.push(`draft: ${draft || false}`)
-    frontmatter.push(`featured: ${featured || false}`)
-
-    if (canonicalUrl) {
-      frontmatter.push(`canonicalUrl: "${canonicalUrl.replace(/"/g, '\\"')}"`)
-    }
-
-    if (layout) {
-      frontmatter.push(`layout: "${layout.replace(/"/g, '\\"')}"`)
-    }
-
-    if (bibliography) {
-      frontmatter.push(`bibliography: "${bibliography.replace(/"/g, '\\"')}"`)
-    }
-
-    if (summary) {
-      frontmatter.push(`summary: "${summary.replace(/"/g, '\\"')}"`)
-    }
-
-    frontmatter.push('---')
-    frontmatter.push('')
-
-    const fullContent = frontmatter.join('\n') + content
-
-    // Write to file (overwrite existing)
-    const filePath = join(process.cwd(), 'data', 'blog', `${slug}.mdx`)
-    writeFileSync(filePath, fullContent)
-
-    return NextResponse.json({ success: true, slug })
+    return NextResponse.json({ success: true, slug: updatedPost.slug })
   } catch (error) {
     console.error('Error updating post:', error)
     return NextResponse.json(
@@ -98,9 +67,14 @@ export async function PUT(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { isAuthenticated } = getKindeServerSession()
+    const { getUser, isAuthenticated } = getKindeServerSession()
     if (!(await isAuthenticated())) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const user = await getUser()
+    if (!user || !user.id) {
+      return NextResponse.json({ error: 'User not found' }, { status: 401 })
     }
 
     const {
@@ -125,66 +99,41 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate slug
-    const slug = title
+    let slug = title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '')
 
-    // Create frontmatter
-    const frontmatter: string[] = []
-    frontmatter.push('---')
-    frontmatter.push(`title: "${title.replace(/"/g, '\\"')}"`)
-    frontmatter.push(`date: "${new Date().toISOString()}"`)
-    frontmatter.push(`lastmod: "${new Date().toISOString()}"`)
-
-    if (tags && tags.length > 0) {
-      frontmatter.push(
-        `tags: [${tags.map((tag: string) => `"${tag.replace(/"/g, '\\"')}"`).join(', ')}]`,
-      )
+    // Ensure slug is unique
+    let existingPost = await prisma.post.findUnique({ where: { slug } })
+    let counter = 1
+    while (existingPost) {
+      slug = `${slug}-${counter}`
+      existingPost = await prisma.post.findUnique({ where: { slug } })
+      counter++
     }
 
-    if (categories && categories.length > 0) {
-      frontmatter.push(
-        `categories: [${categories.map((cat: string) => `"${cat.replace(/"/g, '\\"')}"`).join(', ')}]`,
-      )
-    }
+    // Create post in database
+    const newPost = await prisma.post.create({
+      data: {
+        title,
+        slug,
+        summary,
+        content,
+        tags: tags || [],
+        categories: categories || [],
+        images: images || [],
+        authors: ['Dana Davis'],
+        canonicalUrl,
+        layout,
+        bibliography,
+        draft: draft || false,
+        featured: featured || false,
+        authorId: user.id,
+      },
+    })
 
-    if (images && images.length > 0) {
-      frontmatter.push(
-        `images: [${images.map((img: string) => `"${img.replace(/"/g, '\\"')}"`).join(', ')}]`,
-      )
-    }
-
-    frontmatter.push(`authors: ["Dana Davis"]`)
-    frontmatter.push(`draft: ${draft || false}`)
-    frontmatter.push(`featured: ${featured || false}`)
-
-    if (canonicalUrl) {
-      frontmatter.push(`canonicalUrl: "${canonicalUrl.replace(/"/g, '\\"')}"`)
-    }
-
-    if (layout) {
-      frontmatter.push(`layout: "${layout.replace(/"/g, '\\"')}"`)
-    }
-
-    if (bibliography) {
-      frontmatter.push(`bibliography: "${bibliography.replace(/"/g, '\\"')}"`)
-    }
-
-    if (summary) {
-      frontmatter.push(`summary: "${summary.replace(/"/g, '\\"')}"`)
-    }
-
-    frontmatter.push('---')
-    frontmatter.push('')
-
-    const fullContent = frontmatter.join('\n') + content
-
-    // Write to file
-    const filePath = join(process.cwd(), 'data', 'blog', `${slug}.mdx`)
-    writeFileSync(filePath, fullContent)
-
-    return NextResponse.json({ success: true, slug })
+    return NextResponse.json({ success: true, slug: newPost.slug })
   } catch (error) {
     console.error('Error saving post:', error)
     return NextResponse.json({ error: 'Failed to save post' }, { status: 500 })
