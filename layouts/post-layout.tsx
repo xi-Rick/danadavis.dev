@@ -68,7 +68,7 @@ export function PostLayout({ content, next, prev, children }: LayoutProps) {
         <GradientDivider className="mt-1 mb-2" />
         <div className="grid grid-cols-1 gap-12 pt-8 pb-10 lg:grid-cols-12 lg:pt-10">
           <div className="lg:col-span-8 xl:col-span-9">
-            <div className="prose prose-lg max-w-none lg:pb-8 dark:prose-invert">
+            <div className="prose dark:prose-invert lg:prose-lg max-w-none lg:pb-8 blog-content">
               {children}
             </div>
           </div>

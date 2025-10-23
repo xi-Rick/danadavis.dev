@@ -12,17 +12,21 @@ import { PageHeader } from '~/components/ui/page-header'
 
 // MDXEditor dark mode styles - only for text content
 const mdxEditorDarkStyles = `
-  .dark .mdxeditor-wrapper .cm-editor {
-    color: var(--color-text);
-  }
+.mdxeditor {
+  color: var(--color-text) !important;
+}
 
-  .dark .mdxeditor-wrapper .cm-content {
-    color: var(--color-text);
-  }
+.mdxeditor [contenteditable] {
+  color: var(--color-text) !important;
+}
 
-  .dark .mdxeditor-wrapper .cm-line {
-    color: var(--color-text);
-  }
+.mdxeditor .cm-editor {
+  color: var(--color-text) !important;
+}
+
+.mdxeditor .cm-content {
+  color: var(--color-text) !important;
+}
 `
 
 interface EditPostPageProps {

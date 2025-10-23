@@ -43,7 +43,7 @@ export function PostSimple({ content, children }: PostSimpleProps) {
           </dl>
         </div>
         <GradientDivider />
-        <div className="prose prose-lg max-w-none dark:prose-invert">
+        <div className="prose prose-lg max-w-none dark:prose-invert blog-content">
           {children}
         </div>
         <GradientDivider className="mt-1 mb-10" />

@@ -9,99 +9,23 @@ import { ForwardRefEditor } from '~/components/forward-ref-editor'
 import { Container } from '~/components/ui/container'
 import { PageHeader } from '~/components/ui/page-header'
 
-// MDXEditor dark mode styles - use MDXEditor's public classes and CSS variables
-// to reliably set editor text to pure white in dark mode.
+// MDXEditor dark mode styles - only for text content
 const mdxEditorDarkStyles = `
-  /* Set MDXEditor semantic color variables for dark mode */
-  .dark .mdxeditor {
-    --baseText: #ffffff;
-    --baseTextContrast: #ffffff;
-    --basePageBg: #000000;
-    /* toolbar / UI variables */
-    --accentBg: #0f1724; /* darker toolbar background */
-    --accentBgHover: #0b1220;
-    --accentLine: rgba(255,255,255,0.04);
-    --accentText: #e6e6e6;
-    --baseBg: #0b0b0b; /* editor background */
-    --baseSolid: #0f1724;
-    --baseBorder: rgba(255,255,255,0.03);
-    color: var(--baseText);
-  }
+.mdxeditor {
+  color: var(--color-text) !important;
+}
 
-  /* Target the contentEditable root and rich text root to ensure text is white */
-  .dark .mdxeditor-root-contenteditable,
-  .dark .mdxeditor-rich-text-editor,
-  .dark .mdxeditor-source-editor,
-  .dark .mdxeditor-diff-editor {
-    color: #ffffff !important;
-  }
+.mdxeditor [contenteditable] {
+  color: var(--color-text) !important;
+}
 
-  /* Make rich text, diff and source editor roots have dark backgrounds */
-  .dark .mdxeditor-rich-text-editor,
-  .dark .mdxeditor-diff-editor,
-  .dark .mdxeditor-source-editor {
-    background: var(--baseBg) !important;
-    color: #ffffff !important;
-  }
+.mdxeditor .cm-editor {
+  color: var(--color-text) !important;
+}
 
-  /* CodeMirror / source editor specifics (source/diff modes) */
-  .dark .cm-editor,
-  .dark .cm-content,
-  .dark .cm-line {
-    background: var(--baseBg) !important;
-    color: #ffffff !important;
-  }
-
-  /* Ensure diff view wrappers match dark theme */
-  .dark .mdxeditor-diff-editor .mdxeditor-diff-source-wrapper,
-  .dark .mdxeditor-diff-editor .mdxeditor-diff-editor {
-    background: var(--baseBg) !important;
-    color: #ffffff !important;
-  }
-
-  /* Make sure nested spans and lines inherit the white color */
-  .dark .mdxeditor-root-contenteditable *,
-  .dark .mdxeditor-rich-text-editor * {
-    color: #ffffff !important;
-  }
-
-  /* Also ensure plain textareas on the page are white in dark mode */
-  .dark textarea,
-  .dark textarea:focus {
-    color: #ffffff !important;
-  }
-
-  /* Make the toolbar dark background with readable icons/text */
-  .dark .mdxeditor-toolbar {
-    background: var(--accentBg) !important;
-    color: #e6e6e6 !important;
-    border-bottom: 1px solid rgba(255,255,255,0.04) !important;
-  }
-
-  .dark .mdxeditor-toolbar button,
-  .dark .mdxeditor-toolbar [role="button"] {
-    color: var(--accentText) !important;
-    background: transparent !important;
-  }
-
-  .dark .mdxeditor-toolbar button:hover,
-  .dark .mdxeditor-toolbar [role="button"]:hover {
-    background: rgba(255,255,255,0.03) !important;
-  }
-
-  /* Force SVG icon fills/strokes inside toolbar to light color */
-  .dark .mdxeditor-toolbar svg {
-    fill: var(--accentText) !important;
-    stroke: var(--accentText) !important;
-  }
-
-  /* Placeholder styling */
-  .dark ::placeholder,
-  .dark ::-webkit-input-placeholder,
-  .dark ::-moz-placeholder {
-    color: #ffffff !important;
-    opacity: 0.9;
-  }
+.mdxeditor .cm-content {
+  color: var(--color-text) !important;
+}
 `
 
 export default function AddPostPage() {

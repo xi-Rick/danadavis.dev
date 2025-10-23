@@ -60,7 +60,7 @@ export function PostBanner({ content, children }: LayoutProps) {
             />
           </div>
         </div>
-        <div className="prose prose-lg max-w-none dark:prose-invert">
+        <div className="prose prose-lg max-w-none dark:prose-invert blog-content">
           {children}
         </div>
         <div className="space-y-8 border-t border-gray-200 pt-4 dark:border-gray-700">
