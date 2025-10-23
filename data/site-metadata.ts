@@ -39,6 +39,10 @@ export const SITE_METADATA = {
   },
   comments: {
     // Disqus shortname is loaded from NEXT_PUBLIC_DISQUS_SHORTNAME env var
+    provider: 'disqus',
+    disqus: {
+      shortname: process.env.NEXT_PUBLIC_DISQUS_SHORTNAME || 'danadavis-dev',
+    },
   },
   search: {
     kbarConfigs: {

@@ -1,7 +1,7 @@
 import type { Blog, Snippet } from 'contentlayer/generated'
 import type { ReactNode } from 'react'
 import { BlogMeta } from '~/components/blog/blog-meta'
-import { Comments } from '~/components/blog/comments'
+import Comments from '~/components/blog/comments'
 import { PostTitle } from '~/components/blog/post-title'
 import { ScrollButtons } from '~/components/blog/scroll-buttons'
 import { TagsList } from '~/components/blog/tags'

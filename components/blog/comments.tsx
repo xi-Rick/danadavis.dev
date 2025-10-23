@@ -9,7 +9,12 @@ interface CommentsProps {
   className?: string
 }
 
-export function Comments({ url, identifier, title, className }: CommentsProps) {
+export default function Comments({
+  url,
+  identifier,
+  title,
+  className,
+}: CommentsProps) {
   const shortname = process.env.NEXT_PUBLIC_DISQUS_SHORTNAME as string
 
   return (

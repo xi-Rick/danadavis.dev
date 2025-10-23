@@ -40,6 +40,8 @@ async function loadBooksFromJson(): Promise<SelectBook[]> {
       createdAt: string
       updatedAt: string
       authorId: string
+      userRating?: number | string
+      averageRating?: number | string
     }>
 
     return booksData.map((book) => ({
@@ -56,13 +58,13 @@ async function loadBooksFromJson(): Promise<SelectBook[]> {
       authorName: book.bookAuthor,
       isbn: null, // default
       userName: 'Dana Davis', // default
-      userRating: '5', // default rating
+      userRating: book.userRating ? Number(book.userRating) : 5, // default rating
       userReadAt: book.userShelves === 'read' ? book.date : null,
       userDateAdded: book.date,
       userDateCreated: book.createdAt,
       userShelves: book.userShelves,
       userReview: null, // default
-      averageRating: '4.5', // default
+      averageRating: book.averageRating ? Number(book.averageRating) : 4.5, // default
       bookPublished: String(book.year),
       numPages: book.pageCount,
       content: book.content,

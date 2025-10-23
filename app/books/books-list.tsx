@@ -153,7 +153,7 @@ function BookListItem({ book }: { book: SelectBook }) {
           {book.bookPublished && <span>published {book.bookPublished}</span>}
           {book.numPages && <span>{book.numPages} pages</span>}
           {book.userRating && Number(book.userRating) > 0 && (
-            <span>avg {book.averageRating}/5</span>
+            <span>my rating {book.userRating}/5</span>
           )}
         </div>
       </div>

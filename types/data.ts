@@ -45,13 +45,13 @@ export type GoodreadsBook = {
   authorName: string
   isbn: string
   userName: string
-  userRating: string
+  userRating: number
   userReadAt: string
   userDateAdded: string
   userDateCreated: string
   userShelves: string
   userReview: string
-  averageRating: string
+  averageRating: number
   bookPublished: string
   content: string
   numPages?: number

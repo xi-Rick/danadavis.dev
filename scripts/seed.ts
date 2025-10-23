@@ -52,6 +52,12 @@ export async function seedBooksUsingRssFeed() {
         book.content = book.content.replace(/\n/g, '').replace(/\s\s+/g, ' ')
         book.userShelves = book.userShelves || 'read'
 
+        // Convert ratings to numbers
+        ;(book as any).userRating =
+          Number.parseFloat(String(book.userRating)) || 0
+        ;(book as any).averageRating =
+          Number.parseFloat(String(book.averageRating)) || 0
+
         // Add numPages to book object for later use
         if (book.numPages && typeof book.numPages === 'object') {
           const numPages = Object.values(book.numPages)?.[1]?.[0]
@@ -171,13 +177,13 @@ export async function seedBooksByParsingCSV() {
                 authorName: book.authorName || '',
                 isbn: book.isbn?.replace(/[="]/g, '') || '',
                 userName: 'User', // Static value as not available in CSV
-                userRating: book.userRating || '0',
+                userRating: Number.parseFloat(book.userRating) || 0,
                 userReadAt: book.userReadAt || '',
                 userDateAdded: book.userDateAdded || new Date().toISOString(),
                 userDateCreated: book.userDateAdded || new Date().toISOString(),
                 userShelves: book.userShelves || book.exclusiveShelves || '',
                 userReview: book.userReview || '',
-                averageRating: book.averageRating || '0',
+                averageRating: Number.parseFloat(book.averageRating) || 0,
                 bookPublished: book.bookPublished || book.yearPublished || '',
                 content: book.userReview || book.title || '',
               }
