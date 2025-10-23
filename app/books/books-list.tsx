@@ -37,6 +37,14 @@ export function BooksList({ books }: { books: SelectBook[] }) {
     }
   }
 
+  // sort otherBooks
+  otherBooks = otherBooks.sort((a, b) => {
+    if (a.userRating === b.userRating) {
+      return Number(b.averageRating) - Number(a.averageRating)
+    }
+    return Number(b.userRating) - Number(a.userRating)
+  })
+
   return (
     <div className="py-5 md:py-10 space-y-16">
       {currentlyReading.length > 0 && (
@@ -72,7 +80,7 @@ export function BooksList({ books }: { books: SelectBook[] }) {
           <div className="flex gap-5">
             <div className="flex items-center gap-2">
               <span>Shelf: </span>
-              <ShelveSelect shelf={shelf} />
+              <ShelveSelect shelf={shelf} rate={rate} />
             </div>
             <div className="flex items-center gap-2">
               <span>My rate: </span>

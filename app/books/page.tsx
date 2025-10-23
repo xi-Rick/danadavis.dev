@@ -96,11 +96,7 @@ export default async function BooksPage() {
         className="border-b border-gray-200 dark:border-gray-700"
       />
       <Suspense>
-        <BooksList
-          books={books.sort(
-            (a, b) => Number(b.userRating) - Number(a.userRating),
-          )}
-        />
+        <BooksList books={books} />
       </Suspense>
       <div className="w-1/3 mx-auto border-t border-gray-200 dark:border-gray-700 my-6" />
     </Container>

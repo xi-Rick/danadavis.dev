@@ -78,6 +78,7 @@ export function RateFilter({ rate, shelf }: { rate: RateType; shelf: string }) {
                           : 'hover:bg-gray-200 dark:hover:bg-gray-800',
                       ])}
                       href={`/books?shelf=${shelf}&rate=${value}`}
+                      scroll={false}
                       onClick={close}
                     >
                       <span>({label})</span>

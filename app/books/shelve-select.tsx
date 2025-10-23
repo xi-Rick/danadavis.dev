@@ -48,7 +48,13 @@ export type ShelfType =
   | 'paused'
   | 'abandoned'
 
-export function ShelveSelect({ shelf }: { shelf: ShelfType }) {
+export function ShelveSelect({
+  shelf,
+  rate,
+}: {
+  shelf: ShelfType
+  rate: string
+}) {
   const { label, value: selectedValue } =
     SHELVES.find(({ value }) => value === shelf) || SHELVES[0]
 
@@ -91,7 +97,8 @@ export function ShelveSelect({ shelf }: { shelf: ShelfType }) {
                           ? 'bg-gray-200 dark:bg-gray-800'
                           : 'hover:bg-gray-200 dark:hover:bg-gray-800',
                       ])}
-                      href={`/books?shelf=${value}`}
+                      href={`/books?shelf=${value}&rate=${rate}`}
+                      scroll={false}
                       onClick={close}
                     >
                       <span data-umami-event="books-shelf-select">{label}</span>
