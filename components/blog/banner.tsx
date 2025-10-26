@@ -37,6 +37,7 @@ export function Banner({
           width={1600}
           height={900}
           className="h-auto w-full rounded-lg"
+          unoptimized
         />
       </Zoom>
       <GritBackground className="inset-0 rounded-lg opacity-75" />
