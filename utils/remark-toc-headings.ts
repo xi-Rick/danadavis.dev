@@ -18,12 +18,19 @@ export type Toc = TocItem[]
 function remarkTocHeadings() {
   return (tree: Parent, file) => {
     let toc: Toc = []
+    const slugs = new Map<string, number>()
+
     visit(tree, 'heading', (node) => {
       let textContent = toString(node).replace(/<[^>]*(>|$)/g, '')
       if (textContent) {
+        const baseSlug = slug(textContent)
+        const count = slugs.get(baseSlug) || 0
+        const uniqueSlug = count === 0 ? baseSlug : `${baseSlug}-${count}`
+        slugs.set(baseSlug, count + 1)
+
         toc.push({
           value: textContent,
-          url: `#${slug(textContent)}`,
+          url: `#${uniqueSlug}`,
           // @ts-ignore
           depth: node.depth,
         })

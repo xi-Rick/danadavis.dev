@@ -11,7 +11,10 @@ type TocItem = {
 export function TableOfContents({
   toc,
   className,
-}: { toc: TocItem[]; className?: string }) {
+}: {
+  toc: TocItem[]
+  className?: string
+}) {
   return (
     <details
       className={clsx('space-y-4 open:[&_.chevron-right]:rotate-90', className)}
@@ -26,9 +29,9 @@ export function TableOfContents({
         <span className="text-lg font-medium">On this page</span>
       </summary>
       <ul className="flex flex-col space-y-2">
-        {toc.map(({ value, depth, url }) => (
+        {toc.map(({ value, depth, url }, index) => (
           <li
-            key={url}
+            key={`${url}-${index}`}
             className="font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
             style={{ paddingLeft: (depth - 2) * 16 }}
           >
