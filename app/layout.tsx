@@ -10,6 +10,7 @@ import {
   Nunito,
   Playpen_Sans,
 } from 'next/font/google'
+import { PersonJsonLd, WebsiteJsonLd } from '~/components/structured-data'
 import 'react-medium-image-zoom/dist/styles.css'
 import 'remark-github-blockquote-alert/alert.css'
 import { UmamiAnalytics } from '~/components/analytics/umami'
@@ -66,37 +67,75 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_METADATA.title}`,
   },
   description: SITE_METADATA.description,
+  authors: [{ name: SITE_METADATA.author, url: SITE_METADATA.siteUrl }],
+  creator: SITE_METADATA.author,
+  publisher: SITE_METADATA.author,
   openGraph: {
     title: SITE_METADATA.title,
     description: SITE_METADATA.description,
     url: './',
     siteName: SITE_METADATA.title,
-    images: [SITE_METADATA.socialBanner],
-    locale: 'en_US',
+    images: [
+      {
+        url: SITE_METADATA.socialBanner,
+        width: 1200,
+        height: 630,
+        alt: `${SITE_METADATA.title} - Banner Image`,
+      },
+    ],
+    locale: SITE_METADATA.locale,
     type: 'website',
+    countryName: 'United States',
   },
   alternates: {
     canonical: './',
     types: {
       'application/rss+xml': `${SITE_METADATA.siteUrl}/feed.xml`,
     },
+    languages: {
+      'en-US': '/',
+    },
   },
   robots: {
     index: true,
     follow: true,
+    nocache: true,
     googleBot: {
       index: true,
       follow: true,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
+      noimageindex: false,
     },
   },
   twitter: {
     title: SITE_METADATA.title,
     card: 'summary_large_image',
     images: [SITE_METADATA.socialBanner],
+    creator: '@cortrale',
+    site: '@cortrale',
+    description: SITE_METADATA.description,
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+    yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || '',
+    other: {
+      'msvalidate.01': process.env.NEXT_PUBLIC_MS_VALIDATE || '',
+    },
+  },
+  keywords: [
+    'Dana Davis',
+    'Software Development',
+    'Web Development',
+    'Programming',
+    'Tech Blog',
+    'JavaScript',
+    'TypeScript',
+    'React',
+    'Next.js',
+    'Developer Portfolio',
+  ],
 }
 
 export default function RootLayout({
@@ -119,6 +158,8 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <WebsiteJsonLd />
+        <PersonJsonLd />
         <link
           rel="apple-touch-icon"
           sizes="76x76"
