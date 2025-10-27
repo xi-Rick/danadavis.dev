@@ -10,13 +10,13 @@ import {
   Nunito,
   Playpen_Sans,
 } from 'next/font/google'
-import { PersonJsonLd, WebsiteJsonLd } from '~/components/structured-data'
 import 'react-medium-image-zoom/dist/styles.css'
 import 'remark-github-blockquote-alert/alert.css'
 import { UmamiAnalytics } from '~/components/analytics/umami'
 import { Footer } from '~/components/footer'
 import { Header } from '~/components/header'
 import { KBarSearchProvider } from '~/components/search/kbar-provider'
+import { PersonJsonLd, WebsiteJsonLd } from '~/components/structured-data'
 import Ascii from '~/components/ui/ascii'
 import AutoPlayAudio from '~/components/ui/autoplay'
 import PageTransitionWrapper from '~/components/ui/page-transition-wrapper'
