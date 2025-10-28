@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { Minus, Plus } from 'lucide-react'
+import Image from 'next/image'
 import { GrowingUnderline } from '~/components/ui/growing-underline'
-import { Image } from '~/components/ui/image'
 import { Link } from '~/components/ui/link'
 import { Twemoji } from '~/components/ui/twemoji'
 
@@ -74,14 +74,15 @@ function TimelineItem({
         ],
       )}
     >
-      <Image
-        src={logo}
-        alt={org}
-        className="h-12 w-12! shrink-0 rounded-md"
-        style={{ objectFit: 'contain' }}
-        width={200}
-        height={200}
-      />
+      <div className="relative h-12 w-12 shrink-0 rounded-md">
+        <Image
+          src={logo}
+          alt={org}
+          className="h-12 w-12 rounded-md"
+          width={48}
+          height={48}
+        />
+      </div>
       <details className="w-full open:[&_.minus]:block open:[&_.plus]:hidden">
         <summary className="relative pr-10 marker:content-none">
           <Plus
