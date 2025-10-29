@@ -60,7 +60,7 @@ export function MovieCard({ movie }: { movie: SelectMovie }) {
                 {year}
                 {titleType === 'Movie' && ` - ${formatRuntime(runtime)}`}
               </span>
-              <span className="hidden md:inline">
+              <span>
                 {titleType === 'TV Series' && (
                   <span> - (TV series / {totalSeasons} seasons)</span>
                 )}
