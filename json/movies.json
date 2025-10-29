@@ -21,7 +21,7 @@
     "year": 2005,
     "titleType": "tv",
     "yourRating": 10,
-    "imdbRating": "8.2",
+    "imdbRating": "8.5",
     "imdbUrl": "https://www.imdb.com/title/tt0373732/",
     "createdAt": "2025-10-15T04:53:27.624Z",
     "updatedAt": "2025-10-15T05:20:44.130Z",
@@ -33,7 +33,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/the-boondocks"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/the-boondocks",
+    "numVotes": "39786",
+    "totalSeasons": "4"
   },
   {
     "id": "cmgr5v1zd000906fk8d14nvus",
@@ -64,7 +66,7 @@
     "year": 1997,
     "titleType": "movie",
     "yourRating": 9,
-    "imdbRating": "7.5",
+    "imdbRating": "7.3",
     "imdbUrl": "https://www.imdb.com/title/tt0119282/",
     "createdAt": "2025-10-14T22:56:01.225Z",
     "updatedAt": "2025-10-15T05:16:54.944Z",
@@ -76,7 +78,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/hercules"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/hercules",
+    "numVotes": "273342",
+    "totalSeasons": ""
   },
   {
     "id": "cmgrimqbh00030kflto2wwy3q",
@@ -100,7 +104,7 @@
     "year": 2007,
     "titleType": "tv",
     "yourRating": 10,
-    "imdbRating": "7.9",
+    "imdbRating": "8.1",
     "imdbUrl": "https://www.imdb.com/title/tt0898266/",
     "createdAt": "2025-10-15T04:53:27.870Z",
     "updatedAt": "2025-10-15T05:16:55.719Z",
@@ -112,7 +116,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/the-big-bang-theory"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/the-big-bang-theory",
+    "numVotes": "921709",
+    "totalSeasons": "12"
   },
   {
     "id": "cmgr5v1uu000706fk57uo999l",
@@ -136,7 +142,7 @@
     "year": 1994,
     "titleType": "movie",
     "yourRating": 10,
-    "imdbRating": "8.7",
+    "imdbRating": "9.3",
     "imdbUrl": "https://www.imdb.com/title/tt0111161/",
     "ratings": [
       {
@@ -148,7 +154,9 @@
     "updatedAt": "2025-10-15T05:16:54.716Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o",
     "runtime": "142",
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/the_shawshank_redemption"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/the_shawshank_redemption",
+    "numVotes": "3114101",
+    "totalSeasons": ""
   },
   {
     "id": "cmgrimqrd00070kflmi07j619",
@@ -172,7 +180,7 @@
     "year": 2011,
     "titleType": "tv",
     "yourRating": 8,
-    "imdbRating": "8.5",
+    "imdbRating": "9.2",
     "imdbUrl": "https://www.imdb.com/title/tt0944947/",
     "createdAt": "2025-10-15T04:53:28.441Z",
     "updatedAt": "2025-10-15T05:16:56.228Z",
@@ -184,7 +192,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/game-of-thrones"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/game-of-thrones",
+    "numVotes": "2495126",
+    "totalSeasons": "8"
   },
   {
     "id": "cmgrimr9d000b0kflvp6pxpdu",
@@ -208,7 +218,7 @@
     "year": 1994,
     "titleType": "tv",
     "yourRating": 8,
-    "imdbRating": "8.4",
+    "imdbRating": "8.9",
     "imdbUrl": "https://www.imdb.com/title/tt0108778/",
     "createdAt": "2025-10-15T04:53:29.089Z",
     "updatedAt": "2025-10-15T05:16:56.914Z",
@@ -220,7 +230,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/friends"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/friends",
+    "numVotes": "1165833",
+    "totalSeasons": "10"
   },
   {
     "id": "cmgrimroq000f0kfle3ddbh4v",
@@ -244,7 +256,7 @@
     "year": 2013,
     "titleType": "tv",
     "yourRating": 10,
-    "imdbRating": "8.7",
+    "imdbRating": "9",
     "imdbUrl": "https://www.imdb.com/title/tt2861424/",
     "createdAt": "2025-10-15T04:53:29.642Z",
     "updatedAt": "2025-10-15T05:16:57.469Z",
@@ -256,7 +268,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/rick-and-morty"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/rick-and-morty",
+    "numVotes": "672196",
+    "totalSeasons": "12"
   },
   {
     "id": "cmgrimrzt000h0kfl14vk4ewu",
@@ -292,7 +306,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/naruto"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/naruto",
+    "numVotes": "156742",
+    "totalSeasons": "1"
   },
   {
     "id": "cmgrims6e000j0kflg4ic3ll8",
@@ -316,7 +332,7 @@
     "year": 2004,
     "titleType": "tv",
     "yourRating": 8,
-    "imdbRating": "8.4",
+    "imdbRating": "8.2",
     "imdbUrl": "https://www.imdb.com/title/tt0434665/",
     "createdAt": "2025-10-15T04:53:30.278Z",
     "updatedAt": "2025-10-15T05:16:58.110Z",
@@ -328,7 +344,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/bleach"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/bleach",
+    "numVotes": "86404",
+    "totalSeasons": "17"
   },
   {
     "id": "cmgrimsff000l0kflbretp61i",
@@ -352,7 +370,7 @@
     "year": 2016,
     "titleType": "tv",
     "yourRating": 8,
-    "imdbRating": "8.4",
+    "imdbRating": "8",
     "imdbUrl": "https://www.imdb.com/title/tt4052886/",
     "createdAt": "2025-10-15T04:53:30.603Z",
     "updatedAt": "2025-10-15T05:16:58.417Z",
@@ -364,7 +382,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/lucifer"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/lucifer",
+    "numVotes": "382979",
+    "totalSeasons": "6"
   },
   {
     "id": "cmgrimsmf000n0kflsst298ia",
@@ -388,7 +408,7 @@
     "year": 1997,
     "titleType": "tv",
     "yourRating": 9,
-    "imdbRating": "8.4",
+    "imdbRating": "8.7",
     "imdbUrl": "https://www.imdb.com/title/tt0121955/",
     "createdAt": "2025-10-15T04:53:30.855Z",
     "updatedAt": "2025-10-15T05:16:58.753Z",
@@ -400,7 +420,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/south-park"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/south-park",
+    "numVotes": "434844",
+    "totalSeasons": "30"
   },
   {
     "id": "cmgrimtew000t0kfl8t092a01",
@@ -424,7 +446,7 @@
     "year": 1994,
     "titleType": "movie",
     "yourRating": 9,
-    "imdbRating": "8.5",
+    "imdbRating": "8.8",
     "imdbUrl": "https://www.imdb.com/title/tt0110912/",
     "ratings": [
       {
@@ -436,7 +458,9 @@
     "updatedAt": "2025-10-15T05:16:59.529Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o",
     "runtime": "154",
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/pulp_fiction"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/pulp_fiction",
+    "numVotes": "2379598",
+    "totalSeasons": ""
   },
   {
     "id": "cmgrimtnx000v0kfln8cgiv2t",
@@ -460,7 +484,7 @@
     "year": 2001,
     "titleType": "movie",
     "yourRating": 9,
-    "imdbRating": "8.4",
+    "imdbRating": "8.9",
     "imdbUrl": "https://www.imdb.com/title/tt0120737/",
     "createdAt": "2025-10-15T04:53:32.206Z",
     "updatedAt": "2025-10-15T05:16:59.758Z",
@@ -472,7 +496,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/the_lord_of_the_rings_the_fellowship_of_the_ring"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/the_lord_of_the_rings_the_fellowship_of_the_ring",
+    "numVotes": "2150751",
+    "totalSeasons": ""
   },
   {
     "id": "cmgrimtxi000x0kfl22birter",
@@ -496,7 +522,7 @@
     "year": 2013,
     "titleType": "movie",
     "yourRating": 9,
-    "imdbRating": "7.6",
+    "imdbRating": "7.8",
     "imdbUrl": "https://www.imdb.com/title/tt1170358/",
     "createdAt": "2025-10-15T04:53:32.550Z",
     "updatedAt": "2025-10-15T05:16:59.980Z",
@@ -508,7 +534,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/the_hobbit_the_desolation_of_smaug"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/the_hobbit_the_desolation_of_smaug",
+    "numVotes": "741598",
+    "totalSeasons": ""
   },
   {
     "id": "cmgrimt5x000r0kfl10orzjxk",
@@ -532,7 +560,7 @@
     "year": 2016,
     "titleType": "movie",
     "yourRating": 9,
-    "imdbRating": "8.5",
+    "imdbRating": "8.4",
     "imdbUrl": "https://www.imdb.com/title/tt5311514/",
     "createdAt": "2025-10-15T04:53:31.557Z",
     "updatedAt": "2025-10-15T05:16:59.303Z",
@@ -544,7 +572,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/good_fortune"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/good_fortune",
+    "numVotes": "373638",
+    "totalSeasons": ""
   },
   {
     "id": "cmgrimri0000d0kflmfko7g6g",
@@ -568,7 +598,7 @@
     "year": 2014,
     "titleType": "movie",
     "yourRating": 8,
-    "imdbRating": "7.4",
+    "imdbRating": "7.2",
     "imdbUrl": "https://www.imdb.com/title/tt3060952/",
     "createdAt": "2025-10-15T04:53:29.401Z",
     "updatedAt": "2025-10-15T05:16:57.156Z",
@@ -580,7 +610,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/justice_league_war"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/justice_league_war",
+    "numVotes": "39865",
+    "totalSeasons": ""
   },
   {
     "id": "cmgrimswc000p0kfla8f39bah",
@@ -604,7 +636,7 @@
     "year": 2021,
     "titleType": "tv",
     "yourRating": 8,
-    "imdbRating": "8.6",
+    "imdbRating": "8.7",
     "imdbUrl": "https://www.imdb.com/title/tt6741278/",
     "createdAt": "2025-10-15T04:53:31.213Z",
     "updatedAt": "2025-10-15T05:16:59.071Z",
@@ -616,7 +648,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/invincible"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/invincible",
+    "numVotes": "291752",
+    "totalSeasons": "5"
   },
   {
     "id": "cmgrj6i39000115frb4iw9e2s",
@@ -640,7 +674,7 @@
     "year": 1999,
     "titleType": "movie",
     "yourRating": 9,
-    "imdbRating": "8.2",
+    "imdbRating": "8.7",
     "imdbUrl": "https://www.imdb.com/title/tt0133093/",
     "createdAt": "2025-10-15T05:08:50.325Z",
     "updatedAt": "2025-10-15T05:17:00.203Z",
@@ -652,7 +686,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/the_matrix"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/the_matrix",
+    "numVotes": "2196899",
+    "totalSeasons": ""
   },
   {
     "id": "cmgrj6ibk000315frta9i8784",
@@ -676,7 +712,7 @@
     "year": 2012,
     "titleType": "movie",
     "yourRating": 9,
-    "imdbRating": "8.2",
+    "imdbRating": "8.5",
     "imdbUrl": "https://www.imdb.com/title/tt1853728/",
     "createdAt": "2025-10-15T05:08:50.624Z",
     "updatedAt": "2025-10-15T05:17:00.433Z",
@@ -688,7 +724,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/django_unchained"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/django_unchained",
+    "numVotes": "1832864",
+    "totalSeasons": ""
   },
   {
     "id": "cmgrj6ir2000715frgi70w1ok",
@@ -724,7 +762,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/solo_leveling"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/solo_leveling",
+    "numVotes": "94189",
+    "totalSeasons": "2"
   },
   {
     "id": "cmgrimqk900050kflx146fakb",
@@ -748,7 +788,7 @@
     "year": 2008,
     "titleType": "movie",
     "yourRating": 9,
-    "imdbRating": "8.5",
+    "imdbRating": "9.1",
     "imdbUrl": "https://www.imdb.com/title/tt0468569/",
     "createdAt": "2025-10-15T04:53:28.185Z",
     "updatedAt": "2025-10-15T05:16:55.943Z",
@@ -760,7 +800,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/the_dark_knight"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/the_dark_knight",
+    "numVotes": "3089908",
+    "totalSeasons": ""
   },
   {
     "id": "cmgrj6ijm000515fr7u2oytsf",
@@ -784,7 +826,7 @@
     "year": 2014,
     "titleType": "movie",
     "yourRating": 9,
-    "imdbRating": "7.9",
+    "imdbRating": "8",
     "imdbUrl": "https://www.imdb.com/title/tt2015381/",
     "createdAt": "2025-10-15T05:08:50.915Z",
     "updatedAt": "2025-10-15T05:17:00.655Z",
@@ -796,7 +838,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/good_fortune"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/good_fortune",
+    "numVotes": "1339602",
+    "totalSeasons": ""
   },
   {
     "id": "cmgrimr0q00090kflz7gi0qhl",
@@ -820,7 +864,7 @@
     "year": 1999,
     "titleType": "tv",
     "yourRating": 9,
-    "imdbRating": "8.7",
+    "imdbRating": "9",
     "imdbUrl": "https://www.imdb.com/title/tt0388629/",
     "createdAt": "2025-10-15T04:53:28.779Z",
     "updatedAt": "2025-10-15T05:16:56.533Z",
@@ -832,7 +876,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/good_fortune"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/good_fortune",
+    "numVotes": "327167",
+    "totalSeasons": "1"
   },
   {
     "id": "cmgrj6j39000118frb4iw9e5s",
@@ -856,7 +902,7 @@
     "year": 2001,
     "titleType": "movie",
     "yourRating": 10,
-    "imdbRating": "7.6",
+    "imdbRating": "7.7",
     "imdbUrl": "https://www.imdb.com/title/tt0241527/",
     "createdAt": "2025-10-20T00:00:00.000Z",
     "updatedAt": "2025-10-20T00:00:00.000Z",
@@ -868,7 +914,9 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/harry-potter-and-the-philosophers-stone"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/harry-potter-and-the-philosophers-stone",
+    "numVotes": "923679",
+    "totalSeasons": ""
   },
   {
     "id": "cmgrspiritedaway0001",
@@ -904,6 +952,8 @@
         "source": "Rotten Tomatoes"
       }
     ],
-    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/spirited_away"
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/spirited_away",
+    "numVotes": "936542",
+    "totalSeasons": ""
   }
 ]
