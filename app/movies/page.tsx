@@ -40,8 +40,6 @@ async function loadMoviesFromJson(): Promise<SelectMovie[]> {
       imdbUrl: string
       runtime?: string
       ratings?: Array<{ value: string; source: string }>
-      totalSeasons?: string
-      numVotes?: string
       createdAt: string
       updatedAt: string
       authorId: string
@@ -54,12 +52,12 @@ async function loadMoviesFromJson(): Promise<SelectMovie[]> {
       title: movie.title,
       originalTitle: movie.title, // assuming same
       url: movie.imdbUrl,
-      titleType: movie.titleType === 'movie' ? 'Movie' : 'TV Series', // converts tv/movie to Movie/TV Series
+      titleType: movie.titleType === 'movie' ? 'Movie' : 'TV Series',
       imdbRating: String(movie.imdbRating),
       runtime: movie.runtime || '0', // default
       year: String(movie.year),
       genres: movie.tags.join(', '), // using tags as genres
-      numVotes: movie.numVotes || '0', // Use scraped vote count
+      numVotes: '0', // default
       releaseDate: movie.date,
       directors: movie.director,
       actors: '', // default
@@ -69,7 +67,7 @@ async function loadMoviesFromJson(): Promise<SelectMovie[]> {
       country: '', // default
       awards: '', // default
       boxOffice: '', // default
-      totalSeasons: movie.totalSeasons || '', // Use the actual number of seasons
+      totalSeasons: movie.titleType === 'tv' ? '1' : '', // default for TV
       ratings: movie.ratings || [],
       createdAt: new Date(movie.createdAt),
       updatedAt: new Date(movie.updatedAt),
