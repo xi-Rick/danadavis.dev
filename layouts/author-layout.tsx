@@ -35,7 +35,7 @@ export function AuthorLayout({}: Props) {
                 from <strong>United States</strong>. Building tomorrow&apos;s
                 web today, one commit at a time. I have a passion for{' '}
                 <strong>Full-Stack Development</strong>. I enjoy building
-                applications and stuff related to web dev. I work mainly with{' '}
+                applications and stuff related to the web. I work mainly with{' '}
                 <strong>Next.js</strong>, <strong>TypeScript</strong>,{' '}
                 <strong>React</strong>, <strong>Node.js</strong>, and{' '}
                 <strong>TailwindCSS</strong>.

@@ -24,6 +24,7 @@ export type Project = {
   type: 'work' | 'self'
   title: string
   description?: string
+  content?: string
   imgSrc: string
   url?: string
   repo?: string

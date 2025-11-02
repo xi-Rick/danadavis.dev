@@ -955,5 +955,42 @@
     "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/spirited_away",
     "numVotes": "936542",
     "totalSeasons": ""
+  },
+  {
+    "id": "cmgritv1zd000106fk8d14nvus",
+    "title": "Modern Family",
+    "slug": "modern-family",
+    "summary": "Three different but related families face trials and tribulations in their own uniquely comedic ways. Told in documentary-style format, this show follows the families of Jay Pritchett, his daughter Claire Dunphy, and his son Mitchell Pritchett as they navigate life, love, and family dynamics in suburban Los Angeles.",
+    "content": "<p>Modern Family follows three interconnected families in a mockumentary format, showcasing their daily lives, relationships, and growth over eleven seasons.</p>",
+    "date": "2009-09-23T00:00:00.000Z",
+    "lastmod": "2025-10-21T13:40:07.895Z",
+    "tags": ["Comedy", "Drama", "Family"],
+    "categories": ["tv"],
+    "images": [
+      "https://image.tmdb.org/t/p/w500/klL4yhwiU8aF4AuF5dCfJA9sRnS.jpg"
+    ],
+    "authors": ["Christopher Lloyd", "Steven Levitan"],
+    "draft": false,
+    "featured": true,
+    "layout": "MovieLayout",
+    "director": "Various",
+    "year": 2009,
+    "titleType": "tv",
+    "yourRating": 8,
+    "imdbRating": "8.5",
+    "imdbUrl": "https://www.imdb.com/title/tt1442437/",
+    "createdAt": "2025-10-21T13:40:07.895Z",
+    "updatedAt": "2025-10-21T13:40:07.895Z",
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "runtime": "22",
+    "ratings": [
+      {
+        "value": "85%",
+        "source": "Rotten Tomatoes"
+      }
+    ],
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/modern_family",
+    "numVotes": "528000",
+    "totalSeasons": "11"
   }
 ]

@@ -16,12 +16,11 @@ import type { GithubRepository } from '~/types/data'
 import { fetcher } from '~/utils/misc'
 
 export function ProjectCard({ project }: { project: (typeof PROJECTS)[0] }) {
-  const { title, description, imgSrc, url, repo, builtWith, links } = project
+  const { title, description, imgSrc, repo, builtWith, links } = project
   const { data: repository } = useSWR<GithubRepository>(
     `/api/github?repo=${repo}`,
     fetcher,
   )
-  const href = repository?.url || url
   const lang = repository?.languages?.[0]
 
   return (
@@ -40,15 +39,17 @@ export function ProjectCard({ project }: { project: (typeof PROJECTS)[0] }) {
         />
         <div className="flex flex-col items-start gap-1 pt-1">
           <h2 className="text-[22px] leading-[30px] font-bold">
-            {href ? (
-              <Link href={href} aria-label={`Link to ${title}`}>
-                <GrowingUnderline data-umami-event="project-title-link">
-                  {title}
-                </GrowingUnderline>
-              </Link>
-            ) : (
-              title
-            )}
+            <Link
+              href={`/projects/${title
+                .toLowerCase()
+                .replace(/[^\w\s-]/g, '')
+                .replace(/\s+/g, '-')}`}
+              aria-label={`View details for ${title}`}
+            >
+              <GrowingUnderline data-umami-event="project-title-link">
+                {title}
+              </GrowingUnderline>
+            </Link>
           </h2>
         </div>
       </div>
