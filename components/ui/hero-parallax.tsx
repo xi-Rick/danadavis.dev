@@ -93,7 +93,10 @@ export const HeroParallax = ({
     const speed = 0.1 // px/ms
     const cardWidth = 40 * 16 + 80 // 40rem + 20rem spacing in px (approximate)
     const cardWidthMobile = 14 * 16 + 12 // 14rem + 3rem spacing in px (approximate)
-    const rowLength = firstRow.length // Number of cards in a row
+
+    // Calculate the total width of one set of cards (not all duplicates)
+    const singleSetWidth = cardWidth * (safeProjects.length || 1)
+    const singleSetWidthMobile = cardWidthMobile * (safeProjects.length || 1)
 
     function animate() {
       if (!mountedRef.current) return
@@ -102,31 +105,26 @@ export const HeroParallax = ({
       const delta = now - lastTime
       lastTime = now
 
-      // Desktop
-      let nextX = baseX.get() + speed * delta
-      if (nextX >= cardWidth * rowLength) {
-        nextX = 0
-      }
-      baseX.set(nextX)
+      // Desktop - use modulo for seamless looping
+      const nextX = baseX.get() + speed * delta
+      baseX.set(nextX % singleSetWidth)
 
-      let nextXReverse = baseXReverse.get() - speed * delta
-      if (nextXReverse <= -cardWidth * rowLength) {
-        nextXReverse = 0
-      }
-      baseXReverse.set(nextXReverse)
+      const nextXReverse = baseXReverse.get() - speed * delta
+      baseXReverse.set(
+        (((nextXReverse % singleSetWidth) + singleSetWidth) % singleSetWidth) -
+          singleSetWidth,
+      )
 
-      // Mobile
-      let nextXMobile = baseXMobile.get() + speed * 0.6 * delta
-      if (nextXMobile >= cardWidthMobile * rowLength) {
-        nextXMobile = 0
-      }
-      baseXMobile.set(nextXMobile)
+      // Mobile - use modulo for seamless looping
+      const nextXMobile = baseXMobile.get() + speed * 0.6 * delta
+      baseXMobile.set(nextXMobile % singleSetWidthMobile)
 
-      let nextXReverseMobile = baseXReverseMobile.get() - speed * 0.6 * delta
-      if (nextXReverseMobile <= -cardWidthMobile * rowLength) {
-        nextXReverseMobile = 0
-      }
-      baseXReverseMobile.set(nextXReverseMobile)
+      const nextXReverseMobile = baseXReverseMobile.get() - speed * 0.6 * delta
+      baseXReverseMobile.set(
+        (((nextXReverseMobile % singleSetWidthMobile) + singleSetWidthMobile) %
+          singleSetWidthMobile) -
+          singleSetWidthMobile,
+      )
 
       animationFrame = requestAnimationFrame(animate)
     }
@@ -136,7 +134,13 @@ export const HeroParallax = ({
       mountedRef.current = false
       cancelAnimationFrame(animationFrame)
     }
-  }, [baseX, baseXReverse, baseXMobile, baseXReverseMobile, firstRow.length])
+  }, [
+    baseX,
+    baseXReverse,
+    baseXMobile,
+    baseXReverseMobile,
+    safeProjects.length,
+  ])
 
   // Combine infinite scroll with parallax
   const combinedTranslateX = useTransform(
