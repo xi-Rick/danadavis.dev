@@ -20,12 +20,20 @@ export function Home({
     () => [
       ...PROJECTS.slice(0, 10)
         .filter((project) => project.repo)
-        .map((project) => ({
-          title: project.title,
-          link: project.repo!,
-          thumbnail: project.imgSrc,
-          type: 'project' as const,
-        })),
+        .map((project) => {
+          // Generate the slug for the project page URL
+          const slug = project.title
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/\s+/g, '-')
+
+          return {
+            title: project.title,
+            link: `/projects/${slug}`,
+            thumbnail: project.imgSrc,
+            type: 'project' as const,
+          }
+        }),
       ...posts.slice(0, 5).map((post) => ({
         title: post.title,
         link: `/blog/${post.slug}`,
