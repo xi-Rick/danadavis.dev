@@ -18,7 +18,7 @@ export default function Comments({
 }: CommentsProps) {
   const shortname = process.env.NEXT_PUBLIC_DISQUS_SHORTNAME
 
-  const [loadComments, setLoadComments] = useState(true) // Changed to true for auto-load
+  const [loadComments, setLoadComments] = useState(false) // Wait for theme to be resolved
   const [error, setError] = useState<string | null>(null)
   const [reloadKey, setReloadKey] = useState(0)
   const [mounted, setMounted] = useState(false)
@@ -31,11 +31,18 @@ export default function Comments({
     setMounted(true)
   }, [])
 
-  // Auto-load comments on mount
+  // Auto-load comments when theme is resolved and component is mounted
   useEffect(() => {
-    setLoadComments(true)
-    previousTheme.current = resolvedTheme
-  }, [resolvedTheme])
+    if (resolvedTheme && mounted && !loadComments) {
+      // Delay loading comments slightly to ensure theme is fully resolved
+      const timer = setTimeout(() => {
+        setLoadComments(true)
+        previousTheme.current = resolvedTheme
+      }, 100)
+
+      return () => clearTimeout(timer)
+    }
+  }, [resolvedTheme, mounted, loadComments])
 
   // Enhanced theme change handler
   const handleThemeChange = useCallback(() => {
@@ -134,6 +141,21 @@ export default function Comments({
     )
   }
 
+  // Don't render until mounted and theme is resolved
+  if (!mounted || !resolvedTheme) {
+    return (
+      <div className={className}>
+        <div className="flex items-center justify-center py-8">
+          <div className="text-gray-500 dark:text-gray-400">
+            Loading comments...
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const isDark = resolvedTheme === 'dark'
+
   return (
     <div className={className}>
       <div
@@ -141,15 +163,9 @@ export default function Comments({
         key={`comments-${reloadKey}-${resolvedTheme}`}
         // Reset to standard colors that Disqus can parse, adapted for theme
         style={{
-          colorScheme: mounted && resolvedTheme === 'dark' ? 'dark' : 'light',
-          color:
-            mounted && resolvedTheme === 'dark'
-              ? 'rgb(255, 255, 255)'
-              : 'rgb(0, 0, 0)',
-          backgroundColor:
-            mounted && resolvedTheme === 'dark'
-              ? 'rgb(0, 0, 0)'
-              : 'rgb(255, 255, 255)',
+          colorScheme: isDark ? 'dark' : 'light',
+          color: isDark ? 'rgb(255, 255, 255)' : 'rgb(0, 0, 0)',
+          backgroundColor: isDark ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)',
         }}
       >
         {loadComments && (

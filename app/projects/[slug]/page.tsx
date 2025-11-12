@@ -113,7 +113,7 @@ export default async function ProjectPage(props: {
                   <Link
                     key={url}
                     href={url}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold border-2 border-black dark:border-white rounded-lg bg-white dark:bg-black text-black dark:text-white hover:bg-orange-50 dark:hover:bg-green-900/20 transition-all"
                   >
                     {linkTitle}
                   </Link>
@@ -123,21 +123,21 @@ export default async function ProjectPage(props: {
 
             {/* Project Details */}
             <div className="lg:sticky lg:top-24 space-y-6">
-              <div className="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-primary-200 dark:border-green-800">
-                <h3 className="text-lg font-semibold mb-4 text-primary-600 dark:text-green-500">
+              <div className="p-6 bg-orange-50 dark:bg-black rounded-xl border-2 border-black dark:border-white">
+                <h3 className="text-lg font-semibold mb-4 text-orange-600 dark:text-green-500">
                   Project Details
                 </h3>
                 <dl className="space-y-4">
                   <div>
-                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <dt className="text-sm font-medium text-gray-600 dark:text-gray-300">
                       Type
                     </dt>
-                    <dd className="mt-1 text-sm text-gray-900 dark:text-green-100">
+                    <dd className="mt-1 text-sm font-medium text-black dark:text-white capitalize">
                       {type}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <dt className="text-sm font-medium text-gray-600 dark:text-gray-300">
                       Tech Stack
                     </dt>
                     <dd className="mt-1">
@@ -146,7 +146,7 @@ export default async function ProjectPage(props: {
                           <Badge
                             key={tech}
                             variant="outline"
-                            className="capitalize"
+                            className="capitalize border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white hover:bg-orange-100 dark:hover:bg-green-900/20"
                           >
                             {tech}
                           </Badge>
