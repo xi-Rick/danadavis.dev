@@ -60,9 +60,17 @@ export function FooterMeta() {
       </div>
       <div className="flex items-center gap-2">
         <MapPin className="h-5 w-5" />
-        <span className="font-medium">
-          [::1]:443 - Lansing MI, <Twemoji emoji="flag-us" className="h-4.5!" />
-        </span>
+        <Link
+          href="https://www.google.com/maps/place/Lansing,+MI"
+          target="_blank"
+        >
+          <GrowingUnderline
+            className="font-medium"
+            data-umami-event="footer-location"
+          >
+            Lansing, MI <Twemoji emoji="flag-us" className="h-4.5!" />
+          </GrowingUnderline>
+        </Link>
       </div>
       <div className="flex items-center gap-2">
         <Clock className="h-5 w-5" />
