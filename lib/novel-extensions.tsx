@@ -48,7 +48,7 @@ export const defaultExtensions: unknown[] = [
     blockquote: {
       HTMLAttributes: {
         class:
-          'border-l-4 border-orange-500 pl-4 italic text-black/80 dark:text-white/80',
+          'border-l-4 border-orange-500 dark:border-green-600 pl-4 italic text-black/80 dark:text-white/80',
       },
     },
     codeBlock: {
@@ -66,7 +66,7 @@ export const defaultExtensions: unknown[] = [
     },
     horizontalRule: false,
     dropcursor: {
-      color: '#FF9F43',
+      color: '#f97316', // Orange for light mode
       width: 2,
     },
     gapcursor: false,
@@ -80,7 +80,7 @@ export const defaultExtensions: unknown[] = [
   TiptapLink.configure({
     HTMLAttributes: {
       class:
-        'text-orange-500 underline underline-offset-[3px] hover:text-orange-600 dark:hover:text-orange-400 transition-colors cursor-pointer',
+        'text-orange-500 dark:text-green-600 underline underline-offset-[3px] hover:text-orange-600 dark:hover:text-green-500 transition-colors cursor-pointer',
     },
   }),
   UpdatedImage.configure({
@@ -118,7 +118,7 @@ export const suggestionItemsArr: SuggestionItem[] = [
     title: 'Text',
     description: 'Just start typing with plain text.',
     searchTerms: ['p', 'paragraph'],
-    icon: <Text size={18} className="text-orange-500" />,
+    icon: <Text size={18} className="text-orange-500 dark:text-green-600" />,
     command: ({ editor, range }) => {
       editor
         .chain()
@@ -132,7 +132,9 @@ export const suggestionItemsArr: SuggestionItem[] = [
     title: 'To-do List',
     description: 'Track tasks with a to-do list.',
     searchTerms: ['todo', 'task', 'list', 'check', 'checkbox'],
-    icon: <CheckSquare size={18} className="text-orange-500" />,
+    icon: (
+      <CheckSquare size={18} className="text-orange-500 dark:text-green-600" />
+    ),
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleTaskList().run()
     },
@@ -141,7 +143,9 @@ export const suggestionItemsArr: SuggestionItem[] = [
     title: 'Heading 1',
     description: 'Big section heading.',
     searchTerms: ['title', 'big', 'large'],
-    icon: <Heading1 size={18} className="text-orange-500" />,
+    icon: (
+      <Heading1 size={18} className="text-orange-500 dark:text-green-600" />
+    ),
     command: ({ editor, range }) => {
       editor
         .chain()
@@ -155,7 +159,9 @@ export const suggestionItemsArr: SuggestionItem[] = [
     title: 'Heading 2',
     description: 'Medium section heading.',
     searchTerms: ['subtitle', 'medium'],
-    icon: <Heading2 size={18} className="text-orange-500" />,
+    icon: (
+      <Heading2 size={18} className="text-orange-500 dark:text-green-600" />
+    ),
     command: ({ editor, range }) => {
       editor
         .chain()
@@ -169,7 +175,9 @@ export const suggestionItemsArr: SuggestionItem[] = [
     title: 'Heading 3',
     description: 'Small section heading.',
     searchTerms: ['subtitle', 'small'],
-    icon: <Heading3 size={18} className="text-orange-500" />,
+    icon: (
+      <Heading3 size={18} className="text-orange-500 dark:text-green-600" />
+    ),
     command: ({ editor, range }) => {
       editor
         .chain()
@@ -183,7 +191,7 @@ export const suggestionItemsArr: SuggestionItem[] = [
     title: 'Bullet List',
     description: 'Create a simple bullet list.',
     searchTerms: ['unordered', 'point'],
-    icon: <List size={18} className="text-orange-500" />,
+    icon: <List size={18} className="text-orange-500 dark:text-green-600" />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBulletList().run()
     },
@@ -192,7 +200,9 @@ export const suggestionItemsArr: SuggestionItem[] = [
     title: 'Numbered List',
     description: 'Create a list with numbering.',
     searchTerms: ['ordered'],
-    icon: <ListOrdered size={18} className="text-orange-500" />,
+    icon: (
+      <ListOrdered size={18} className="text-orange-500 dark:text-green-600" />
+    ),
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleOrderedList().run()
     },
@@ -201,7 +211,9 @@ export const suggestionItemsArr: SuggestionItem[] = [
     title: 'Quote',
     description: 'Capture a quote.',
     searchTerms: ['blockquote'],
-    icon: <TextQuote size={18} className="text-orange-500" />,
+    icon: (
+      <TextQuote size={18} className="text-orange-500 dark:text-green-600" />
+    ),
     command: ({ editor, range }) =>
       editor
         .chain()
@@ -215,7 +227,7 @@ export const suggestionItemsArr: SuggestionItem[] = [
     title: 'Code',
     description: 'Capture a code snippet.',
     searchTerms: ['codeblock'],
-    icon: <Code size={18} className="text-orange-500" />,
+    icon: <Code size={18} className="text-orange-500 dark:text-green-600" />,
     command: ({ editor, range }) =>
       editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),
   },
@@ -223,7 +235,9 @@ export const suggestionItemsArr: SuggestionItem[] = [
     title: 'Image',
     description: 'Upload an image.',
     searchTerms: ['img', 'picture', 'media'],
-    icon: <ImageIcon size={18} className="text-orange-500" />,
+    icon: (
+      <ImageIcon size={18} className="text-orange-500 dark:text-green-600" />
+    ),
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run()
     },

@@ -178,10 +178,10 @@ export default function AdvancedNovelEditor({
                 <EditorCommandItem
                   key={item.title}
                   onCommand={(val) => item.command?.(val)}
-                  className="relative flex w-full items-start gap-2 cursor-default select-none rounded-md px-2 py-1.5 text-left text-sm outline-none hover:bg-orange-100 dark:hover:bg-orange-900 aria-selected:bg-orange-200 dark:aria-selected:bg-orange-800 transition-colors"
+                  className="relative flex w-full items-start gap-2 cursor-default select-none rounded-md px-2 py-1.5 text-left text-sm outline-none hover:bg-orange-100 dark:hover:bg-green-900 aria-selected:bg-orange-200 dark:aria-selected:bg-green-800 transition-colors"
                   value={item.title}
                 >
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded border border-orange-500 bg-orange-50 dark:bg-orange-950">
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded border border-orange-500 bg-orange-50 dark:border-green-600 dark:bg-green-950">
                     {item.icon}
                   </div>
                   <div className="flex flex-col flex-1 min-w-0 gap-0.5">
