@@ -317,12 +317,12 @@ export const Header = ({
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [mouseX, mouseY])
 
-  // Create dynamic grid of interactive elements
+  // Create dynamic grid of interactive elements - reduced for performance
   const gridElements = useMemo(
     () =>
-      Array.from({ length: 24 }, (_, i) => ({
+      Array.from({ length: 12 }, (_, i) => ({
         id: i,
-        delay: i * 0.1,
+        delay: i * 0.05,
         x: (i % 6) * 20,
         y: Math.floor(i / 6) * 25,
       })),
@@ -330,7 +330,7 @@ export const Header = ({
   )
 
   return (
-    <div className="relative mx-auto w-full max-w-7xl overflow-visible px-4 py-10 sm:py-20 md:py-32">
+    <div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:py-20 md:py-32">
       {/* Interactive background grid */}
       <motion.div
         className="pointer-events-none absolute inset-0 opacity-30"
@@ -539,14 +539,14 @@ export const Header = ({
 
         {/* Introduction with mobile-optimized layout */}
         <motion.div
-          className="relative max-w-full sm:max-w-4xl"
+          className="relative max-w-full pl-8 sm:max-w-4xl sm:pl-12 md:pl-14 lg:pl-16"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 3.0 }}
         >
-          {/* Enhanced bracket decoration - hidden on mobile, visible on larger screens */}
+          {/* Enhanced bracket decoration - visible on all screen sizes */}
           <motion.div
-            className="absolute top-0 -left-12 hidden sm:block"
+            className="absolute top-0 left-0"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 3.2 }}
@@ -556,15 +556,11 @@ export const Header = ({
               whileHover={{ scale: 1.1 }}
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
-              {/* Main bracket */}
+              {/* Main bracket with themed colors */}
               <motion.span
-                className="text-foreground/30 font-mono text-4xl font-bold"
+                className="font-mono text-xl font-bold text-orange-500 sm:text-2xl md:text-3xl lg:text-4xl dark:text-green-500"
                 animate={{
-                  color: [
-                    'rgba(var(--foreground) / 0.3)',
-                    'rgba(var(--foreground) / 0.6)',
-                    'rgba(var(--foreground) / 0.3)',
-                  ],
+                  opacity: [0.6, 1, 0.6],
                 }}
                 transition={{
                   duration: 3,
@@ -575,25 +571,27 @@ export const Header = ({
                 [
               </motion.span>
 
-              {/* Accent lines */}
+              {/* Accent lines with themed colors */}
               <motion.div
-                className="absolute top-1 -left-1 h-6 w-0.5 bg-gradient-to-b from-orange-400/50 to-transparent"
+                className="absolute top-0.5 -left-0.5 h-3 w-0.5 bg-gradient-to-b from-orange-500/70 to-transparent sm:h-4 sm:top-1 sm:-left-1 md:h-5 lg:h-6 dark:from-green-500/70"
                 initial={{ height: 0 }}
-                animate={{ height: 24 }}
+                animate={{ height: 12 }}
                 transition={{ delay: 3.4, duration: 0.8 }}
+                style={{ height: 'clamp(12px, 1.25rem, 24px)' }}
               />
               <motion.div
-                className="absolute bottom-1 -left-1 h-6 w-0.5 bg-gradient-to-t from-orange-400/50 to-transparent"
+                className="absolute bottom-0.5 -left-0.5 h-3 w-0.5 bg-gradient-to-t from-orange-500/70 to-transparent sm:h-4 sm:bottom-1 sm:-left-1 md:h-5 lg:h-6 dark:from-green-500/70"
                 initial={{ height: 0 }}
-                animate={{ height: 24 }}
+                animate={{ height: 12 }}
                 transition={{ delay: 3.6, duration: 0.8 }}
+                style={{ height: 'clamp(12px, 1.25rem, 24px)' }}
               />
             </motion.div>
           </motion.div>
 
           {/* Content area with mobile-first approach */}
           <motion.div
-            className="sm:border-foreground/10 sm:border-l-2 sm:pl-4"
+            className="border-l-2 border-orange-500/20 pl-2 sm:border-orange-500/10 sm:pl-4 dark:border-green-500/20 dark:sm:border-green-500/10"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 3.4 }}
@@ -688,9 +686,9 @@ export const Header = ({
             </motion.div>
           </motion.div>
 
-          {/* Enhanced closing bracket - hidden on mobile */}
+          {/* Enhanced closing bracket - visible on all screen sizes */}
           <motion.div
-            className="absolute bottom-0 -left-12 hidden sm:block"
+            className="absolute bottom-0 left-0"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 5.2 }}
@@ -700,15 +698,11 @@ export const Header = ({
               whileHover={{ scale: 1.1 }}
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
-              {/* Main bracket */}
+              {/* Main bracket with themed colors */}
               <motion.span
-                className="text-foreground/30 font-mono text-4xl font-bold"
+                className="font-mono text-xl font-bold text-orange-500 sm:text-2xl md:text-3xl lg:text-4xl dark:text-green-500"
                 animate={{
-                  color: [
-                    'rgba(var(--foreground) / 0.3)',
-                    'rgba(var(--foreground) / 0.6)',
-                    'rgba(var(--foreground) / 0.3)',
-                  ],
+                  opacity: [0.6, 1, 0.6],
                 }}
                 transition={{
                   duration: 3,
@@ -720,18 +714,20 @@ export const Header = ({
                 ]
               </motion.span>
 
-              {/* Accent lines */}
+              {/* Accent lines with themed colors */}
               <motion.div
-                className="absolute top-1 -right-1 h-6 w-0.5 bg-gradient-to-b from-orange-400/50 to-transparent"
+                className="absolute top-0.5 -right-0.5 h-3 w-0.5 bg-gradient-to-b from-orange-500/70 to-transparent sm:h-4 sm:top-1 sm:-right-1 md:h-5 lg:h-6 dark:from-green-500/70"
                 initial={{ height: 0 }}
-                animate={{ height: 24 }}
+                animate={{ height: 12 }}
                 transition={{ delay: 5.4, duration: 0.8 }}
+                style={{ height: 'clamp(12px, 1.25rem, 24px)' }}
               />
               <motion.div
-                className="absolute -right-1 bottom-1 h-6 w-0.5 bg-gradient-to-t from-orange-400/50 to-transparent"
+                className="absolute bottom-0.5 -right-0.5 h-3 w-0.5 bg-gradient-to-t from-orange-500/70 to-transparent sm:h-4 sm:bottom-1 sm:-right-1 md:h-5 lg:h-6 dark:from-green-500/70"
                 initial={{ height: 0 }}
-                animate={{ height: 24 }}
+                animate={{ height: 12 }}
                 transition={{ delay: 5.6, duration: 0.8 }}
+                style={{ height: 'clamp(12px, 1.25rem, 24px)' }}
               />
             </motion.div>
           </motion.div>
@@ -772,7 +768,8 @@ export const ProductCard = ({
           src={product.thumbnail}
           height="600"
           width="600"
-          priority
+          priority={false}
+          loading="lazy"
           className="absolute inset-0 h-full w-full object-cover object-left-top"
           alt={product.title}
         />
@@ -818,7 +815,8 @@ export const ProductCardMobile = ({
           src={product.thumbnail}
           height="300"
           width="300"
-          priority
+          priority={false}
+          loading="lazy"
           className="absolute inset-0 h-full w-full rounded-lg object-cover object-left-top"
           alt={product.title}
         />
