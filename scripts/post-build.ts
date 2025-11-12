@@ -135,6 +135,54 @@ function processLine(line: string): boolean {
     return false
   }
 
+  // Track Next.js server tracing
+  if (line.includes('Traced Next.js server files')) {
+    const timeMatch = line.match(/([\d.]+)ms/)
+    const time = timeMatch ? timeMatch[1] : 'unknown'
+    logSuccess(`Server files traced in ${time}ms`)
+    return false
+  }
+
+  // Track serverless function creation
+  if (line.includes('Created all serverless functions')) {
+    const timeMatch = line.match(/([\d.]+)ms/)
+    const time = timeMatch ? timeMatch[1] : 'unknown'
+    logSuccess(`Serverless functions created in ${time}ms`)
+    return false
+  }
+
+  // Track static file collection
+  if (line.includes('Collected static files')) {
+    const timeMatch = line.match(/([\d.]+)ms/)
+    const time = timeMatch ? timeMatch[1] : 'unknown'
+    logSuccess(`Static files collected in ${time}ms`)
+    return false
+  }
+
+  // Track build completion
+  if (line.includes('Build Completed in')) {
+    const timeMatch = line.match(/\[([\d.]+[a-z]+)\]/)
+    const time = timeMatch ? timeMatch[1] : 'unknown'
+    logSuccess(`Build output ready in ${time}`)
+    return false
+  }
+
+  // Track deployment phases
+  if (line.includes('Deploying outputs')) {
+    logStep('Deploying outputs...', '🚀')
+    return false
+  }
+
+  if (line.includes('Deployment completed')) {
+    logSuccess('Deployment completed')
+    return false
+  }
+
+  if (line.includes('Creating build cache')) {
+    logInfo('💾 Creating build cache...')
+    return false
+  }
+
   // Show content generation messages
   if (line.includes('Tag list generated')) {
     logInfo('🏷️  Tags indexed')
