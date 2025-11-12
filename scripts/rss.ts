@@ -2,14 +2,11 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import type { Blog, Snippet } from 'contentlayer/generated'
 import { slug } from 'github-slugger'
-import { allBlogs, allSnippets } from '~/.contentlayer/generated/index.mjs'
 import { SITE_METADATA } from '~/data/site-metadata'
 import tagData from '~/json/tag-data.json' assert { type: 'json' }
 import { escape } from '~/utils/html-escaper'
 import { sortPosts } from '~/utils/misc'
 
-const blogs = allBlogs as unknown as Blog[]
-const snippets = allSnippets as unknown as Snippet[]
 const RSS_PAGE = 'feed.xml'
 
 function generateRssItem(item: Blog | Snippet) {
@@ -47,6 +44,13 @@ function generateRss(items: (Blog | Snippet)[], page = RSS_PAGE) {
 }
 
 export async function generateRssFeed() {
+  // Dynamically import contentlayer data after build is complete
+  const { allBlogs, allSnippets } = await import(
+    '~/.contentlayer/generated/index.mjs'
+  )
+  const blogs = allBlogs as unknown as Blog[]
+  const snippets = allSnippets as unknown as Snippet[]
+
   const publishPosts = blogs.filter((post) => post.draft !== true)
   const publishSnippets = snippets.filter((post) => post.draft !== true)
   // RSS for blog post & snippet
