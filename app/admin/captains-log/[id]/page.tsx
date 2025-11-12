@@ -69,7 +69,8 @@ export default function CaptainsLogDetailPage({
 }: {
   params: Promise<{ id: string }>
 }) {
-  const { id } = use(params)
+  const unwrappedParams = use(params)
+  const { id } = unwrappedParams
   const [entry, setEntry] = useState<LogEntry | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
@@ -80,15 +81,40 @@ export default function CaptainsLogDetailPage({
   const { toast } = useToast()
 
   const loadEntry = useCallback(async () => {
+    if (!id) {
+      console.log('No ID provided')
+      setIsLoading(false)
+      return
+    }
+
     try {
       setIsLoading(true)
-      const response = await fetch(`/api/captains-log/${id}`)
+      console.log('Fetching entry with ID:', id)
+      const response = await fetch(`/api/captains-log/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      })
+
+      console.log('Response status:', response.status)
 
       if (!response.ok) {
-        throw new Error('Failed to load entry')
+        const errorData = await response.json().catch(() => ({}))
+        console.error('API Error:', errorData)
+        throw new Error(
+          errorData.error || `Failed to load entry (${response.status})`,
+        )
       }
 
       const data = await response.json()
+      console.log('Received data:', data)
+
+      if (!data.logEntry) {
+        throw new Error('No log entry data received')
+      }
+
       const formattedEntry = {
         ...data.logEntry,
         timestamp: new Date(data.logEntry.timestamp),
@@ -104,11 +130,14 @@ export default function CaptainsLogDetailPage({
       setEditedEntry(formattedEntry)
     } catch (error) {
       console.error('Load error:', error)
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error'
       toast({
         title: 'Load Error',
-        description: 'Failed to load log entry. Please try again.',
+        description: `Failed to load log entry: ${errorMessage}`,
         variant: 'destructive',
       })
+      setEntry(null)
     } finally {
       setIsLoading(false)
     }
