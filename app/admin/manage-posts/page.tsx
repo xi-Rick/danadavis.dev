@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Container } from '~/components/ui/container'
+import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { PageHeader } from '~/components/ui/page-header'
 import { RadiantCard } from '~/components/ui/radiant-card'
 import { FADE_UP_ANIMATION_VARIANTS } from '~/lib/animations'
@@ -112,9 +113,11 @@ export default function ManagePostsPage() {
           </div>
           <Link
             href="/admin/add-post"
-            className="px-6 py-2 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+            className="text-base font-semibold underline-offset-4 transition-colors hover:text-gray-900 dark:hover:text-gray-200"
           >
-            Add New Post
+            <GrowingUnderline data-umami-event="add-new-post">
+              Add New Post
+            </GrowingUnderline>
           </Link>
         </div>
 
@@ -140,9 +143,11 @@ export default function ManagePostsPage() {
               </p>
               <Link
                 href="/admin/add-post"
-                className="inline-block px-6 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+                className="inline-block text-lg font-semibold underline-offset-4 transition-colors hover:text-gray-900 dark:hover:text-gray-200"
               >
-                Create Your First Post
+                <GrowingUnderline data-umami-event="create-first-post">
+                  Create Your First Post
+                </GrowingUnderline>
               </Link>
             </RadiantCard>
           </motion.div>
@@ -202,25 +207,37 @@ export default function ManagePostsPage() {
                       </div>
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-4 items-center">
                       <Link
                         href={`/blog/${post.slug}`}
-                        className="px-4 py-2 bg-gray-500 text-white text-sm font-medium rounded-lg hover:bg-gray-600 transition-colors"
+                        className="text-sm font-semibold underline-offset-4 transition-colors text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
                       >
-                        View
+                        <GrowingUnderline data-umami-event="view-post">
+                          View
+                        </GrowingUnderline>
                       </Link>
+                      <span className="text-gray-300 dark:text-gray-600">
+                        /
+                      </span>
                       <Link
                         href={`/admin/edit-post/${post.slug}`}
-                        className="px-4 py-2 accent-bg text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+                        className="text-sm font-semibold underline-offset-4 transition-colors hover:text-gray-900 dark:hover:text-gray-200"
                       >
-                        Edit
+                        <GrowingUnderline data-umami-event="edit-post">
+                          Edit
+                        </GrowingUnderline>
                       </Link>
+                      <span className="text-gray-300 dark:text-gray-600">
+                        /
+                      </span>
                       <button
                         type="button"
                         onClick={() => handleDelete(post.slug)}
-                        className="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors"
+                        className="text-sm font-semibold underline-offset-4 transition-colors text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
                       >
-                        Delete
+                        <GrowingUnderline data-umami-event="delete-post">
+                          Delete
+                        </GrowingUnderline>
                       </button>
                     </div>
                   </div>

@@ -4,6 +4,7 @@ import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import Link from 'next/link'
 import useSWR from 'swr'
 import { Container } from '~/components/ui/container'
+import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { PageHeader } from '~/components/ui/page-header'
 import { RadiantCard } from '~/components/ui/radiant-card'
 import { fetcher } from '~/utils/misc'
@@ -49,9 +50,11 @@ export default function AdminPage() {
               </p>
               <Link
                 href="/admin/add-post"
-                className="inline-block w-full text-center px-4 py-2 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+                className="inline-block w-full text-center text-base font-semibold underline-offset-4 transition-colors hover:text-gray-900 dark:hover:text-gray-200"
               >
-                Add New Post
+                <GrowingUnderline data-umami-event="admin-add-post">
+                  Add New Post
+                </GrowingUnderline>
               </Link>
             </div>
           </RadiantCard>
@@ -68,9 +71,11 @@ export default function AdminPage() {
               </p>
               <Link
                 href="/admin/manage-posts"
-                className="inline-block w-full text-center px-4 py-2 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+                className="inline-block w-full text-center text-base font-semibold underline-offset-4 transition-colors hover:text-gray-900 dark:hover:text-gray-200"
               >
-                Manage Posts
+                <GrowingUnderline data-umami-event="admin-manage-posts">
+                  Manage Posts
+                </GrowingUnderline>
               </Link>
             </div>
           </RadiantCard>
@@ -85,13 +90,9 @@ export default function AdminPage() {
               <p className="text-gray-600 dark:text-gray-300 flex-grow">
                 View detailed statistics and performance metrics.
               </p>
-              <button
-                type="button"
-                disabled
-                className="w-full px-4 py-2 bg-gray-400 text-white font-semibold rounded-lg cursor-not-allowed"
-              >
+              <div className="w-full text-center text-base font-semibold text-gray-400 dark:text-gray-500 cursor-not-allowed">
                 Coming Soon
-              </button>
+              </div>
             </div>
           </RadiantCard>
 
@@ -105,13 +106,9 @@ export default function AdminPage() {
               <p className="text-gray-600 dark:text-gray-300 flex-grow">
                 Manage and showcase your projects portfolio.
               </p>
-              <button
-                type="button"
-                disabled
-                className="w-full px-4 py-2 bg-gray-400 text-white font-semibold rounded-lg cursor-not-allowed"
-              >
+              <div className="w-full text-center text-base font-semibold text-gray-400 dark:text-gray-500 cursor-not-allowed">
                 Coming Soon
-              </button>
+              </div>
             </div>
           </RadiantCard>
 
@@ -125,13 +122,9 @@ export default function AdminPage() {
               <p className="text-gray-600 dark:text-gray-300 flex-grow">
                 Configure blog settings and preferences.
               </p>
-              <button
-                type="button"
-                disabled
-                className="w-full px-4 py-2 bg-gray-400 text-white font-semibold rounded-lg cursor-not-allowed"
-              >
+              <div className="w-full text-center text-base font-semibold text-gray-400 dark:text-gray-500 cursor-not-allowed">
                 Coming Soon
-              </button>
+              </div>
             </div>
           </RadiantCard>
 
@@ -147,9 +140,11 @@ export default function AdminPage() {
               </p>
               <Link
                 href="/blog"
-                className="inline-block w-full text-center px-4 py-2 accent-green-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+                className="inline-block w-full text-center text-base font-semibold underline-offset-4 transition-colors hover:text-gray-900 dark:hover:text-gray-200"
               >
-                View Blog
+                <GrowingUnderline data-umami-event="admin-view-blog">
+                  View Blog
+                </GrowingUnderline>
               </Link>
             </div>
           </RadiantCard>

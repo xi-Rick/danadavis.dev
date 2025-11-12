@@ -1,11 +1,13 @@
 'use client'
 
+import { PostPreviewModal } from '@/components/admin/post-preview-modal'
 import NovelEditor from '@/components/novel-editor'
 import { LoginLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Container } from '~/components/ui/container'
+import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { PageHeader } from '~/components/ui/page-header'
 import { FADE_UP_ANIMATION_VARIANTS } from '~/lib/animations'
 
@@ -363,23 +365,36 @@ export default function EditPostPage({ params }: EditPostPageProps) {
         </motion.div>
 
         <motion.div
-          className="flex gap-4 pt-6"
+          className="flex gap-6 pt-6 items-center"
           variants={FADE_UP_ANIMATION_VARIANTS}
         >
           <button
             type="button"
             onClick={handleSave}
             disabled={saving || !title.trim() || !content.trim()}
-            className="px-8 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            className="text-lg font-semibold underline-offset-4 transition-colors hover:text-gray-900 dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-current"
           >
-            {saving ? 'Updating...' : 'Update Post'}
+            <GrowingUnderline data-umami-event="update-post">
+              {saving ? 'Updating...' : 'Update Post'}
+            </GrowingUnderline>
           </button>
+          <span className="text-gray-300 dark:text-gray-600">/</span>
+          <PostPreviewModal
+            title={title}
+            summary={summary}
+            content={content}
+            tags={tags}
+            images={images}
+          />
+          <span className="text-gray-300 dark:text-gray-600">/</span>
           <button
             type="button"
             onClick={() => router.push('/admin')}
-            className="px-8 py-3 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors"
+            className="text-lg font-semibold underline-offset-4 transition-colors text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
           >
-            Cancel
+            <GrowingUnderline data-umami-event="cancel-edit-post">
+              Cancel
+            </GrowingUnderline>
           </button>
         </motion.div>
       </motion.div>
