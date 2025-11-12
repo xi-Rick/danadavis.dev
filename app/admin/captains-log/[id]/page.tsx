@@ -21,7 +21,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { use, useCallback, useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { Container } from '~/components/ui/container'
 import { PageHeader } from '~/components/ui/page-header'
 import { RadiantCard } from '~/components/ui/radiant-card'
@@ -80,72 +80,72 @@ export default function CaptainsLogDetailPage({
   const router = useRouter()
   const { toast } = useToast()
 
-  const loadEntry = useCallback(async () => {
-    if (!id) {
-      console.log('No ID provided')
-      setIsLoading(false)
-      return
-    }
-
-    try {
-      setIsLoading(true)
-      console.log('Fetching entry with ID:', id)
-      const response = await fetch(`/api/captains-log/${id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      })
-
-      console.log('Response status:', response.status)
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        console.error('API Error:', errorData)
-        throw new Error(
-          errorData.error || `Failed to load entry (${response.status})`,
-        )
-      }
-
-      const data = await response.json()
-      console.log('Received data:', data)
-
-      if (!data.logEntry) {
-        throw new Error('No log entry data received')
-      }
-
-      const formattedEntry = {
-        ...data.logEntry,
-        timestamp: new Date(data.logEntry.timestamp),
-        createdAt: data.logEntry.createdAt
-          ? new Date(data.logEntry.createdAt)
-          : undefined,
-        updatedAt: data.logEntry.updatedAt
-          ? new Date(data.logEntry.updatedAt)
-          : undefined,
-      }
-
-      setEntry(formattedEntry)
-      setEditedEntry(formattedEntry)
-    } catch (error) {
-      console.error('Load error:', error)
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error'
-      toast({
-        title: 'Load Error',
-        description: `Failed to load log entry: ${errorMessage}`,
-        variant: 'destructive',
-      })
-      setEntry(null)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [id, toast])
-
+  // biome-ignore lint/correctness/useExhaustiveDependencies: toast is stable from useToast
   useEffect(() => {
+    const loadEntry = async () => {
+      if (!id) {
+        setIsLoading(false)
+        return
+      }
+
+      try {
+        setIsLoading(true)
+        const response = await fetch(`/api/captains-log/${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        })
+
+        if (!response.ok) {
+          let errorData: { error?: string } | undefined
+          try {
+            errorData = await response.json()
+          } catch {
+            throw new Error(`Failed to load entry (${response.status})`)
+          }
+          throw new Error(
+            errorData?.error || `Failed to load entry (${response.status})`,
+          )
+        }
+
+        const data = await response.json()
+
+        if (!data.logEntry) {
+          throw new Error('No log entry data received')
+        }
+
+        const formattedEntry = {
+          ...data.logEntry,
+          timestamp: new Date(data.logEntry.timestamp),
+          createdAt: data.logEntry.createdAt
+            ? new Date(data.logEntry.createdAt)
+            : undefined,
+          updatedAt: data.logEntry.updatedAt
+            ? new Date(data.logEntry.updatedAt)
+            : undefined,
+        }
+
+        setEntry(formattedEntry)
+        setEditedEntry(formattedEntry)
+      } catch (error) {
+        console.error('Load error:', error)
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error'
+        toast({
+          title: 'Load Error',
+          description: `Failed to load log entry: ${errorMessage}`,
+          variant: 'destructive',
+        })
+        setEntry(null)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
     loadEntry()
-  }, [loadEntry])
+  }, [id])
 
   const handleSave = async () => {
     if (!entry) return
