@@ -1,5 +1,6 @@
 'use client'
 
+import { AdminNavigation } from '@/components/admin/admin-navigation'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components'
 import { motion } from 'framer-motion'
@@ -75,7 +76,7 @@ export default function ManagePostsPage() {
   if (isLoading)
     return (
       <Container className="pt-4 lg:pt-12 pb-12">
-        <div className="text-center">Loading...</div>
+        <div className="text-center" />
       </Container>
     )
 
@@ -100,6 +101,8 @@ export default function ManagePostsPage() {
 
   return (
     <Container className="pt-4 lg:pt-12 pb-12">
+      <AdminNavigation currentPage="Manage Posts" />
+
       <PageHeader
         title="Manage Posts"
         description="View, edit, and delete your existing blog posts."

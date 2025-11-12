@@ -1,5 +1,6 @@
 'use client'
 
+import { AdminNavigation } from '@/components/admin/admin-navigation'
 import { PostPreviewModal } from '@/components/admin/post-preview-modal'
 import NovelEditor from '@/components/novel-editor'
 import { LoginLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
@@ -157,6 +158,12 @@ export default function EditPostPage({ params }: EditPostPageProps) {
 
   return (
     <Container className="pt-4 lg:pt-12 pb-12">
+      <AdminNavigation
+        currentPage="Edit Post"
+        backLink="/admin/manage-posts"
+        backLabel="Back to Manage Posts"
+      />
+
       <PageHeader
         title="Edit Post"
         description={`Editing: ${title || 'Untitled Post'}`}

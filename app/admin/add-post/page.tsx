@@ -1,5 +1,6 @@
 'use client'
 
+import { AdminNavigation } from '@/components/admin/admin-navigation'
 import { PostPreviewModal } from '@/components/admin/post-preview-modal'
 import NovelEditor from '@/components/novel-editor'
 import { LoginLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
@@ -116,6 +117,8 @@ export default function AddPostPage() {
 
   return (
     <Container className="pt-4 lg:pt-12 pb-12">
+      <AdminNavigation currentPage="Add New Post" />
+
       <PageHeader
         title="Add New Post"
         description="Create a new blog post with the full editor and comprehensive metadata."
