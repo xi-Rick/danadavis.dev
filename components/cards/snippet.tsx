@@ -16,7 +16,7 @@ export function SnippetCard({ snippet }: { snippet: CoreContent<Snippet> }) {
         href={`/${path}`}
         title={title}
         className={clsx([
-          'relative flex h-full rounded-2xl',
+          'relative flex h-full min-h-[180px] rounded-2xl',
           'bg-zinc-50 dark:bg-white/5',
           'transition-shadow hover:shadow-md',
           'hover:shadow-zinc-900/5 dark:hover:shadow-black/15',
@@ -24,17 +24,19 @@ export function SnippetCard({ snippet }: { snippet: CoreContent<Snippet> }) {
         prefetch={false}
       >
         <TiltedGridBackground className="inset-0" />
-        <Brand
-          name={icon as keyof typeof BrandsMap}
-          as="icon"
-          className="absolute -top-5 left-4 z-10 h-12 w-12 text-gray-900 dark:text-white"
-          aria-hidden="true"
-        />
+        <div className="absolute -top-5 left-4 z-10 h-12 w-12">
+          <Brand
+            name={icon as keyof typeof BrandsMap}
+            as="icon"
+            className="h-12 w-12 text-gray-900 dark:text-white"
+            aria-hidden="true"
+          />
+        </div>
         <div className="relative w-full px-4 pt-6 pb-6">
-          <h3 className="mt-4 text-xl leading-7 font-semibold">
+          <h3 className="mt-4 text-xl leading-7 font-semibold min-h-[28px]">
             <GrowingUnderline>{heading}</GrowingUnderline>
           </h3>
-          <p className="mt-1.5 line-clamp-2 text-zinc-600 dark:text-zinc-400">
+          <p className="mt-1.5 line-clamp-2 min-h-[48px] text-zinc-600 dark:text-zinc-400">
             {summary}
           </p>
         </div>

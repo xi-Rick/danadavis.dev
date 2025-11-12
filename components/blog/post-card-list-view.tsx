@@ -18,13 +18,13 @@ export function PostCardListView({
 }) {
   const { slug, date, title, summary, tags, images, readingTime } = post
   return (
-    <article>
+    <article className="min-h-[300px]">
       <div className="flex flex-col gap-2 space-y-3 md:flex-row md:gap-8">
         <Link
           href={`/blog/${slug}`}
           className={clsx([
             'relative block shrink-0',
-            'h-auto w-full md:h-80 md:w-72',
+            'h-auto w-full md:h-80 md:w-72 min-h-[200px]',
             'pt-0 pr-3 pb-3 pl-0',
             'transition-all ease-in-out hover:pt-1 hover:pr-2 hover:pb-2 hover:pl-1',
           ])}

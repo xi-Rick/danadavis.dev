@@ -11,13 +11,13 @@ import { formatDate } from '~/utils/misc'
 export function PostCardGridView({ post }: { post: CoreContent<Blog> }) {
   const { path, date, title, images, readingTime } = post
   return (
-    <article>
+    <article className="min-h-[380px]">
       <div className="flex flex-col items-start justify-between gap-4 md:gap-6">
         <Link
           href={`/${path}`}
           className={clsx([
             'relative block shrink-0',
-            'h-auto w-full md:aspect-3/2',
+            'h-auto w-full md:aspect-3/2 min-h-[200px]',
             'pt-0 pr-3 pb-3 pl-0',
             'transition-all ease-in-out hover:pt-1 hover:pr-2 hover:pb-2 hover:pl-1',
           ])}
@@ -47,7 +47,7 @@ export function PostCardGridView({ post }: { post: CoreContent<Blog> }) {
             <span>{Math.ceil(readingTime.minutes)} mins read</span>
           </div>
           <div className="group relative">
-            <h3 className="text-xl leading-6 font-semibold">
+            <h3 className="text-xl leading-6 font-semibold min-h-[48px]">
               <Link href={`/${path}`}>
                 <GrowingUnderline>{title}</GrowingUnderline>
               </Link>

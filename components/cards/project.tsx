@@ -26,17 +26,19 @@ export function ProjectCard({ project }: { project: (typeof PROJECTS)[0] }) {
   return (
     <GradientBorder
       offset={28}
-      className="flex flex-col rounded-[40px] p-6 [box-shadow:0_8px_32px_rgba(194,194,218,.3)] md:p-8 dark:bg-white/5 dark:shadow-none"
+      className="flex min-h-[400px] flex-col rounded-[40px] p-6 [box-shadow:0_8px_32px_rgba(194,194,218,.3)] md:p-8 dark:bg-white/5 dark:shadow-none"
     >
       <TiltedGridBackground className="inset-0 z-[-1] rounded-[40px]" />
       <div className="mb-6 flex items-center gap-4">
-        <Image
-          src={imgSrc}
-          alt={title}
-          width={100}
-          height={100}
-          className="h-15 w-15 shrink-0"
-        />
+        <div className="h-15 w-15 shrink-0">
+          <Image
+            src={imgSrc}
+            alt={title}
+            width={100}
+            height={100}
+            className="h-full w-full object-contain"
+          />
+        </div>
         <div className="flex flex-col items-start gap-1 pt-1">
           <h2 className="text-[22px] leading-[30px] font-bold">
             <Link
