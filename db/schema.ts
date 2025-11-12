@@ -1,95 +1,107 @@
-import {
-  integer,
-  jsonb,
-  numeric,
-  pgEnum,
-  pgTable,
-  primaryKey,
-  real,
-  text,
-  timestamp,
-  varchar,
-} from 'drizzle-orm/pg-core'
-import { createInsertSchema } from 'drizzle-zod'
+/**
+ * Database schema types and exports
+ *
+ * This file exports types from Prisma Client to maintain compatibility
+ * with the application code that previously used Drizzle ORM.
+ * All types are now sourced from the Prisma schema.
+ */
 
-export let typeEnum = pgEnum('type', ['blog', 'snippet'])
+import type {
+  GoodreadsBook,
+  GoodreadsMovie,
+  StatsType as PrismaStatsType,
+  Stats,
+} from '@prisma/client'
+import { z } from 'zod'
 
-export let statsTable = pgTable(
-  'stats',
-  {
-    type: typeEnum().notNull(),
-    slug: varchar({ length: 255 }).notNull(),
-    views: integer().notNull().default(0),
-    loves: integer().notNull().default(0),
-    applauses: integer().notNull().default(0),
-    ideas: integer().notNull().default(0),
-    bullseyes: integer().notNull().default(0),
-  },
-  ({ type, slug }) => [primaryKey({ columns: [type, slug] })],
-)
+// Re-export StatsType enum from Prisma
+export type StatsType = PrismaStatsType
 
-export let booksTable = pgTable('books', {
-  id: varchar({ length: 255 }).primaryKey().notNull(),
-  guid: varchar({ length: 500 }).notNull(),
-  pubDate: varchar({ length: 255 }).notNull(),
-  title: text().notNull().notNull(),
-  link: text().notNull(),
-  bookImageUrl: text().notNull(),
-  bookSmallImageUrl: text().notNull(),
-  bookMediumImageUrl: text().notNull(),
-  bookLargeImageUrl: text().notNull(),
-  bookDescription: text().notNull(),
-  authorName: varchar({ length: 500 }).notNull(),
-  isbn: varchar({ length: 50 }),
-  userName: varchar({ length: 255 }).notNull(),
-  userRating: real().notNull(),
-  userReadAt: varchar({ length: 255 }),
-  userDateAdded: varchar({ length: 255 }).notNull(),
-  userDateCreated: varchar({ length: 255 }).notNull(),
-  userShelves: varchar({ length: 500 }),
-  userReview: text(),
-  averageRating: real().notNull(),
-  bookPublished: varchar({ length: 255 }),
-  numPages: integer(),
-  content: text().notNull(),
-  createdAt: timestamp().defaultNow().notNull(),
-  updatedAt: timestamp().defaultNow().notNull(),
-})
+// Stats types
+export type SelectStats = Stats
 
-export let moviesTable = pgTable('movies', {
-  id: varchar({ length: 255 }).primaryKey().notNull(),
-  yourRating: numeric().notNull(),
-  dateRated: varchar({ length: 255 }).notNull(),
-  title: text().notNull(),
-  originalTitle: text().notNull(),
-  url: text().notNull(),
-  titleType: varchar({ length: 100 }).notNull(),
-  imdbRating: numeric().notNull(),
-  runtime: numeric().notNull(),
-  year: varchar({ length: 10 }),
-  genres: varchar({ length: 500 }).notNull(),
-  numVotes: numeric().notNull(),
-  releaseDate: varchar({ length: 255 }).notNull(),
-  directors: text().notNull(),
-  actors: text().notNull(),
-  plot: text().notNull(),
-  poster: text().notNull(),
-  language: varchar({ length: 500 }).notNull(),
-  country: varchar({ length: 500 }).notNull(),
-  awards: text().notNull(),
-  boxOffice: varchar({ length: 100 }),
-  totalSeasons: varchar({ length: 10 }),
-  ratings: jsonb().$type<Array<{ value: string; source: string }>>().notNull(),
-  createdAt: timestamp().defaultNow().notNull(),
-  updatedAt: timestamp().defaultNow().notNull(),
-})
+// Book types
+export type SelectBook = GoodreadsBook
+export type InsertBook = Omit<GoodreadsBook, 'createdAt' | 'updatedAt'>
 
-export let insertBookSchema = createInsertSchema(booksTable)
-export let insertMovieSchema = createInsertSchema(moviesTable)
+// Movie types
+export type SelectMovie = GoodreadsMovie
+export type InsertMovie = Omit<GoodreadsMovie, 'createdAt' | 'updatedAt'>
 
-export type StatsType = (typeof typeEnum.enumValues)[number]
-export type SelectStats = typeof statsTable.$inferSelect
-export type SelectBook = typeof booksTable.$inferSelect
-export type InsertBook = typeof booksTable.$inferInsert
-export type SelectMovie = typeof moviesTable.$inferSelect
-export type InsertMovie = typeof moviesTable.$inferInsert
+// Schema validation for seeds and data imports
+// These provide basic validation similar to the old drizzle-zod schemas
+export const insertBookSchema = z
+  .object({
+    id: z.string(),
+    guid: z.string(),
+    pubDate: z.string(),
+    title: z.string(),
+    link: z.string(),
+    bookImageUrl: z.string(),
+    bookSmallImageUrl: z.string(),
+    bookMediumImageUrl: z.string(),
+    bookLargeImageUrl: z.string(),
+    bookDescription: z.string(),
+    authorName: z.string(),
+    isbn: z.string().nullable(),
+    userName: z.string(),
+    userRating: z.number(),
+    userReadAt: z.string().nullable(),
+    userDateAdded: z.string(),
+    userDateCreated: z.string(),
+    userShelves: z.string().nullable(),
+    userReview: z.string().nullable(),
+    averageRating: z.number(),
+    bookPublished: z.string().nullable(),
+    numPages: z.number().int().nullable(),
+    content: z.string(),
+  })
+  .transform((data) => ({
+    ...data,
+    // Ensure nullable fields are null instead of undefined
+    isbn: data.isbn ?? null,
+    userReadAt: data.userReadAt ?? null,
+    userShelves: data.userShelves ?? null,
+    userReview: data.userReview ?? null,
+    bookPublished: data.bookPublished ?? null,
+    numPages: data.numPages ?? null,
+  }))
+
+export const insertMovieSchema = z
+  .object({
+    id: z.string(),
+    yourRating: z.number(),
+    dateRated: z.string(),
+    title: z.string(),
+    originalTitle: z.string(),
+    url: z.string(),
+    titleType: z.string(),
+    imdbRating: z.number(),
+    runtime: z.number(),
+    year: z.string().nullable(),
+    genres: z.string(),
+    numVotes: z.number(),
+    releaseDate: z.string(),
+    directors: z.string(),
+    actors: z.string(),
+    plot: z.string(),
+    poster: z.string(),
+    language: z.string(),
+    country: z.string(),
+    awards: z.string(),
+    boxOffice: z.string().nullable(),
+    totalSeasons: z.string().nullable(),
+    ratings: z.array(
+      z.object({
+        value: z.string(),
+        source: z.string(),
+      }),
+    ),
+  })
+  .transform((data) => ({
+    ...data,
+    // Ensure nullable fields are null instead of undefined
+    year: data.year ?? null,
+    boxOffice: data.boxOffice ?? null,
+    totalSeasons: data.totalSeasons ?? null,
+  }))

@@ -4,6 +4,7 @@ import { SocialAccounts } from '~/components/author/social-accounts'
 import { Button } from '~/components/ui/button'
 import { Container } from '~/components/ui/container'
 import { Image } from '~/components/ui/image'
+import { LinkPreview } from '~/components/ui/link-preview'
 import { PageHeader } from '~/components/ui/page-header'
 import { Twemoji } from '~/components/ui/twemoji'
 import { SITE_METADATA } from '~/data/site-metadata'
@@ -145,80 +146,72 @@ export function AuthorLayout({}: Props) {
                 </li>
                 <li>
                   <Twemoji emoji="artist-palette" />{' '}
-                  <strong>Tailwind CSS</strong> for styling.
+                  <strong>Tailwind CSS</strong> with custom{' '}
+                  <strong>Black, Orange, and Green</strong> theme.
                 </li>
                 <li>
-                  <Twemoji emoji="safety-vest" /> <strong>TypeScript</strong>{' '}
-                  for better type safety.
+                  <Twemoji emoji="sparkles" /> Custom animated{' '}
+                  <LinkPreview
+                    url="https://ui.aceternity.com/components/hero-parallax"
+                    className="font-bold"
+                  >
+                    Hero Parallax
+                  </LinkPreview>{' '}
+                  landing with{' '}
+                  <LinkPreview
+                    url="https://www.framer.com/motion/"
+                    className="font-bold"
+                  >
+                    Framer Motion
+                  </LinkPreview>
+                  .
+                </li>
+                <li>
+                  <Twemoji emoji="writing-hand" />{' '}
+                  <LinkPreview url="https://novel.sh/" className="font-bold">
+                    Novel.sh AI Editor
+                  </LinkPreview>{' '}
+                  with{' '}
+                  <LinkPreview url="https://kinde.com/" className="font-bold">
+                    Kinde Auth
+                  </LinkPreview>{' '}
+                  for secure admin access.
+                </li>
+                <li>
+                  <Twemoji emoji="card-file-box" /> <strong>PostgreSQL</strong>{' '}
+                  with{' '}
+                  <LinkPreview
+                    url="https://www.prisma.io/"
+                    className="font-bold"
+                  >
+                    Prisma ORM
+                  </LinkPreview>{' '}
+                  for type-safe database operations.
                 </li>
                 <li>
                   <Twemoji emoji="open-book" />{' '}
-                  <a
-                    href="https://contentlayer.dev/"
-                    target="_blank"
-                    rel="noreferrer"
+                  <LinkPreview
+                    url="https://contentlayer.dev/"
+                    className="font-bold"
                   >
                     Contentlayer
-                  </a>{' '}
-                  & MDX for blogs and snippets data.
+                  </LinkPreview>{' '}
+                  & MDX for blog content.
                 </li>
                 <li>
-                  <Twemoji emoji="bar-chart" /> Website analytics with{' '}
-                  <a
-                    href="https://cloud.umami.is/"
-                    target="_blank"
-                    rel="noreferrer"
+                  <Twemoji emoji="musical-notes" /> <strong>Spotify</strong> and{' '}
+                  <Twemoji emoji="laptop" /> <strong>GitHub</strong>{' '}
+                  integrations.
+                </li>
+                <li>
+                  <Twemoji emoji="bar-chart" />{' '}
+                  <LinkPreview
+                    url="https://cloud.umami.is/"
+                    className="font-bold"
                   >
                     Umami
-                  </a>
-                  .
-                </li>
-                <li>
-                  <Twemoji emoji="card-file-box" /> Database hosting on{' '}
-                  <a
-                    href="https://supabase.com/"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Supabase
-                  </a>
-                  .
-                </li>
-                <li>
-                  <Twemoji emoji="building-construction" /> Type-safe database
-                  operations using{' '}
-                  <a
-                    href="https://orm.drizzle.team/"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Drizzle ORM
-                  </a>
-                  .
-                </li>
-                <li>
-                  <Twemoji emoji="hammer-and-wrench" /> Code linting and
-                  formatting with{' '}
-                  <a
-                    href="https://biomejs.dev/"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Biome
-                  </a>
-                  .
-                </li>
-                <li>
-                  <Twemoji emoji="first-quarter-moon" /> Dark mode theme colors
-                  with{' '}
-                  <a
-                    href="https://github.blog/changelog/2021-04-14-dark-and-dimmed-themes-are-now-generally-available/"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    GitHub dark dimmed
-                  </a>
-                  .
+                  </LinkPreview>{' '}
+                  analytics.
                 </li>
               </ul>
             </div>
@@ -226,44 +219,38 @@ export function AuthorLayout({}: Props) {
               <h3>Credits</h3>
               <p>
                 This blog is hosted on{' '}
-                <a href="https://vercel.com/" target="_blank" rel="noreferrer">
+                <LinkPreview url="https://vercel.com/" className="font-bold">
                   Vercel
-                </a>
+                </LinkPreview>
                 , built with{' '}
-                <a href="https://nextjs.org/" target="_blank" rel="noreferrer">
+                <LinkPreview url="https://nextjs.org/" className="font-bold">
                   Next.js
-                </a>{' '}
+                </LinkPreview>{' '}
                 and{' '}
-                <a
-                  href="https://tailwindcss.com/"
-                  target="_blank"
-                  rel="noreferrer"
+                <LinkPreview
+                  url="https://tailwindcss.com/"
+                  className="font-bold"
                 >
                   Tailwind CSS
-                </a>{' '}
+                </LinkPreview>{' '}
                 using <strong>Tailwind Nextjs Starter Blog</strong>.
               </p>
               <p>
                 A huge thanks to{' '}
-                <a
-                  href="https://x.com/hta218_"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <LinkPreview url="https://x.com/hta218_" className="font-bold">
                   Leo Huynh
-                </a>{' '}
+                </LinkPreview>{' '}
                 for the minimal, lightweight, and super easy-to-customize blog
                 starter.
               </p>
               <p>
                 See my{' '}
-                <a
-                  href="https://github.com/xi-Rick/danadavis.dev"
-                  target="_blank"
-                  rel="noreferrer"
+                <LinkPreview
+                  url="https://github.com/xi-Rick/danadavis.dev"
+                  className="font-bold"
                 >
                   GitHub repository
-                </a>{' '}
+                </LinkPreview>{' '}
                 for this blog.
               </p>
             </div>
@@ -301,25 +288,17 @@ export function AuthorLayout({}: Props) {
               <h3>Assets</h3>
               <p>
                 Most of the images in my blog are from{' '}
-                <a
-                  href="https://unsplash.com/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <LinkPreview url="https://unsplash.com/" className="font-bold">
                   Unsplash
-                </a>
+                </LinkPreview>
                 , gifs from{' '}
-                <a href="https://giphy.com/" target="_blank" rel="noreferrer">
+                <LinkPreview url="https://giphy.com/" className="font-bold">
                   GIPHY
-                </a>
+                </LinkPreview>
                 , and illustrations are from{' '}
-                <a
-                  href="https://storyset.com/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <LinkPreview url="https://storyset.com/" className="font-bold">
                   Storyset
-                </a>
+                </LinkPreview>
                 .
               </p>
               <p>

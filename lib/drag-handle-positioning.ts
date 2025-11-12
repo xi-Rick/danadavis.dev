@@ -1,13 +1,13 @@
 /**
  * Intelligent drag handle positioning utility
- * Ensures drag handles stay within viewport boundaries and don't scroll off-screen
+ * Ensures drag handles stay within editor container boundaries
  */
 
 const HANDLE_WIDTH = 24 // pixels
 const HANDLE_HEIGHT = 24 // pixels
-const PADDING = 8 // pixels from viewport edges
+const PADDING = 8 // pixels from container edges
 
-export interface ViewportBounds {
+export interface ContainerBounds {
   top: number
   left: number
   bottom: number
@@ -17,16 +17,20 @@ export interface ViewportBounds {
 }
 
 /**
- * Get current viewport bounds
+ * Get editor container bounds relative to viewport
  */
-export const getViewportBounds = (): ViewportBounds => {
+export const getEditorContainerBounds = (): ContainerBounds | null => {
+  const editor = document.querySelector('.editor-content-wrapper')
+  if (!editor) return null
+
+  const rect = editor.getBoundingClientRect()
   return {
-    top: 0,
-    left: 0,
-    bottom: window.innerHeight,
-    right: window.innerWidth,
-    width: window.innerWidth,
-    height: window.innerHeight,
+    top: rect.top,
+    left: rect.left,
+    bottom: rect.bottom,
+    right: rect.right,
+    width: rect.width,
+    height: rect.height,
   }
 }
 
@@ -36,44 +40,45 @@ export interface ElementPosition {
 }
 
 /**
- * Constrain position within viewport bounds
- * Ensures element stays visible and doesn't scroll off-screen
+ * Constrain position within editor container bounds
+ * Ensures handle stays within the editor and doesn't move outside during scroll
  */
-export const constrainPositionToViewport = (
+export const constrainPositionToContainer = (
   position: ElementPosition,
+  containerBounds: ContainerBounds,
   elementWidth: number = HANDLE_WIDTH,
   elementHeight: number = HANDLE_HEIGHT,
 ): ElementPosition => {
-  const viewport = getViewportBounds()
-
   return {
-    // Clamp top position
+    // Clamp top position within container
     top: Math.max(
-      PADDING,
-      Math.min(position.top, viewport.height - elementHeight - PADDING),
+      containerBounds.top + PADDING,
+      Math.min(position.top, containerBounds.bottom - elementHeight - PADDING),
     ),
-    // Clamp left position
+    // Clamp left position within container
     left: Math.max(
-      PADDING,
-      Math.min(position.left, viewport.width - elementWidth - PADDING),
+      containerBounds.left + PADDING,
+      Math.min(position.left, containerBounds.right - elementWidth - PADDING),
     ),
   }
 }
 
 /**
- * Calculate optimal position for drag handle to avoid going off-screen
- * Takes into account the element being dragged and viewport bounds
+ * Calculate optimal position for drag handle relative to its block element
+ * Stays within editor container bounds
  */
 export const calculateOptimalDragHandlePosition = (
   elementRect: DOMRect,
-  viewportOffset: { x: number; y: number } = { x: -32, y: 0 },
-): ElementPosition => {
+  containerBounds: ContainerBounds,
+): ElementPosition | null => {
+  // Position handle to the left of the element, vertically centered
   const top = elementRect.top + elementRect.height / 2 - HANDLE_HEIGHT / 2
-  const left = elementRect.left + viewportOffset.x
+  const left = elementRect.left - HANDLE_WIDTH - 8 // 8px gap from element
 
-  // Constrain within viewport
-  const constrained = constrainPositionToViewport(
+  // Constrain within container
+  const constrained = constrainPositionToContainer(
     { top, left },
+    containerBounds,
     HANDLE_WIDTH,
     HANDLE_HEIGHT,
   )
@@ -82,17 +87,19 @@ export const calculateOptimalDragHandlePosition = (
 }
 
 /**
- * Check if an element is visible within the viewport
+ * Check if an element is visible within the editor container
  */
-export const isElementInViewport = (element: Element): boolean => {
+export const isElementInContainer = (
+  element: Element,
+  containerBounds: ContainerBounds,
+): boolean => {
   const rect = element.getBoundingClientRect()
-  const viewport = getViewportBounds()
 
   return (
-    rect.bottom > PADDING &&
-    rect.top < viewport.height - PADDING &&
-    rect.right > PADDING &&
-    rect.left < viewport.width - PADDING
+    rect.bottom > containerBounds.top + PADDING &&
+    rect.top < containerBounds.bottom - PADDING &&
+    rect.right > containerBounds.left + PADDING &&
+    rect.left < containerBounds.right - PADDING
   )
 }
 
@@ -103,49 +110,120 @@ export const isElementInViewport = (element: Element): boolean => {
 export const setupDragHandlePositioning = (): (() => void) => {
   let resizeObserver: ResizeObserver | null = null
   let scrollListener: (() => void) | null = null
+  let mutationObserver: MutationObserver | null = null
+  let dragStartListener: ((e: DragEvent) => void) | null = null
+  let dragEndListener: ((e: DragEvent) => void) | null = null
 
   const updateDragHandlePositions = () => {
-    const dragHandles = document.querySelectorAll('.drag-handle')
+    const containerBounds = getEditorContainerBounds()
+    if (!containerBounds) return
+
+    const dragHandles = document.querySelectorAll('[data-drag-handle]')
 
     for (const handle of Array.from(dragHandles)) {
-      const elementBeingDragged = handle.closest('.ProseMirror [data-drag]')
+      // Find the parent block element
+      const blockElement = (handle as HTMLElement).parentElement
 
-      if (elementBeingDragged) {
-        const rect = elementBeingDragged.getBoundingClientRect()
-        const optimalPosition = calculateOptimalDragHandlePosition(rect)
+      if (blockElement) {
+        const rect = blockElement.getBoundingClientRect()
 
-        // Apply constrained position with transform for better performance
-        ;(handle as HTMLElement).style.transform =
-          `translate(${optimalPosition.left}px, ${optimalPosition.top}px)`
+        // Check if block is visible in container
+        if (!isElementInContainer(blockElement, containerBounds)) {
+          // Hide handle if block is outside container
+          ;(handle as HTMLElement).style.opacity = '0'
+          ;(handle as HTMLElement).style.pointerEvents = 'none'
+          continue
+        }
+
+        const optimalPosition = calculateOptimalDragHandlePosition(
+          rect,
+          containerBounds,
+        )
+
+        if (optimalPosition) {
+          // Use absolute positioning relative to viewport
+          ;(handle as HTMLElement).style.position = 'fixed'
+          ;(handle as HTMLElement).style.top = `${optimalPosition.top}px`
+          ;(handle as HTMLElement).style.left = `${optimalPosition.left}px`
+          ;(handle as HTMLElement).style.opacity = ''
+          ;(handle as HTMLElement).style.pointerEvents = ''
+        }
       }
     }
   }
 
-  // Setup ResizeObserver to track viewport changes
+  // Setup drag event listeners to prevent auto-scroll
+  dragStartListener = (e: DragEvent) => {
+    const editor = document.querySelector('.ProseMirror')
+    if (editor && (e.target as HTMLElement).hasAttribute('data-drag-handle')) {
+      editor.classList.add('dragging')
+    }
+  }
+
+  dragEndListener = () => {
+    const editor = document.querySelector('.ProseMirror')
+    if (editor) {
+      editor.classList.remove('dragging')
+    }
+  }
+
+  // Setup ResizeObserver to track container changes
   resizeObserver = new ResizeObserver(() => {
     updateDragHandlePositions()
   })
 
+  // Setup MutationObserver to track DOM changes
+  mutationObserver = new MutationObserver(() => {
+    updateDragHandlePositions()
+  })
+
   // Observe the editor container
-  const editor = document.querySelector('.ProseMirror')
+  const editor = document.querySelector('.editor-content-wrapper')
+  const proseMirror = document.querySelector('.ProseMirror')
+
   if (editor) {
     resizeObserver.observe(editor)
+    mutationObserver.observe(editor, {
+      childList: true,
+      subtree: true,
+      attributes: false,
+    })
   }
 
-  // Setup scroll listener
+  // Add drag event listeners
+  if (proseMirror) {
+    proseMirror.addEventListener('dragstart', dragStartListener, true)
+    proseMirror.addEventListener('dragend', dragEndListener, true)
+  }
+
+  // Setup scroll listener for both window and editor container
   scrollListener = () => {
     updateDragHandlePositions()
   }
 
   window.addEventListener('scroll', scrollListener, true)
+  editor?.addEventListener('scroll', scrollListener, true)
+
+  // Initial positioning
+  requestAnimationFrame(updateDragHandlePositions)
 
   // Cleanup function
   const cleanup = () => {
     if (resizeObserver) {
       resizeObserver.disconnect()
     }
+    if (mutationObserver) {
+      mutationObserver.disconnect()
+    }
     if (scrollListener) {
       window.removeEventListener('scroll', scrollListener, true)
+      editor?.removeEventListener('scroll', scrollListener, true)
+    }
+    if (dragStartListener && proseMirror) {
+      proseMirror.removeEventListener('dragstart', dragStartListener, true)
+    }
+    if (dragEndListener && proseMirror) {
+      proseMirror.removeEventListener('dragend', dragEndListener, true)
     }
   }
 
@@ -153,34 +231,65 @@ export const setupDragHandlePositioning = (): (() => void) => {
 }
 
 /**
- * Add CSS constraint classes to prevent drag handle overflow
+ * Add CSS constraint classes for drag handle behavior
  */
 export const applyDragHandleConstraints = (): void => {
   const style = document.createElement('style')
   style.id = 'drag-handle-constraints'
   style.textContent = `
-    .drag-handle {
-      /* Prevent scrolling off viewport */
-      position: fixed;
-      will-change: transform;
-      /* Ensure handle is always renderable */
+    /* Drag handle positioning */
+    [data-drag-handle] {
+      position: fixed !important;
+      z-index: 50;
+      will-change: top, left;
+      transition: opacity 0.2s ease;
       contain: layout style paint;
     }
 
-    /* Hide handle if it goes too far off-screen */
-    .drag-handle[data-hidden="true"] {
-      opacity: 0;
-      pointer-events: none;
+    /* Prevent content auto-scroll during dragging */
+    .ProseMirror.dragging {
+      overflow: hidden !important;
+      cursor: grabbing !important;
     }
 
-    /* Prevent handle from blocking interaction with editor */
-    .ProseMirror {
+    /* Disable text selection during drag */
+    .ProseMirror.dragging * {
+      user-select: none !important;
+    }
+
+    /* Editor container constraints */
+    .editor-content-wrapper {
+      position: relative;
       overflow: visible;
+    }
+
+    /* Make sure editor has proper scrolling container */
+    .ProseMirror {
+      overflow-y: auto;
+      overflow-x: hidden;
+      max-height: inherit;
+    }
+
+    /* Hide drag handle when element is being dragged */
+    .ProseMirror [data-drag-handle-dragging="true"] {
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    /* Visual feedback for draggable blocks */
+    .ProseMirror [data-drag-handle]:hover {
+      cursor: grab;
+    }
+
+    .ProseMirror [data-drag-handle]:active {
+      cursor: grabbing;
     }
   `
 
   // Only add if not already present
-  if (!document.getElementById('drag-handle-constraints')) {
-    document.head.appendChild(style)
+  const existingStyle = document.getElementById('drag-handle-constraints')
+  if (existingStyle) {
+    existingStyle.remove()
   }
+  document.head.appendChild(style)
 }

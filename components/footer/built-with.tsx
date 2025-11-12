@@ -11,7 +11,7 @@ export function BuiltWith() {
         <Brand name="TailwindCSS" iconClassName="h-5 w-5" />
         <Brand name="Typescript" iconClassName="h-5 w-5" />
         <Brand name="Supabase" iconClassName="h-5 w-5" />
-        <Brand name="Drizzle" iconClassName="h-5 w-5 bg-dark px-0.5" />
+        <Brand name="Prisma" iconClassName="h-5 w-5" />
         <Brand name="Umami" iconClassName="h-5 w-5" className="pl-px" />
         <Brand name="Biome" iconClassName="h-5 w-5" />
       </div>

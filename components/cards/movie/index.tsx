@@ -74,9 +74,8 @@ export function MovieCard({ movie }: { movie: SelectMovie }) {
   )
 }
 
-function formatRuntime(runtime: string) {
-  const _mins = Number(runtime)
-  const hours = Math.floor(_mins / 60)
-  const mins = _mins % 60
+function formatRuntime(runtime: number) {
+  const hours = Math.floor(runtime / 60)
+  const mins = runtime % 60
   return `${hours}h ${mins < 10 ? '0' : ''}${mins}m`
 }

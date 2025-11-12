@@ -104,7 +104,7 @@ export const defaultExtensions: unknown[] = [
       class:
         'flex h-full cursor-grab active:cursor-grabbing pr-2 opacity-0 hover:opacity-100 transition-opacity',
     },
-    // Enable viewport boundary detection
+    // Configure drag handle width
     dragHandleWidth: 24,
   }),
 ]

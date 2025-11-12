@@ -41,7 +41,7 @@ Welcome to **danadavis.dev**, my personal blog and portfolio built with modern w
 - **🔍 Search Functionality**: Powered by KBar for quick navigation
 - **🌙 Dark Mode**: GitHub dark dimmed theme support
 - **📊 Analytics**: Umami integration for privacy-focused tracking
-- **�️ Database**: Supabase with Drizzle ORM for type-safe operations
+- **🗄️ Database**: PostgreSQL with Prisma ORM for type-safe operations
 - **🔐 Admin Panel**: Manage posts, comments, and more
 - **🎵 Integrations**: Spotify now-playing, GitHub activities, and more
 - **📱 Responsive Design**: Optimized for all devices
@@ -53,7 +53,7 @@ Welcome to **danadavis.dev**, my personal blog and portfolio built with modern w
 | **Frontend**   | Next.js 15 (App Router), React 19, TypeScript |
 | **Styling**    | Tailwind CSS, PostCSS                         |
 | **Content**    | Contentlayer, MDX                             |
-| **Database**   | Supabase, Drizzle ORM, Prisma                 |
+| **Database**   | PostgreSQL (Supabase), Prisma ORM             |
 | **Analytics**  | Umami                                         |
 | **Linting**    | Biome                                         |
 | **Deployment** | Vercel                                        |
@@ -88,7 +88,7 @@ This blog is forked and heavily customized from [leohuynh.dev](https://github.co
   - Comprehensive metadata management (tags, categories, images, canonical URLs)
   - Draft and featured post toggles for content workflow
 - **Novel.sh Editor**: Advanced AI-powered WYSIWYG editor with support for formatting, links, images, code blocks, and slash commands
-- **Type-Safe Database**: Supabase + Drizzle ORM for dynamic content management and querying
+- **Type-Safe Database**: PostgreSQL with Prisma ORM for dynamic content management and querying
 - **Admin Dashboard**: Secure access to manage all content through an authenticated interface
 
 ### 🔗 API Integrations & Data

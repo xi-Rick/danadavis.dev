@@ -2,9 +2,17 @@ import { Brand } from '~/components/ui/brand'
 import { Link } from '~/components/ui/link'
 import type { SelectMovie } from '~/db/schema'
 
+interface RatingItem {
+  value: string
+  source: string
+}
+
 export function Ratings({ movie }: { movie: SelectMovie }) {
   const { imdbRating, ratings, url, title, numVotes } = movie
-  const rottenTomatoRating = ratings?.find(
+  const ratingsArray = Array.isArray(ratings)
+    ? (ratings as unknown as RatingItem[])
+    : []
+  const rottenTomatoRating = ratingsArray.find(
     ({ source }) => source === 'Rotten Tomatoes',
   )
   const rottenSearchUrl = new URL('https://www.rottentomatoes.com/search')
@@ -17,7 +25,7 @@ export function Ratings({ movie }: { movie: SelectMovie }) {
         <span>
           {imdbRating}{' '}
           <span className="hidden text-gray-500 md:inline dark:text-gray-400">
-            ({shortenNumVotes(Number(numVotes))})
+            ({shortenNumVotes(numVotes)})
           </span>
         </span>
       </Link>

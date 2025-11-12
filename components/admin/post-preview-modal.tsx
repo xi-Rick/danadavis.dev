@@ -159,7 +159,8 @@ export function PostPreviewModal({
                               <Image
                                 src={bannerImage}
                                 alt={title}
-                                className="w-full h-full object-cover"
+                                fill
+                                className="object-cover"
                                 onError={(e) => {
                                   e.currentTarget.src =
                                     '/static/images/twitter-card.jpeg'

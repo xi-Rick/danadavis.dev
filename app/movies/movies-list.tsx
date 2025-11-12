@@ -22,16 +22,16 @@ export function MoviesList({ movies }: { movies: SelectMovie[] }) {
     .filter((movie) => {
       if (type === 'all' || MOVIES_TITLE_TYPES[type] === movie.titleType) {
         if (rate === '<=6') {
-          return Number(movie.yourRating) <= 6
+          return movie.yourRating <= 6
         }
-        return movie.yourRating === rate
+        return movie.yourRating === Number(rate)
       }
     })
     .sort((m1, m2) => {
       if (m1.yourRating === m2.yourRating) {
-        return Number(m2.imdbRating) - Number(m1.imdbRating)
+        return m2.imdbRating - m1.imdbRating
       }
-      return Number(m2.yourRating) - Number(m1.yourRating)
+      return m2.yourRating - m1.yourRating
     })
   const { description, emoji } =
     RATES.find(({ value }) => value === rate) || RATES[0]

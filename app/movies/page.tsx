@@ -49,17 +49,17 @@ async function loadMoviesFromJson(): Promise<SelectMovie[]> {
 
     return moviesData.map((movie) => ({
       id: movie.id,
-      yourRating: String(movie.yourRating),
+      yourRating: movie.yourRating,
       dateRated: movie.date, // using date as dateRated
       title: movie.title,
       originalTitle: movie.title, // assuming same
       url: movie.imdbUrl,
       titleType: movie.titleType === 'movie' ? 'Movie' : 'TV Series', // converts tv/movie to Movie/TV Series
-      imdbRating: String(movie.imdbRating),
-      runtime: movie.runtime || '0', // default
+      imdbRating: movie.imdbRating,
+      runtime: Number.parseFloat(movie.runtime || '0'), // convert to number
       year: String(movie.year),
       genres: movie.tags.join(', '), // using tags as genres
-      numVotes: movie.numVotes || '0', // Use scraped vote count
+      numVotes: Number.parseFloat(movie.numVotes || '0'), // convert to number
       releaseDate: movie.date,
       directors: movie.director,
       actors: '', // default

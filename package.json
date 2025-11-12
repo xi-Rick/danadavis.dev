@@ -15,8 +15,6 @@
     "biome:format": "biome format --write",
     "biome:fix": "biome check --write",
     "prepare": "husky",
-    "db:init": "npx drizzle-kit generate && npx drizzle-kit push",
-    "db:studio": "npx drizzle-kit studio --port 8088",
     "seed": "tsx ./scripts/seed.ts",
     "typecheck": "npx tsc -b",
     "test:spotify": "node scripts/test-spotify.js"
@@ -29,6 +27,7 @@
     "@octokit/graphql": "^9.0.1",
     "@prisma/client": "^6.17.1",
     "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-hover-card": "^1.1.15",
     "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-scroll-area": "^1.2.10",
     "@radix-ui/react-separator": "^1.1.8",
@@ -49,8 +48,6 @@
     "contentlayer2": "0.5.8",
     "disqus-react": "^1.1.7",
     "dotenv": "^16.5.0",
-    "drizzle-orm": "^0.44.2",
-    "drizzle-zod": "^0.8.2",
     "framer-motion": "^12.23.24",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.2",
@@ -69,6 +66,7 @@
     "postgres": "^3.4.7",
     "probe-image-size": "^7.2.3",
     "prop-types": "^15.8.1",
+    "qss": "^3.0.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-medium-image-zoom": "^5.2.14",
@@ -90,7 +88,8 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.10",
     "typed.js": "^2.1.0",
-    "unist-util-visit": "^5.0.0"
+    "unist-util-visit": "^5.0.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
@@ -105,7 +104,6 @@
     "cheerio": "^1.1.2",
     "cross-env": "^7.0.3",
     "csv-parser": "^3.2.0",
-    "drizzle-kit": "^0.31.1",
     "esbuild": "0.25.11",
     "eslint": "^9.38.0",
     "eslint-config-next": "15.5.6",

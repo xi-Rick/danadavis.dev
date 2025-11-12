@@ -53,7 +53,7 @@ export function Reactions({
     } catch {}
   }, [type, slug])
 
-  function handleChange(key: string) {
+  function handleChange(key: keyof SelectStats) {
     updateReaction({
       type,
       slug,
@@ -66,7 +66,7 @@ export function Reactions({
     <div className={clsx('flex items-center gap-6', className)}>
       {REACTIONS.map(({ key, emoji }) => (
         <Reaction
-          key={key}
+          key={String(key)}
           path={`${type}/${slug}`}
           react={{ emoji, key }}
           value={

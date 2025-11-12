@@ -118,6 +118,10 @@ module.exports = () => {
           protocol: 'https',
           hostname: 'mpd-biblio-covers.imgix.net', // Biblio covers
         },
+        {
+          protocol: 'https',
+          hostname: 'api.microlink.io', // Microlink Image Preview
+        },
       ],
       unoptimized,
     },
