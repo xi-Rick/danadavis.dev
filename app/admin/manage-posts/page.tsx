@@ -2,11 +2,13 @@
 
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Container } from '~/components/ui/container'
 import { PageHeader } from '~/components/ui/page-header'
 import { RadiantCard } from '~/components/ui/radiant-card'
+import { FADE_UP_ANIMATION_VARIANTS } from '~/lib/animations'
 
 interface Post {
   slug: string
@@ -117,96 +119,115 @@ export default function ManagePostsPage() {
         </div>
 
         {loading ? (
-          <div className="text-center py-12">Loading posts...</div>
+          <div className="text-center py-12" />
         ) : error ? (
           <div className="text-center py-12 text-red-600 dark:text-red-400">
             {error}
           </div>
         ) : posts.length === 0 ? (
-          <RadiantCard className="p-8 text-center">
-            <div className="text-4xl mb-4">📝</div>
-            <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
-              No posts yet
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
-              Get started by creating your first blog post.
-            </p>
-            <Link
-              href="/admin/add-post"
-              className="inline-block px-6 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
-            >
-              Create Your First Post
-            </Link>
-          </RadiantCard>
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={FADE_UP_ANIMATION_VARIANTS}
+          >
+            <RadiantCard className="p-8 text-center">
+              <div className="text-4xl mb-4">📝</div>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
+                No posts yet
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Get started by creating your first blog post.
+              </p>
+              <Link
+                href="/admin/add-post"
+                className="inline-block px-6 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+              >
+                Create Your First Post
+              </Link>
+            </RadiantCard>
+          </motion.div>
         ) : (
-          <div className="space-y-4">
+          <motion.div
+            className="space-y-4"
+            initial="hidden"
+            animate="show"
+            variants={{
+              show: {
+                transition: {
+                  staggerChildren: 0.08,
+                },
+              },
+            }}
+          >
             {posts.map((post) => (
-              <RadiantCard key={post.slug} className="p-6">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                        {post.title}
-                      </h3>
-                      {post.draft && (
-                        <span className="px-2 py-1 text-xs bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 rounded-full">
-                          Draft
-                        </span>
-                      )}
-                      {post.featured && (
-                        <span className="px-2 py-1 text-xs accent-green-bg text-white rounded-full">
-                          Featured
-                        </span>
-                      )}
+              <motion.div key={post.slug} variants={FADE_UP_ANIMATION_VARIANTS}>
+                <RadiantCard className="p-6">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                          {post.title}
+                        </h3>
+                        {post.draft && (
+                          <span className="px-2 py-1 text-xs bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 rounded-full">
+                            Draft
+                          </span>
+                        )}
+                        {post.featured && (
+                          <span className="px-2 py-1 text-xs accent-green-bg text-white rounded-full">
+                            Featured
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-gray-600 dark:text-gray-300 text-sm mb-2 line-clamp-2">
+                        {post.summary}
+                      </p>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {post.tags.slice(0, 3).map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-2 py-1 text-xs bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                        {post.tags.length > 3 && (
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                            +{post.tags.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        {new Date(post.date).toLocaleDateString()}
+                      </div>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2 line-clamp-2">
-                      {post.summary}
-                    </p>
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      {post.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-1 text-xs bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                      {post.tags.length > 3 && (
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          +{post.tags.length - 3} more
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      {new Date(post.date).toLocaleDateString()}
-                    </div>
-                  </div>
 
-                  <div className="flex gap-2">
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="px-4 py-2 bg-gray-500 text-white text-sm font-medium rounded-lg hover:bg-gray-600 transition-colors"
-                    >
-                      View
-                    </Link>
-                    <Link
-                      href={`/admin/edit-post/${post.slug}`}
-                      className="px-4 py-2 accent-bg text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(post.slug)}
-                      className="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors"
-                    >
-                      Delete
-                    </button>
+                    <div className="flex gap-2">
+                      <Link
+                        href={`/blog/${post.slug}`}
+                        className="px-4 py-2 bg-gray-500 text-white text-sm font-medium rounded-lg hover:bg-gray-600 transition-colors"
+                      >
+                        View
+                      </Link>
+                      <Link
+                        href={`/admin/edit-post/${post.slug}`}
+                        className="px-4 py-2 accent-bg text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(post.slug)}
+                        className="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </RadiantCard>
+                </RadiantCard>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
     </Container>

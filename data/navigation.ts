@@ -13,6 +13,12 @@ export const MORE_NAV_LINKS = [
   { href: '/tags', title: 'Tags', emoji: 'label' },
 ]
 
+export const ADMIN_NAV_LINK = {
+  href: '/admin',
+  title: 'Admin',
+  emoji: 'hammer-and-wrench',
+}
+
 export const FOOTER_NAV_LINKS = [
   { href: '/blog', title: 'Blog' },
   { href: '/snippets', title: 'Snippets' },

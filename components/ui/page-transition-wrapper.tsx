@@ -1,6 +1,6 @@
 'use client'
 
-import { FADE_IN_ANIMATION_VARIANTS } from '@/lib/animations'
+import { PAGE_TRANSITION_VARIANTS } from '@/lib/animations'
 import { AnimatePresence, motion } from 'framer-motion'
 import { usePathname } from 'next/navigation'
 
@@ -17,9 +17,8 @@ const PageTransitionWrapper = ({ children }: PageTransitionWrapperProps) => {
         key={pathname}
         initial="hidden"
         animate="show"
-        exit="hidden"
-        variants={FADE_IN_ANIMATION_VARIANTS}
-        transition={{ duration: 0.4, ease: 'easeInOut' }}
+        exit="exit"
+        variants={PAGE_TRANSITION_VARIANTS}
       >
         {children}
       </motion.div>

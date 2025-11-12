@@ -1,8 +1,6 @@
-import { readFileSync, unlinkSync } from 'node:fs'
-import { join } from 'node:path'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
-import matter from 'gray-matter'
 import { type NextRequest, NextResponse } from 'next/server'
+import { prisma } from '../../../../db'
 
 export async function GET(
   request: NextRequest,
@@ -15,37 +13,40 @@ export async function GET(
     }
 
     const { slug } = await params
-    const filePath = join(process.cwd(), 'data', 'blog', `${slug}.mdx`)
 
-    try {
-      const fileContent = readFileSync(filePath, 'utf-8')
-      const { data, content } = matter(fileContent)
+    // Query from Prisma database instead of MDX files
+    const post = await prisma.post.findUnique({
+      where: { slug },
+      include: { author: true },
+    })
 
-      // Return the post data
-      return NextResponse.json({
-        slug,
-        title: data.title || '',
-        summary: data.summary || '',
-        tags: data.tags || [],
-        categories: data.categories || [],
-        images: data.images || [],
-        canonicalUrl: data.canonicalUrl || '',
-        layout: data.layout || '',
-        bibliography: data.bibliography || '',
-        draft: data.draft || false,
-        featured: data.featured || false,
-        content,
-        date: data.date,
-        lastmod: data.lastmod,
-        authors: data.authors || [],
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
-        authorId: data.authorId,
-      })
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_fileError) {
+    if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })
     }
+
+    // Return the post data
+    return NextResponse.json({
+      id: post.id,
+      slug: post.slug,
+      title: post.title,
+      summary: post.summary,
+      tags: post.tags,
+      categories: post.categories,
+      images: post.images,
+      canonicalUrl: post.canonicalUrl,
+      layout: post.layout,
+      bibliography: post.bibliography,
+      draft: post.draft,
+      featured: post.featured,
+      content: post.content,
+      date: post.date,
+      lastmod: post.lastmod,
+      authors: post.authors,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      authorId: post.authorId,
+      author: post.author,
+    })
   } catch (error) {
     console.error('Error loading post:', error)
     return NextResponse.json({ error: 'Failed to load post' }, { status: 500 })
@@ -63,19 +64,17 @@ export async function DELETE(
     }
 
     const { slug } = await params
-    const filePath = join(process.cwd(), 'data', 'blog', `${slug}.mdx`)
 
-    try {
-      // Check if file exists before deleting
-      readFileSync(filePath, 'utf-8')
-      // Delete the file
-      unlinkSync(filePath)
+    // Delete from Prisma database instead of MDX files
+    const post = await prisma.post.findUnique({ where: { slug } })
 
-      return NextResponse.json({ message: 'Post deleted successfully' })
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_fileError) {
+    if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })
     }
+
+    await prisma.post.delete({ where: { slug } })
+
+    return NextResponse.json({ message: 'Post deleted successfully' })
   } catch (error) {
     console.error('Error deleting post:', error)
     return NextResponse.json(

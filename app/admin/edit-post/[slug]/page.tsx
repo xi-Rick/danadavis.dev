@@ -1,33 +1,13 @@
 'use client'
 
-import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components'
-import type { MDXEditorMethods } from '@mdxeditor/editor'
-import '@mdxeditor/editor/style.css'
+import NovelEditor from '@/components/novel-editor'
+import { LoginLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useRef, useState } from 'react'
-import { ForwardRefEditor } from '~/components/forward-ref-editor'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Container } from '~/components/ui/container'
 import { PageHeader } from '~/components/ui/page-header'
-
-// MDXEditor dark mode styles - only for text content
-const mdxEditorDarkStyles = `
-.mdxeditor {
-  color: var(--color-text) !important;
-}
-
-.mdxeditor [contenteditable] {
-  color: var(--color-text) !important;
-}
-
-.mdxeditor .cm-editor {
-  color: var(--color-text) !important;
-}
-
-.mdxeditor .cm-content {
-  color: var(--color-text) !important;
-}
-`
+import { FADE_UP_ANIMATION_VARIANTS } from '~/lib/animations'
 
 interface EditPostPageProps {
   params: Promise<{
@@ -51,8 +31,6 @@ export default function EditPostPage({ params }: EditPostPageProps) {
   const [content, setContent] = useState('')
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
-  const editorRef = useRef<MDXEditorMethods>(null)
-
   const { slug } = React.use(params)
 
   useEffect(() => {
@@ -61,7 +39,6 @@ export default function EditPostPage({ params }: EditPostPageProps) {
       return
     }
 
-    // Load existing post data
     const loadPost = async () => {
       try {
         const response = await fetch(`/api/posts/${slug}`)
@@ -94,33 +71,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
     loadPost()
   }, [slug, router])
 
-  if (isLoading || loading)
-    return (
-      <Container className="pt-4 lg:pt-12">
-        <div className="text-center" />
-      </Container>
-    )
-
-  if (!isAuthenticated) {
-    return (
-      <Container className="pt-4 lg:pt-12">
-        <div className="text-center">
-          <PageHeader
-            title="Admin Access Required"
-            description="You need to be logged in to access the admin area."
-            className="border-b border-gray-200 dark:border-gray-700"
-          />
-          <div className="mt-8">
-            <LoginLink className="inline-block px-8 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
-              Login to Admin
-            </LoginLink>
-          </div>
-        </div>
-      </Container>
-    )
-  }
-
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     setSaving(true)
     try {
       const response = await fetch('/api/save-post', {
@@ -155,22 +106,77 @@ export default function EditPostPage({ params }: EditPostPageProps) {
         alert(`Error updating post: ${error.error}`)
       }
     } catch (error) {
-      alert(`Error updating post: ${error.message}`)
+      alert(
+        `Error updating post: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      )
     }
     setSaving(false)
+  }, [
+    slug,
+    title,
+    summary,
+    tags,
+    categories,
+    images,
+    canonicalUrl,
+    layout,
+    bibliography,
+    draft,
+    featured,
+    content,
+    router,
+  ])
+
+  if (isLoading || loading)
+    return (
+      <Container className="pt-4 lg:pt-12">
+        <div className="text-center" />
+      </Container>
+    )
+
+  if (!isAuthenticated) {
+    return (
+      <Container className="pt-4 lg:pt-12">
+        <div className="text-center">
+          <PageHeader
+            title="Admin Access Required"
+            description="You need to be logged in to access the admin area."
+            className="border-b border-gray-200 dark:border-gray-700"
+          />
+          <div className="mt-8">
+            <LoginLink className="inline-block px-8 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
+              Login to Admin
+            </LoginLink>
+          </div>
+        </div>
+      </Container>
+    )
   }
 
   return (
     <Container className="pt-4 lg:pt-12 pb-12">
-      <style dangerouslySetInnerHTML={{ __html: mdxEditorDarkStyles }} />
       <PageHeader
         title="Edit Post"
         description={`Editing: ${title || 'Untitled Post'}`}
         className="border-b border-gray-200 dark:border-gray-700"
       />
 
-      <div className="py-8 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <motion.div
+        className="py-8 space-y-6"
+        initial="hidden"
+        animate="show"
+        variants={{
+          show: {
+            transition: {
+              staggerChildren: 0.08,
+            },
+          },
+        }}
+      >
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          variants={FADE_UP_ANIMATION_VARIANTS}
+        >
           <div>
             <label
               htmlFor="title"
@@ -204,9 +210,9 @@ export default function EditPostPage({ params }: EditPostPageProps) {
               placeholder="javascript, react, tutorial"
             />
           </div>
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div variants={FADE_UP_ANIMATION_VARIANTS}>
           <label
             htmlFor="summary"
             className="block text-sm font-medium mb-2 text-gray-900 dark:text-gray-100"
@@ -221,9 +227,12 @@ export default function EditPostPage({ params }: EditPostPageProps) {
             rows={3}
             placeholder="Brief summary of the post"
           />
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          variants={FADE_UP_ANIMATION_VARIANTS}
+        >
           <div>
             <label
               htmlFor="categories"
@@ -257,9 +266,12 @@ export default function EditPostPage({ params }: EditPostPageProps) {
               placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
             />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          variants={FADE_UP_ANIMATION_VARIANTS}
+        >
           <div>
             <label
               htmlFor="canonicalUrl"
@@ -310,9 +322,12 @@ export default function EditPostPage({ params }: EditPostPageProps) {
               placeholder="Bibliography content..."
             />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="flex gap-6">
+        <motion.div
+          className="flex gap-6"
+          variants={FADE_UP_ANIMATION_VARIANTS}
+        >
           <label className="flex items-center space-x-3">
             <input
               type="checkbox"
@@ -336,21 +351,21 @@ export default function EditPostPage({ params }: EditPostPageProps) {
               Featured
             </span>
           </label>
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div variants={FADE_UP_ANIMATION_VARIANTS}>
           <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-gray-100">
             Content
           </label>
-          <ForwardRefEditor
-            ref={editorRef}
-            markdown={content}
-            onChange={setContent}
-            className="border border-gray-300 dark:border-gray-600 rounded-lg min-h-[600px] focus-within:ring-2 focus-within:ring-orange-500 focus-within:border-transparent"
-          />
-        </div>
+          <div>
+            <NovelEditor markdown={content} onChange={setContent} />
+          </div>
+        </motion.div>
 
-        <div className="flex gap-4 pt-6">
+        <motion.div
+          className="flex gap-4 pt-6"
+          variants={FADE_UP_ANIMATION_VARIANTS}
+        >
           <button
             type="button"
             onClick={handleSave}
@@ -366,8 +381,8 @@ export default function EditPostPage({ params }: EditPostPageProps) {
           >
             Cancel
           </button>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </Container>
   )
 }

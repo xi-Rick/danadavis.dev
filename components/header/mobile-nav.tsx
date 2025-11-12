@@ -6,6 +6,7 @@ import {
   Transition,
   TransitionChild,
 } from '@headlessui/react'
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import {
   clearAllBodyScrollLocks,
   disableBodyScroll,
@@ -16,13 +17,18 @@ import { Menu, X } from 'lucide-react'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { Link } from '~/components/ui/link'
 import { Twemoji } from '~/components/ui/twemoji'
-import { HEADER_NAV_LINKS, MORE_NAV_LINKS } from '~/data/navigation'
+import {
+  ADMIN_NAV_LINK,
+  HEADER_NAV_LINKS,
+  MORE_NAV_LINKS,
+} from '~/data/navigation'
 import { SITE_METADATA } from '~/data/site-metadata'
 import { Logo } from './logo'
 
 export function MobileNav() {
   const [navShow, setNavShow] = useState(false)
   const navRef = useRef(null)
+  const { isAuthenticated } = useKindeBrowserClient()
 
   const onToggleNav = () => {
     setNavShow((status) => {
@@ -97,6 +103,16 @@ export function MobileNav() {
                     <span className="ml-2">{link.title}</span>
                   </Link>
                 ))}
+                {isAuthenticated && (
+                  <Link
+                    href={ADMIN_NAV_LINK.href}
+                    className="hover:text-primary-500 dark:hover:text-primary-400 py-1 text-xl font-bold tracking-widest text-gray-900 outline-0 outline-solid dark:text-gray-100"
+                    onClick={onToggleNav}
+                  >
+                    <Twemoji emoji={ADMIN_NAV_LINK.emoji} />
+                    <span className="ml-2">{ADMIN_NAV_LINK.title}</span>
+                  </Link>
+                )}
               </nav>
               <button
                 type="button"

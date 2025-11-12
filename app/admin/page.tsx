@@ -38,13 +38,13 @@ export default function AdminPage() {
         </h2>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {/* Create Post */}
-          <RadiantCard className="p-6">
-            <div className="space-y-4">
+          <RadiantCard className="p-6 flex flex-col min-h-80">
+            <div className="space-y-4 flex flex-col h-full">
               <div className="text-4xl">📝</div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                 Create Post
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-gray-600 dark:text-gray-300 flex-grow">
                 Write and publish new blog posts with the full MDX editor.
               </p>
               <Link
@@ -57,13 +57,13 @@ export default function AdminPage() {
           </RadiantCard>
 
           {/* Manage Posts */}
-          <RadiantCard className="p-6">
-            <div className="space-y-4">
+          <RadiantCard className="p-6 flex flex-col min-h-80">
+            <div className="space-y-4 flex flex-col h-full">
               <div className="text-4xl">📋</div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                 Manage Posts
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-gray-600 dark:text-gray-300 flex-grow">
                 View, edit, and organize your existing blog posts.
               </p>
               <Link
@@ -76,13 +76,13 @@ export default function AdminPage() {
           </RadiantCard>
 
           {/* Analytics */}
-          <RadiantCard className="p-6">
-            <div className="space-y-4">
+          <RadiantCard className="p-6 flex flex-col min-h-80">
+            <div className="space-y-4 flex flex-col h-full">
               <div className="text-4xl">📊</div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                 Analytics
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-gray-600 dark:text-gray-300 flex-grow">
                 View detailed statistics and performance metrics.
               </p>
               <button
@@ -96,13 +96,13 @@ export default function AdminPage() {
           </RadiantCard>
 
           {/* Projects */}
-          <RadiantCard className="p-6">
-            <div className="space-y-4">
+          <RadiantCard className="p-6 flex flex-col min-h-80">
+            <div className="space-y-4 flex flex-col h-full">
               <div className="text-4xl">🚀</div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                 Projects
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-gray-600 dark:text-gray-300 flex-grow">
                 Manage and showcase your projects portfolio.
               </p>
               <button
@@ -116,13 +116,13 @@ export default function AdminPage() {
           </RadiantCard>
 
           {/* Settings */}
-          <RadiantCard className="p-6">
-            <div className="space-y-4">
+          <RadiantCard className="p-6 flex flex-col min-h-80">
+            <div className="space-y-4 flex flex-col h-full">
               <div className="text-4xl">⚙️</div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                 Settings
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-gray-600 dark:text-gray-300 flex-grow">
                 Configure blog settings and preferences.
               </p>
               <button
@@ -136,13 +136,13 @@ export default function AdminPage() {
           </RadiantCard>
 
           {/* Back to Blog */}
-          <RadiantCard className="p-6">
-            <div className="space-y-4">
+          <RadiantCard className="p-6 flex flex-col min-h-80">
+            <div className="space-y-4 flex flex-col h-full">
               <div className="text-4xl">📖</div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                 View Blog
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-gray-600 dark:text-gray-300 flex-grow">
                 Return to the public blog to see your posts.
               </p>
               <Link
@@ -162,7 +162,7 @@ export default function AdminPage() {
           Blog Statistics
         </h2>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <RadiantCard className="p-6 text-center">
+          <RadiantCard className="p-6 text-center flex flex-col min-h-48 justify-center">
             <div className="text-4xl font-bold accent mb-2">
               {postsLoading ? '--' : totalPosts}
             </div>
@@ -170,7 +170,7 @@ export default function AdminPage() {
               Total Posts
             </div>
           </RadiantCard>
-          <RadiantCard className="p-6 text-center">
+          <RadiantCard className="p-6 text-center flex flex-col min-h-48 justify-center">
             <div className="text-4xl font-bold accent-green mb-2">
               {postsLoading ? '--' : publishedPosts}
             </div>
@@ -178,7 +178,7 @@ export default function AdminPage() {
               Published Posts
             </div>
           </RadiantCard>
-          <RadiantCard className="p-6 text-center">
+          <RadiantCard className="p-6 text-center flex flex-col min-h-48 justify-center">
             <div className="text-4xl font-bold text-orange-500 mb-2">
               {postsLoading ? '--' : draftPosts}
             </div>

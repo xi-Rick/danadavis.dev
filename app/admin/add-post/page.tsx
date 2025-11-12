@@ -1,32 +1,12 @@
 'use client'
 
-import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components'
-import type { MDXEditorMethods } from '@mdxeditor/editor'
-import '@mdxeditor/editor/style.css'
-import { useRef, useState } from 'react'
-import { ForwardRefEditor } from '~/components/forward-ref-editor'
+import NovelEditor from '@/components/novel-editor'
+import { LoginLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
+import { motion } from 'framer-motion'
+import { useCallback, useState } from 'react'
 import { Container } from '~/components/ui/container'
 import { PageHeader } from '~/components/ui/page-header'
-
-// MDXEditor dark mode styles - only for text content
-const mdxEditorDarkStyles = `
-.mdxeditor {
-  color: var(--color-text) !important;
-}
-
-.mdxeditor [contenteditable] {
-  color: var(--color-text) !important;
-}
-
-.mdxeditor .cm-editor {
-  color: var(--color-text) !important;
-}
-
-.mdxeditor .cm-content {
-  color: var(--color-text) !important;
-}
-`
+import { FADE_UP_ANIMATION_VARIANTS } from '~/lib/animations'
 
 export default function AddPostPage() {
   const { isAuthenticated, isLoading } = useKindeBrowserClient()
@@ -42,35 +22,8 @@ export default function AddPostPage() {
   const [featured, setFeatured] = useState(false)
   const [content, setContent] = useState('')
   const [saving, setSaving] = useState(false)
-  const editorRef = useRef<MDXEditorMethods>(null)
 
-  if (isLoading)
-    return (
-      <Container className="pt-4 lg:pt-12">
-        <div className="text-center" />
-      </Container>
-    )
-
-  if (!isAuthenticated) {
-    return (
-      <Container className="pt-4 lg:pt-12">
-        <div className="text-center">
-          <PageHeader
-            title="Admin Access Required"
-            description="You need to be logged in to access the admin area."
-            className="border-b border-gray-200 dark:border-gray-700"
-          />
-          <div className="mt-8">
-            <LoginLink className="inline-block px-8 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
-              Login to Admin
-            </LoginLink>
-          </div>
-        </div>
-      </Container>
-    )
-  }
-
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     setSaving(true)
     try {
       const response = await fetch('/api/save-post', {
@@ -109,28 +62,80 @@ export default function AddPostPage() {
         setDraft(false)
         setFeatured(false)
         setContent('')
-        editorRef.current?.setMarkdown('')
       } else {
         const error = await response.json()
         alert(`Error saving post: ${error.error}`)
       }
     } catch (error) {
-      alert(`Error saving post: ${error.message}`)
+      alert(
+        `Error saving post: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      )
     }
     setSaving(false)
+  }, [
+    title,
+    summary,
+    tags,
+    categories,
+    images,
+    canonicalUrl,
+    layout,
+    bibliography,
+    draft,
+    featured,
+    content,
+  ])
+
+  if (isLoading)
+    return (
+      <Container className="pt-4 lg:pt-12">
+        <div className="text-center" />
+      </Container>
+    )
+
+  if (!isAuthenticated) {
+    return (
+      <Container className="pt-4 lg:pt-12">
+        <div className="text-center">
+          <PageHeader
+            title="Admin Access Required"
+            description="You need to be logged in to access the admin area."
+            className="border-b border-gray-200 dark:border-gray-700"
+          />
+          <div className="mt-8">
+            <LoginLink className="inline-block px-8 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
+              Login to Admin
+            </LoginLink>
+          </div>
+        </div>
+      </Container>
+    )
   }
 
   return (
     <Container className="pt-4 lg:pt-12 pb-12">
-      <style dangerouslySetInnerHTML={{ __html: mdxEditorDarkStyles }} />
       <PageHeader
         title="Add New Post"
-        description="Create a new blog post with the full MDX editor and comprehensive metadata."
+        description="Create a new blog post with the full editor and comprehensive metadata."
         className="border-b border-gray-200 dark:border-gray-700"
       />
 
-      <div className="py-8 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <motion.div
+        className="py-8 space-y-6"
+        initial="hidden"
+        animate="show"
+        variants={{
+          show: {
+            transition: {
+              staggerChildren: 0.08,
+            },
+          },
+        }}
+      >
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          variants={FADE_UP_ANIMATION_VARIANTS}
+        >
           <div>
             <label
               htmlFor="title"
@@ -164,9 +169,9 @@ export default function AddPostPage() {
               placeholder="javascript, react, tutorial"
             />
           </div>
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div variants={FADE_UP_ANIMATION_VARIANTS}>
           <label
             htmlFor="summary"
             className="block text-sm font-medium mb-2 text-gray-900 dark:text-gray-100"
@@ -181,9 +186,12 @@ export default function AddPostPage() {
             rows={3}
             placeholder="Brief summary of the post"
           />
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          variants={FADE_UP_ANIMATION_VARIANTS}
+        >
           <div>
             <label
               htmlFor="categories"
@@ -217,9 +225,12 @@ export default function AddPostPage() {
               placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
             />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          variants={FADE_UP_ANIMATION_VARIANTS}
+        >
           <div>
             <label
               htmlFor="canonicalUrl"
@@ -270,9 +281,12 @@ export default function AddPostPage() {
               placeholder="Bibliography content..."
             />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="flex gap-6">
+        <motion.div
+          className="flex gap-6"
+          variants={FADE_UP_ANIMATION_VARIANTS}
+        >
           <label className="flex items-center space-x-3">
             <input
               type="checkbox"
@@ -296,21 +310,21 @@ export default function AddPostPage() {
               Featured
             </span>
           </label>
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div variants={FADE_UP_ANIMATION_VARIANTS}>
           <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-gray-100">
             Content
           </label>
-          <ForwardRefEditor
-            ref={editorRef}
-            markdown={content}
-            onChange={setContent}
-            className="border border-gray-300 dark:border-gray-600 rounded-lg min-h-[600px] focus-within:ring-2 focus-within:ring-orange-500 focus-within:border-transparent"
-          />
-        </div>
+          <div>
+            <NovelEditor markdown={content} onChange={setContent} />
+          </div>
+        </motion.div>
 
-        <div className="flex gap-4 pt-6">
+        <motion.div
+          className="flex gap-4 pt-6"
+          variants={FADE_UP_ANIMATION_VARIANTS}
+        >
           <button
             type="button"
             onClick={handleSave}
@@ -326,8 +340,8 @@ export default function AddPostPage() {
           >
             Cancel
           </button>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </Container>
   )
 }

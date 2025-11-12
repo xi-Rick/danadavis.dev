@@ -156,6 +156,7 @@ export default function RootLayout({
         FONT_GEIST.variable,
       )}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
     >
       <head>
         <WebsiteJsonLd />

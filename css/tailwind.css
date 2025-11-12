@@ -204,3 +204,637 @@
 div#disqus_thread iframe[sandbox] {
   max-height: 0px !important;
 }
+
+/* Novel.sh Editor Styles - Updated */
+.editor-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-content-wrapper {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ProseMirror {
+  @apply p-12 px-8 sm:px-12 overflow-hidden;
+}
+
+/* Placeholder styling - shows when editor is empty with slash command hint */
+.ProseMirror .is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  height: 0;
+}
+
+.ProseMirror .is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  height: 0;
+}
+
+.dark .ProseMirror .is-editor-empty:first-child::before {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.dark .ProseMirror .is-empty::before {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* FIXED: Enhanced image styling with better feedback */
+.ProseMirror img {
+  transition: all 0.2s ease-in-out;
+  border-radius: 0.5rem;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+}
+
+.ProseMirror img:hover {
+  cursor: pointer;
+  filter: brightness(90%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.ProseMirror img.ProseMirror-selectednode {
+  outline: 3px solid var(--color-accent-orange);
+  filter: brightness(90%);
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+}
+
+.dark .ProseMirror img.ProseMirror-selectednode {
+  box-shadow: 0 8px 20px rgba(234, 88, 12, 0.3);
+}
+
+.ProseMirror:not(.dragging) .ProseMirror-selectednode {
+  outline: none !important;
+  background-color: var(--novel-highlight-blue);
+  transition: background-color 0.2s;
+  box-shadow: none;
+}
+
+/* FIXED: Drag handle with intelligent viewport positioning */
+.drag-handle {
+  position: fixed;
+  opacity: 1;
+  transition: opacity ease-in 0.2s;
+  border-radius: 0.25rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' style='fill: rgba(0, 0, 0, 0.5)'%3E%3Cpath d='M3,2 C2.44771525,2 2,1.55228475 2,1 C2,0.44771525 2.44771525,0 3,0 C3.55228475,0 4,0.44771525 4,1 C4,1.55228475 3.55228475,2 3,2 Z M3,6 C2.44771525,6 2,5.55228475 2,5 C2,4.44771525 2.44771525,4 3,4 C3.55228475,4 4,4.44771525 4,5 C4,5.55228475 3.55228475,6 3,6 Z M3,10 C2.44771525,10 2,9.55228475 2,9 C2,8.44771525 2.44771525,8 3,8 C3.55228475,8 4,8.44771525 4,9 C4,9.55228475 3.55228475,10 3,10 Z M7,2 C6.44771525,2 6,1.55228475 6,1 C6,0.44771525 6.44771525,0 7,0 C7.55228475,0 8,0.44771525 8,1 C8,1.55228475 7.55228475,2 7,2 Z M7,6 C6.44771525,6 6,5.55228475 6,5 C6,4.44771525 6.44771525,4 7,4 C7.55228475,4 8,4.44771525 8,5 C8,5.55228475 7.55228475,6 7,6 Z M7,10 C6.44771525,10 6,9.55228475 6,9 C6,8.44771525 6.44771525,8 7,8 C7.55228475,8 8,8.44771525 8,9 C8,9.55228475 7.55228475,10 7,10 Z'%3E%3C/path%3E%3C/svg%3E");
+  background-size: calc(0.5em + 0.375rem) calc(0.5em + 0.375rem);
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 1.2rem;
+  height: 1.5rem;
+  z-index: 50;
+  cursor: grab;
+  will-change: transform;
+  /* Add visual boundaries to prevent off-screen positioning */
+  max-width: calc(100vw - 1.5rem);
+  max-height: calc(100vh - 1.5rem);
+}
+
+.drag-handle:hover {
+  background-color: var(--novel-stone-100);
+  transition: background-color 0.2s;
+}
+
+.drag-handle:active {
+  background-color: var(--novel-stone-200);
+  transition: background-color 0.2s;
+  cursor: grabbing;
+}
+
+.drag-handle.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media screen and (max-width: 600px) {
+  .drag-handle {
+    display: none;
+    pointer-events: none;
+  }
+}
+
+.dark .drag-handle {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' style='fill: rgba(255, 255, 255, 0.5)'%3E%3Cpath d='M3,2 C2.44771525,2 2,1.55228475 2,1 C2,0.44771525 2.44771525,0 3,0 C3.55228475,0 4,0.44771525 4,1 C4,1.55228475 3.55228475,2 3,2 Z M3,6 C2.44771525,6 2,5.55228475 2,5 C2,4.44771525 2.44771525,4 3,4 C3.55228475,4 4,4.44771525 4,5 C4,5.55228475 3.55228475,6 3,6 Z M3,10 C2.44771525,10 2,9.55228475 2,9 C2,8.44771525 2.44771525,8 3,8 C3.55228475,8 4,8.44771525 4,9 C4,9.55228475 3.55228475,10 3,10 Z M7,2 C6.44771525,2 6,1.55228475 6,1 C6,0.44771525 6.44771525,0 7,0 C7.55228475,0 8,0.44771525 8,1 C8,1.55228475 7.55228475,2 7,2 Z M7,6 C6.44771525,6 6,5.55228475 6,5 C6,4.44771525 6.44771525,4 7,4 C7.55228475,4 8,4.44771525 8,5 C8,5.55228475 7.55228475,6 7,6 Z M7,10 C6.44771525,10 6,9.55228475 6,9 C6,8.44771525 6.44771525,8 7,8 C7.55228475,8 8,8.44771525 8,9 C8,9.55228475 7.55228475,10 7,10 Z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+/* Intelligent viewport boundary management */
+.drag-handle-constraints {
+  /* Prevent drag handle from scrolling off viewport */
+  position: fixed;
+  will-change: transform;
+}
+
+/* Ensure editor allows drag handle to be positioned correctly */
+.editor-container {
+  position: relative;
+  overflow: visible;
+}
+
+.ProseMirror[data-drag-target] {
+  /* Allow proper positioning of drag handle during drag operations */
+  position: relative;
+  overflow: visible !important;
+}
+
+/* Novel.sh Editor List Styles - Override blog-content */
+.ProseMirror .novel-bullet-list,
+.ProseMirror ul:not([data-type="taskList"]) {
+  list-style: disc !important;
+  list-style-position: outside;
+  margin: 1rem 0;
+  padding-left: 2rem !important;
+  clear: none;
+  width: 100%;
+}
+
+.ProseMirror .novel-ordered-list,
+.ProseMirror ol {
+  list-style: decimal !important;
+  list-style-position: outside;
+  margin: 1rem 0;
+  padding-left: 2rem !important;
+  clear: none;
+  width: 100%;
+}
+
+.ProseMirror .novel-list-item,
+.ProseMirror li {
+  margin: 0.5rem 0;
+  padding-left: 0 !important;
+  line-height: 1.5;
+  color: inherit;
+  clear: none;
+  list-style: disc;
+}
+
+.ProseMirror .novel-list-item::before {
+  display: none;
+}
+
+/* Prevent placeholder from appearing in list items */
+.ProseMirror li.is-empty::before {
+  display: none !important;
+}
+
+/* Task list styles */
+ul[data-type="taskList"] {
+  list-style: none;
+  margin: 1rem 0;
+  padding-left: 0;
+}
+
+ul[data-type="taskList"] li > label {
+  margin-right: 0.2rem;
+  user-select: none;
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+  ul[data-type="taskList"] li > label {
+    margin-right: 0.5rem;
+  }
+}
+
+/* Prevent placeholder in task lists */
+ul[data-type="taskList"] li p.is-empty::before {
+  display: none !important;
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #ffffff;
+  margin: 0;
+  cursor: pointer;
+  width: 1.2em;
+  height: 1.2em;
+  position: relative;
+  top: 3px;
+  border: 2px solid #000000;
+  margin-right: 0.5rem;
+  display: grid;
+  place-content: center;
+  flex-shrink: 0;
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"]:hover {
+  background-color: #f97316;
+  border-color: #f97316;
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em #000000;
+  transform-origin: center;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"]:checked {
+  background-color: #ffffff;
+  border-color: #000000;
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+ul[data-type="taskList"] li[data-checked="true"] > div > p {
+  opacity: 0.6;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+/* Dark mode task list styles */
+.dark ul[data-type="taskList"] li > label input[type="checkbox"] {
+  background-color: #000000;
+  border-color: #ffffff;
+}
+
+.dark ul[data-type="taskList"] li > label input[type="checkbox"]:hover {
+  background-color: #ea580c;
+  border-color: #ea580c;
+}
+
+.dark ul[data-type="taskList"] li > label input[type="checkbox"]::before {
+  box-shadow: inset 1em 1em #ffffff;
+}
+
+.dark ul[data-type="taskList"] li > label input[type="checkbox"]:checked {
+  background-color: #000000;
+  border-color: #ffffff;
+}
+
+/* Tippy tooltip */
+.tippy-box {
+  max-width: 400px !important;
+}
+
+/* Slash command menu styling */
+#slash-command {
+  --color-bg: #ffffff;
+  --color-text: #0b0b0b;
+  --color-border: #e5e7eb;
+}
+
+.dark #slash-command {
+  --color-bg: #000000;
+  --color-text: #e6e6e6;
+  --color-border: #2b2b2b;
+}
+
+/* Ensure slash command items don't have distorted text */
+#slash-command [cmdk-item] {
+  padding: 0.375rem 0.5rem;
+  margin: 0;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+/* Command item title and description layout */
+#slash-command [cmdk-item] > div:last-child {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: 0.125rem;
+}
+
+#slash-command [cmdk-item] p:first-of-type {
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: normal;
+  word-break: break-word;
+}
+
+#slash-command [cmdk-item] p:last-of-type {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.25;
+  white-space: normal;
+  word-break: break-word;
+  overflow: visible;
+  display: block;
+  max-width: 100%;
+}
+
+/* Icon container alignment */
+#slash-command [cmdk-item] > div:first-child {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Prevent placeholder text from showing in nested elements only */
+.ProseMirror ul.is-empty::before,
+.ProseMirror ol.is-empty::before,
+.ProseMirror li.is-empty::before,
+.ProseMirror li > p.is-empty::before,
+.ProseMirror blockquote.is-empty::before,
+.ProseMirror h1.is-empty::before,
+.ProseMirror h2.is-empty::before,
+.ProseMirror h3.is-empty::before,
+.ProseMirror h4.is-empty::before,
+.ProseMirror h5.is-empty::before,
+.ProseMirror h6.is-empty::before,
+.ProseMirror code.is-empty::before,
+.ProseMirror pre.is-empty::before {
+  display: none !important;
+}
+
+/* Bold and mark color inheritance */
+span[style] > strong {
+  color: inherit;
+}
+
+mark[style] > strong {
+  color: inherit;
+}
+
+/* Enhanced Novel Editor UI/UX Improvements */
+
+/* Editor container with better visual hierarchy */
+.editor-container {
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.dark .editor-container {
+  border-color: var(--color-border-dark);
+  box-shadow: none;
+}
+
+.editor-content-wrapper {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.dark .editor-content-wrapper {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-dark);
+}
+
+/* Improved ProseMirror base styling */
+.ProseMirror {
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.ProseMirror:focus {
+  box-shadow: 0 0 0 2px var(--color-accent-orange);
+  outline: 2px solid var(--color-accent-orange);
+}
+
+.dark .ProseMirror:focus {
+  box-shadow: 0 0 0 2px var(--color-accent-orange);
+}
+
+/* Better separator/divider styling */
+.ProseMirror hr {
+  margin: 2rem 0;
+  border: none;
+  border-top: 2px solid var(--color-border);
+}
+
+.dark .ProseMirror hr {
+  border-top-color: var(--color-border-dark);
+}
+
+/* Better emphasis/mark styling */
+.ProseMirror mark {
+  background-color: rgba(250, 204, 21, 0.3);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.dark .ProseMirror mark {
+  background-color: rgba(180, 83, 9, 0.3);
+}
+
+/* Improved link styling in editor */
+.ProseMirror a {
+  color: var(--color-accent-orange);
+  text-decoration: underline;
+  transition: all 0.2s;
+}
+
+.ProseMirror a:hover {
+  filter: brightness(0.9);
+}
+
+/* Image loading state */
+.ProseMirror img.loading {
+  opacity: 0.5;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Image error state */
+.ProseMirror img.error {
+  border: 2px solid #ef4444;
+  opacity: 0.5;
+}
+
+/* Image caption styling */
+.ProseMirror .image-caption {
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.6);
+  font-style: italic;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.dark .ProseMirror .image-caption {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Better blockquote styling in editor */
+.ProseMirror blockquote {
+  border-left: 4px solid var(--color-accent-orange);
+  padding-left: 1rem;
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.7);
+  margin: 1rem 0;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.dark .ProseMirror blockquote {
+  border-left-color: var(--color-accent-orange);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Code block styling improvements */
+.ProseMirror pre {
+  background-color: #1f1f1f;
+  color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border: 1px solid #333333;
+  font-family: var(--font-jetbrains-mono), monospace;
+}
+
+.dark .ProseMirror pre {
+  background-color: #0a0a0a;
+  border-color: #444444;
+}
+
+.ProseMirror pre code {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Heading styling in editor with visual hierarchy */
+.ProseMirror h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text);
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: 0.5rem;
+}
+
+.dark .ProseMirror h2 {
+  border-bottom-color: var(--color-border-dark);
+}
+
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+  font-weight: 700;
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+/* Better list styling */
+.ProseMirror ul:not([data-type="taskList"]),
+.ProseMirror ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.ProseMirror li {
+  margin: 0.5rem 0;
+  padding-left: 0;
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+/* Paragraph spacing */
+.ProseMirror p {
+  margin: 0.75rem 0;
+  color: var(--color-text);
+  line-height: 1.625;
+}
+
+/* Command menu improvements - more visible and accessible */
+.EditorCommand {
+  z-index: 50;
+  max-height: 20rem;
+  overflow-y: auto;
+  border-radius: 0.5rem;
+  border: 2px solid var(--color-text);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.dark .EditorCommand {
+  border-color: var(--color-text-dark);
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-dark);
+}
+
+.EditorCommandEmpty {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.dark .EditorCommandEmpty {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.EditorCommandItem {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--color-text);
+}
+
+.EditorCommandItem:hover {
+  background-color: rgba(249, 115, 22, 0.1);
+  transform: translateX(0.25rem);
+}
+
+.dark .EditorCommandItem:hover {
+  background-color: rgba(234, 88, 12, 0.15);
+}
+
+.EditorCommandItem[aria-selected="true"] {
+  background-color: rgba(249, 115, 22, 0.2);
+}
+
+.dark .EditorCommandItem[aria-selected="true"] {
+  background-color: rgba(234, 88, 12, 0.25);
+}
+
+/* Icon container for command items */
+.command-icon-container {
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  border: 2px solid var(--color-accent-orange);
+  background-color: rgba(249, 115, 22, 0.05);
+  color: var(--color-accent-orange);
+}

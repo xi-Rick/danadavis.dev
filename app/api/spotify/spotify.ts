@@ -1,14 +1,38 @@
 import type { NowPlayingData, RecentlyPlayedData } from '~/types/data'
 
+const TOKEN_ENDPOINT = 'https://accounts.spotify.com/api/token'
 const CURRENTLY_PLAYING =
   'https://api.spotify.com/v1/me/player/currently-playing'
 const RECENTLY_PLAYED = 'https://api.spotify.com/v1/me/player/recently-played'
 
-const { SPOTIFY_API_KEY: api_key } = process.env
+const {
+  SPOTIFY_CLIENT_ID: client_id,
+  SPOTIFY_CLIENT_SECRET: client_secret,
+  SPOTIFY_REFRESH_TOKEN: refresh_token = '',
+} = process.env
+
+const basic = Buffer.from(`${client_id}:${client_secret}`).toString('base64')
+
+async function getAccessToken() {
+  const response = await fetch(TOKEN_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      Authorization: `Basic ${basic}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    cache: 'no-store',
+    body: new URLSearchParams({
+      grant_type: 'refresh_token',
+      refresh_token,
+    }),
+  })
+
+  return response.json()
+}
 
 export async function getNowPlaying(): Promise<NowPlayingData> {
   try {
-    const access_token = api_key
+    const { access_token } = await getAccessToken()
     const url = new URL(CURRENTLY_PLAYING)
     url.searchParams.append('additional_types', 'track,episode')
 
@@ -19,11 +43,8 @@ export async function getNowPlaying(): Promise<NowPlayingData> {
       cache: 'no-store',
     })
 
-    if (response.status === 204) {
-      return { ok: false, error: 'No content available.' }
-    }
-    if (response.status >= 400) {
-      return { ok: false, error: `Bad request: ${response.status}` }
+    if (response.status === 204 || response.status >= 400) {
+      return { ok: false, error: 'Bad request or No content available.' }
     }
 
     const data = await response.json()
@@ -71,17 +92,14 @@ export async function getNowPlaying(): Promise<NowPlayingData> {
 
 export async function getRecentlyPlayed(): Promise<RecentlyPlayedData> {
   try {
-    const access_token = api_key
+    const { access_token } = await getAccessToken()
     const res = await fetch(RECENTLY_PLAYED, {
       headers: {
         Authorization: `Bearer ${access_token}`,
       },
     })
-    if (res.status === 204) {
-      return { ok: false, error: 'No content available.' }
-    }
-    if (res.status >= 400) {
-      return { ok: false, error: `Bad request: ${res.status}` }
+    if (res.status === 204 || res.status >= 400) {
+      return { ok: false, error: 'Bad request or No content available.' }
     }
 
     const data = await res.json()

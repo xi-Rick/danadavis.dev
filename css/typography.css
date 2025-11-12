@@ -228,7 +228,8 @@
 .blog-content ul,
 .blog-content ol {
   margin: 2rem 0;
-  padding-left: 0;
+  padding-left: 0 !important;
+  list-style: none !important;
 }
 
 .blog-content li {
@@ -238,6 +239,7 @@
   font-size: 1.1rem;
   line-height: 1.8;
   color: #111111 !important;
+  list-style: none !important;
 }
 
 .blog-content ul li::before {
