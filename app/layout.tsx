@@ -12,6 +12,7 @@ import {
 } from 'next/font/google'
 import 'react-medium-image-zoom/dist/styles.css'
 import 'remark-github-blockquote-alert/alert.css'
+import { Toaster } from 'sonner'
 import { UmamiAnalytics } from '~/components/analytics/umami'
 import { Footer } from '~/components/footer'
 import { Header } from '~/components/header'
@@ -229,6 +230,7 @@ export default function RootLayout({
               </main>
             </KBarSearchProvider>
             <Footer />
+            <Toaster richColors position="top-right" />
           </AuthProvider>
         </ThemeProviders>
         <SpeedInsights />

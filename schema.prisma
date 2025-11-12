@@ -29,24 +29,24 @@ model User {
 }
 
 model Post {
-  id          String   @id @default(cuid())
-  title       String
-  slug        String   @unique
-  summary     String?
-  content     String
-  date        DateTime @default(now())
-  lastmod     DateTime @updatedAt
-  tags        String[]
-  categories  String[]
-  images      String[]
-  authors     String[]
-  draft       Boolean  @default(true)
-  featured    Boolean  @default(false)
+  id           String   @id @default(cuid())
+  title        String
+  slug         String   @unique
+  summary      String?
+  content      String
+  date         DateTime @default(now())
+  lastmod      DateTime @updatedAt
+  tags         String[]
+  categories   String[]
+  images       String[]
+  authors      String[]
+  draft        Boolean  @default(true)
+  featured     Boolean  @default(false)
   canonicalUrl String?
-  layout      String?
+  layout       String?
   bibliography String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   // Relations
   author   User   @relation(fields: [authorId], references: [id])
@@ -56,25 +56,25 @@ model Post {
 }
 
 model Project {
-  id          String   @id @default(cuid())
-  title       String
-  slug        String   @unique
-  summary     String?
-  content     String
-  date        DateTime @default(now())
-  lastmod     DateTime @updatedAt
-  tags        String[]
-  categories  String[]
-  images      String[]
-  authors     String[]
-  draft       Boolean  @default(true)
-  featured    Boolean  @default(false)
-  layout      String?
-  github      String?
-  demo        String?
+  id           String   @id @default(cuid())
+  title        String
+  slug         String   @unique
+  summary      String?
+  content      String
+  date         DateTime @default(now())
+  lastmod      DateTime @updatedAt
+  tags         String[]
+  categories   String[]
+  images       String[]
+  authors      String[]
+  draft        Boolean  @default(true)
+  featured     Boolean  @default(false)
+  layout       String?
+  github       String?
+  demo         String?
   technologies String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   // Relations
   author   User   @relation(fields: [authorId], references: [id])
@@ -84,25 +84,25 @@ model Project {
 }
 
 model Snippet {
-  id          String   @id @default(cuid())
-  title       String
-  slug        String   @unique
-  summary     String?
-  content     String
-  date        DateTime @default(now())
-  lastmod     DateTime @updatedAt
-  tags        String[]
-  categories  String[]
-  images      String[]
-  authors     String[]
-  draft       Boolean  @default(true)
-  featured    Boolean  @default(false)
-  layout      String?
-  language    String?
-  framework   String?
-  difficulty  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(cuid())
+  title      String
+  slug       String   @unique
+  summary    String?
+  content    String
+  date       DateTime @default(now())
+  lastmod    DateTime @updatedAt
+  tags       String[]
+  categories String[]
+  images     String[]
+  authors    String[]
+  draft      Boolean  @default(true)
+  featured   Boolean  @default(false)
+  layout     String?
+  language   String?
+  framework  String?
+  difficulty String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   // Relations
   author   User   @relation(fields: [authorId], references: [id])
@@ -112,28 +112,28 @@ model Snippet {
 }
 
 model Movie {
-  id          String   @id @default(cuid())
-  title       String
-  slug        String   @unique
-  summary     String?
-  content     String
-  date        DateTime @default(now())
-  lastmod     DateTime @updatedAt
-  tags        String[]
-  categories  String[]
-  images      String[]
-  authors     String[]
-  draft       Boolean  @default(true)
-  featured    Boolean  @default(false)
-  layout      String?
-  director    String?
-  year        Int?
-  titleType   String?  // 'movie' or 'tv-series'
-  yourRating  Int?
-  imdbRating  Float?
-  imdbUrl     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(cuid())
+  title      String
+  slug       String   @unique
+  summary    String?
+  content    String
+  date       DateTime @default(now())
+  lastmod    DateTime @updatedAt
+  tags       String[]
+  categories String[]
+  images     String[]
+  authors    String[]
+  draft      Boolean  @default(true)
+  featured   Boolean  @default(false)
+  layout     String?
+  director   String?
+  year       Int?
+  titleType  String? // 'movie' or 'tv-series'
+  yourRating Int?
+  imdbRating Float?
+  imdbUrl    String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   // Relations
   author   User   @relation(fields: [authorId], references: [id])
@@ -143,27 +143,27 @@ model Movie {
 }
 
 model Book {
-  id          String   @id @default(cuid())
-  title       String
-  slug        String   @unique
-  summary     String?
-  content     String
-  date        DateTime @default(now())
-  lastmod     DateTime @updatedAt
-  tags        String[]
-  categories  String[]
-  images      String[]
-  authors     String[]
-  draft       Boolean  @default(true)
-  featured    Boolean  @default(false)
-  layout      String?
-  bookAuthor  String?
-  year        Int?
-  pageCount   Int?
-  userShelves String?
+  id           String   @id @default(cuid())
+  title        String
+  slug         String   @unique
+  summary      String?
+  content      String
+  date         DateTime @default(now())
+  lastmod      DateTime @updatedAt
+  tags         String[]
+  categories   String[]
+  images       String[]
+  authors      String[]
+  draft        Boolean  @default(true)
+  featured     Boolean  @default(false)
+  layout       String?
+  bookAuthor   String?
+  year         Int?
+  pageCount    Int?
+  userShelves  String?
   goodreadsUrl String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   // Relations
   author   User   @relation(fields: [authorId], references: [id])
@@ -196,8 +196,8 @@ model Stats {
 }
 
 model Product {
-  id               String           @id @default(cuid())
-  slug             String           @unique
+  id               String   @id @default(cuid())
+  slug             String   @unique
   name             String
   description      String
   shortDescription String
@@ -206,15 +206,15 @@ model Product {
   category         String
   tags             String[]
   images           String[]
-  featured         Boolean          @default(false)
-  inStock          Boolean          @default(true)
+  featured         Boolean  @default(false)
+  inStock          Boolean  @default(true)
   stripeProductId  String?
   stripePriceId    String?
   specifications   Json?
   rating           Float?
   reviewCount      Int?
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   // Relations
   variants ProductVariant[]
@@ -228,7 +228,7 @@ model ProductVariant {
   name          String
   price         Float
   stripePriceId String?
-  attributes    Json    // e.g., { color: "black", size: "L" }
+  attributes    Json // e.g., { color: "black", size: "L" }
   inStock       Boolean @default(true)
 
   // Relations
@@ -254,31 +254,31 @@ model Review {
 }
 
 model GoodreadsBook {
-  id                String   @id
-  guid              String
-  pubDate           String
-  title             String
-  link              String
-  bookImageUrl      String
-  bookSmallImageUrl String
+  id                 String   @id
+  guid               String
+  pubDate            String
+  title              String
+  link               String
+  bookImageUrl       String
+  bookSmallImageUrl  String
   bookMediumImageUrl String
-  bookLargeImageUrl String
-  bookDescription   String
-  authorName        String
-  isbn              String?
-  userName          String
-  userRating        Float
-  userReadAt        String?
-  userDateAdded     String
-  userDateCreated   String
-  userShelves       String?
-  userReview        String?
-  averageRating     Float
-  bookPublished     String?
-  numPages          Int?
-  content           String
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  bookLargeImageUrl  String
+  bookDescription    String
+  authorName         String
+  isbn               String?
+  userName           String
+  userRating         Float
+  userReadAt         String?
+  userDateAdded      String
+  userDateCreated    String
+  userShelves        String?
+  userReview         String?
+  averageRating      Float
+  bookPublished      String?
+  numPages           Int?
+  content            String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@map("goodreads_books")
 }
@@ -311,4 +311,21 @@ model GoodreadsMovie {
   updatedAt     DateTime @updatedAt
 
   @@map("goodreads_movies")
+}
+
+model CaptainsLog {
+  id               String   @id @default(cuid())
+  timestamp        DateTime @default(now())
+  transcription    String
+  summary          String?
+  contentType      String
+  tags             String[]
+  blogPotential    Boolean  @default(false)
+  projectPotential Boolean  @default(false)
+  duration         Int?
+  isPrivate        Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("captains_logs")
 }

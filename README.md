@@ -79,14 +79,19 @@ This blog is forked and heavily customized from [leohuynh.dev](https://github.co
 
 ### 🔧 Content Management System & Authentication
 
-![Dana Davis CMS Add Post Dashboard](./public/static/images/add-post.png)
+![Dana Davis Admin Dashboard](./public/static/images/admin-dashboard.png)
 
 - **Themed CMS Admin Panel**: Full-featured dashboard for managing blog posts, media, and comments
-  - Add/Edit/Delete posts with Novel.sh rich text editor
+  - Add/Edit/Delete posts with <span>Novel.sh</span> rich text editor
   - Post management with filtering and organization
   - Built-in authentication with Kinde Auth for secure access
   - Comprehensive metadata management (tags, categories, images, canonical URLs)
   - Draft and featured post toggles for content workflow
+- **Captain's Log**: Voice-to-text note-taking system with AI-powered analysis
+  - Record audio notes that are automatically transcribed using OpenAI Whisper
+  - AI summarization and content type classification (thought, idea, blog-draft, project-idea, note)
+  - Automatic tagging and potential identification for blog posts and projects
+  - Full editing capabilities with privacy controls and metadata tracking
 - **Novel.sh Editor**: Advanced AI-powered WYSIWYG editor with support for formatting, links, images, code blocks, and slash commands
 - **Type-Safe Database**: PostgreSQL with Prisma ORM for dynamic content management and querying
 - **Admin Dashboard**: Secure access to manage all content through an authenticated interface
@@ -124,7 +129,8 @@ Before deploying to production, you'll need to gather API credentials from vario
 - A [GitHub](https://github.com) account (for repository connection)
 - Browser access to set up services
 
-### 1. **Database Setup** 📦
+<details>
+<summary><strong>1. Database Setup 📦</strong></summary>
 
 #### Supabase (PostgreSQL Database)
 
@@ -138,15 +144,16 @@ Before deploying to production, you'll need to gather API credentials from vario
 
 **Environment Variable:** `DATABASE_URL`
 
----
+</details>
 
-### 2. **Authentication Setup** 🔐
+<details>
+<summary><strong>2. Authentication Setup 🔐</strong></summary>
 
 #### Kinde Auth (Admin Dashboard Protection)
 
 1. Visit [kinde.com](https://kinde.com) and create a free account
 2. Go to **Settings > Applications** in your dashboard
-3. Click **"Create Application"** and name it (e.g., "Dana's Blog")
+3. Click **"Create Application"** and name it (e.g., "My Blog")
 4. Copy these credentials:
    - **Client ID** → `KINDE_CLIENT_ID`
    - **Client Secret** → `KINDE_CLIENT_SECRET` (click "View Secret")
@@ -165,9 +172,10 @@ Before deploying to production, you'll need to gather API credentials from vario
 - `NEXT_PUBLIC_KINDE_CLIENT_ID`
 - `NEXT_PUBLIC_KINDE_DOMAIN`
 
----
+</details>
 
-### 3. **GitHub Integration** 🐙
+<details>
+<summary><strong>3. GitHub Integration 🐙</strong></summary>
 
 #### GitHub API Token
 
@@ -181,9 +189,10 @@ Before deploying to production, you'll need to gather API credentials from vario
 
 **Environment Variable:** `GITHUB_API_TOKEN`
 
----
+</details>
 
-### 4. **Music Integration** 🎵
+<details>
+<summary><strong>4. Music Integration 🎵</strong></summary>
 
 #### Spotify API Credentials
 
@@ -191,7 +200,7 @@ Before deploying to production, you'll need to gather API credentials from vario
 2. Log in with or create a Spotify account
 3. Click **"Create App"** and accept the Developer Terms
 4. Fill in the form:
-   - **App Name:** "Dana's Blog"
+   - **App Name:** "My Blog"
    - **App Description:** "Displays currently playing track"
 5. Copy the credentials:
    - **Client ID** → `SPOTIFY_CLIENT_ID`
@@ -215,9 +224,10 @@ This will redirect to your callback page with an authorization code. Use this to
 - `SPOTIFY_CLIENT_SECRET`
 - `SPOTIFY_REFRESH_TOKEN` (obtain via authorization flow)
 
----
+</details>
 
-### 5. **Analytics Setup** 📊
+<details>
+<summary><strong>5. Analytics Setup 📊</strong></summary>
 
 #### Umami Analytics
 
@@ -227,9 +237,25 @@ This will redirect to your callback page with an authorization code. Use this to
 
 **Environment Variable:** `NEXT_UMAMI_ID`
 
----
+</details>
 
-### 6. **Stripe (Optional - For Store Feature)** 💳
+<details>
+<summary><strong>6. OpenAI API 🤖</strong></summary>
+
+#### OpenAI API Key (For Captain's Log Transcription)
+
+1. Go to [platform.openai.com](https://platform.openai.com) and sign in or create an account
+2. Navigate to **API Keys** in your account settings
+3. Click **"Create new secret key"**
+4. Name it "My Blog's - Captain's Log" and copy the key immediately (it won't show again)
+5. Note: You'll need to add credit to your OpenAI account to use the Whisper API for transcription
+
+**Environment Variable:** `OPENAI_API_KEY`
+
+</details>
+
+<details>
+<summary><strong>7. Stripe (Optional - For Store Feature) 💳</strong></summary>
 
 1. Go to [stripe.com](https://stripe.com) and create an account
 2. Go to **Developers > API Keys**
@@ -241,9 +267,10 @@ This will redirect to your callback page with an authorization code. Use this to
 - `STRIPE_SECRET_KEY`
 - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
 
----
+</details>
 
-### 7. **Deployment on Vercel** ☁️
+<details>
+<summary><strong>8. Deployment on Vercel ☁️</strong></summary>
 
 1. Go to [vercel.com](https://vercel.com) and sign in with GitHub
 2. Click **"Add New" > "Project"**
@@ -253,11 +280,13 @@ This will redirect to your callback page with an authorization code. Use this to
 6. Add all the environment variables from above
 7. Click **"Deploy"**
 
-Or
+</details>
+
+---
 
 ### One Click Deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/xi-Rick/danadavis.dev&env=DATABASE_URL,ADMIN_EMAIL,KINDE_CLIENT_ID,KINDE_CLIENT_SECRET,KINDE_ISSUER_URL,KINDE_SITE_URL,KINDE_POST_LOGOUT_REDIRECT_URL,KINDE_POST_LOGIN_REDIRECT_URL,NEXT_PUBLIC_KINDE_CLIENT_ID,NEXT_PUBLIC_KINDE_DOMAIN,NEXT_PUBLIC_KINDE_EMAIL_CONNECTION_ID,NEXT_PUBLIC_KINDE_GOOGLE_CONNECTION_ID,NEXT_PUBLIC_KINDE_GITHUB_CONNECTION_ID,STRIPE_SECRET_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,NEXT_PUBLIC_DISQUS_SHORTNAME,GITHUB_API_TOKEN,SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET,SPOTIFY_REFRESH_TOKEN,NEXT_UMAMI_ID&envDescription=Environment%20variables%20required%20to%20run%20the%20Dana%20Davis%20Dev%20Blog)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/xi-Rick/danadavis.dev&env=DATABASE_URL,ADMIN_EMAIL,KINDE_CLIENT_ID,KINDE_CLIENT_SECRET,KINDE_ISSUER_URL,KINDE_SITE_URL,KINDE_POST_LOGOUT_REDIRECT_URL,KINDE_POST_LOGIN_REDIRECT_URL,NEXT_PUBLIC_KINDE_CLIENT_ID,NEXT_PUBLIC_KINDE_DOMAIN,NEXT_PUBLIC_KINDE_EMAIL_CONNECTION_ID,NEXT_PUBLIC_KINDE_GOOGLE_CONNECTION_ID,NEXT_PUBLIC_KINDE_GITHUB_CONNECTION_ID,STRIPE_SECRET_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,NEXT_PUBLIC_DISQUS_SHORTNAME,GITHUB_API_TOKEN,SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET,SPOTIFY_REFRESH_TOKEN,NEXT_UMAMI_ID,OPENAI_API_KEY&envDescription=Environment%20variables%20required%20to%20run%20the%20Dana%20Davis%20Dev%20Blog)
 
 That's it! Your blog is now live. 🎉
 
@@ -269,7 +298,10 @@ That's it! Your blog is now live. 🎉
 # Database
 DATABASE_URL=
 
-# Authentication
+# Admin Configuration
+ADMIN_EMAIL=
+
+# Kinde Authentication
 KINDE_CLIENT_ID=
 KINDE_CLIENT_SECRET=
 KINDE_ISSUER_URL=
@@ -278,6 +310,9 @@ KINDE_POST_LOGOUT_REDIRECT_URL=
 KINDE_POST_LOGIN_REDIRECT_URL=
 NEXT_PUBLIC_KINDE_CLIENT_ID=
 NEXT_PUBLIC_KINDE_DOMAIN=
+NEXT_PUBLIC_KINDE_EMAIL_CONNECTION_ID=
+NEXT_PUBLIC_KINDE_GOOGLE_CONNECTION_ID=
+NEXT_PUBLIC_KINDE_GITHUB_CONNECTION_ID=
 
 # GitHub
 GITHUB_API_TOKEN=
@@ -289,6 +324,12 @@ SPOTIFY_REFRESH_TOKEN=
 
 # Analytics
 NEXT_UMAMI_ID=
+
+# OpenAI
+OPENAI_API_KEY=
+
+# Disqus Comments
+NEXT_PUBLIC_DISQUS_SHORTNAME=
 
 # Stripe (Optional)
 STRIPE_SECRET_KEY=

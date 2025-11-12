@@ -80,19 +80,24 @@ export default function AdminPage() {
             </div>
           </RadiantCard>
 
-          {/* Analytics */}
+          {/* Captain's Log */}
           <RadiantCard className="p-6 flex flex-col min-h-80">
             <div className="space-y-4 flex flex-col h-full">
-              <div className="text-4xl">📊</div>
+              <div className="text-4xl">🎙️</div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                Analytics
+                Captain&apos;s Log
               </h3>
               <p className="text-gray-600 dark:text-gray-300 flex-grow">
-                View detailed statistics and performance metrics.
+                Voice-to-text notes with AI analysis for blog and project ideas.
               </p>
-              <div className="w-full text-center text-base font-semibold text-gray-400 dark:text-gray-500 cursor-not-allowed">
-                Coming Soon
-              </div>
+              <Link
+                href="/admin/captains-log"
+                className="inline-block w-full text-center text-base font-semibold underline-offset-4 transition-colors hover:text-gray-900 dark:hover:text-gray-200"
+              >
+                <GrowingUnderline data-umami-event="admin-captains-log">
+                  Open Captain&apos;s Log
+                </GrowingUnderline>
+              </Link>
             </div>
           </RadiantCard>
 
@@ -112,15 +117,15 @@ export default function AdminPage() {
             </div>
           </RadiantCard>
 
-          {/* Settings */}
+          {/* Analytics */}
           <RadiantCard className="p-6 flex flex-col min-h-80">
             <div className="space-y-4 flex flex-col h-full">
-              <div className="text-4xl">⚙️</div>
+              <div className="text-4xl">📊</div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                Settings
+                Analytics
               </h3>
               <p className="text-gray-600 dark:text-gray-300 flex-grow">
-                Configure blog settings and preferences.
+                View detailed statistics and performance metrics.
               </p>
               <div className="w-full text-center text-base font-semibold text-gray-400 dark:text-gray-500 cursor-not-allowed">
                 Coming Soon
