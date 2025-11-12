@@ -169,12 +169,23 @@ export default function CaptainsLogPage() {
   const hasUserInteracted = useRef<boolean>(false)
   const startRecordingRef = useRef<(() => Promise<void>) | null>(null)
   const stopRecordingRef = useRef<(() => void) | null>(null)
+  const restartTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const restartAttemptsRef = useRef<number>(0)
+  const isMobileRef = useRef<boolean>(false)
 
   const { toast } = useToast()
 
   useEffect(() => {
     loadEntries()
     checkMicrophonePermission()
+
+    // Detect mobile device
+    if (typeof window !== 'undefined') {
+      isMobileRef.current =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent,
+        )
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -355,10 +366,16 @@ export default function CaptainsLogPage() {
   }, [voiceCommandsEnabled, microphonePermission, toast])
 
   const stopCommandListening = useCallback(() => {
+    if (restartTimeoutRef.current) {
+      clearTimeout(restartTimeoutRef.current)
+      restartTimeoutRef.current = null
+    }
+
     if (commandRecognitionRef.current && isListeningForCommands) {
       try {
         commandRecognitionRef.current.stop()
         setIsListeningForCommands(false)
+        restartAttemptsRef.current = 0
       } catch (_e) {
         console.log('Command recognition already stopped')
       }
@@ -392,33 +409,117 @@ export default function CaptainsLogPage() {
         if (event.error === 'not-allowed') {
           setMicrophonePermission('denied')
           setIsListeningForCommands(false)
+          if (restartTimeoutRef.current) {
+            clearTimeout(restartTimeoutRef.current)
+            restartTimeoutRef.current = null
+          }
           toast({
             title: 'Microphone Access Denied',
             description:
               'Please grant microphone permission to use voice commands.',
             variant: 'destructive',
           })
+        } else if (event.error === 'network') {
+          // Network errors are common on mobile, especially when switching networks
+          console.log('Network error in speech recognition, will retry')
+          setIsListeningForCommands(false)
+        } else if (event.error === 'service-not-allowed') {
+          // Some Android devices throw this when the service is busy
+          console.log('Speech service busy, will retry')
+          setIsListeningForCommands(false)
+        } else if (event.error === 'audio-capture') {
+          // Microphone hardware issue - common on some Android devices
+          console.log(
+            'Audio capture error - microphone may be in use by another app',
+          )
+          setIsListeningForCommands(false)
+
+          // On mobile, give a longer delay before retry
+          if (isMobileRef.current) {
+            restartAttemptsRef.current += 1
+          }
         } else if (event.error !== 'no-speech' && event.error !== 'aborted') {
+          // Log other errors for debugging
           console.error('Speech recognition error:', event.error)
         }
+
+        // For 'no-speech' and 'aborted', don't do anything special
+        // These are normal and will trigger onend which handles restart
       }
 
       recognition.onend = () => {
         setIsListeningForCommands(false)
-        if (
+
+        // Clear any existing restart timeout
+        if (restartTimeoutRef.current) {
+          clearTimeout(restartTimeoutRef.current)
+          restartTimeoutRef.current = null
+        }
+
+        // Only restart if conditions are met and we haven't exceeded retry attempts
+        const shouldRestart =
           voiceCommandsEnabled &&
           !isRecordingRef.current &&
           hasUserInteracted.current &&
-          microphonePermission === 'granted'
-        ) {
-          setTimeout(() => {
+          microphonePermission === 'granted' &&
+          restartAttemptsRef.current < 10 // Limit restart attempts
+
+        if (shouldRestart) {
+          // Mobile browsers need longer delays between restarts
+          // Android Chrome/Firefox often need 1.5-3 seconds
+          const restartDelay = isMobileRef.current ? 2000 : 1000
+
+          restartTimeoutRef.current = setTimeout(() => {
             try {
-              recognition.start()
-              setIsListeningForCommands(true)
+              // Check conditions again before restarting
+              if (
+                voiceCommandsEnabled &&
+                !isRecordingRef.current &&
+                hasUserInteracted.current &&
+                microphonePermission === 'granted'
+              ) {
+                recognition.start()
+                setIsListeningForCommands(true)
+                restartAttemptsRef.current += 1
+
+                // Reset counter after successful restart
+                setTimeout(() => {
+                  if (restartAttemptsRef.current > 0) {
+                    restartAttemptsRef.current = 0
+                  }
+                }, 5000)
+              }
             } catch (e) {
-              console.log('Could not restart recognition:', e)
+              const error = e as Error
+              // Don't log "already started" errors
+              if (!error.message.includes('already started')) {
+                console.log('Could not restart recognition:', error.message)
+
+                // If we get an error, try again with exponential backoff
+                // but only on mobile devices
+                if (isMobileRef.current && restartAttemptsRef.current < 5) {
+                  const backoffDelay = Math.min(
+                    5000,
+                    1000 * 2 ** restartAttemptsRef.current,
+                  )
+                  restartTimeoutRef.current = setTimeout(() => {
+                    try {
+                      recognition.start()
+                      setIsListeningForCommands(true)
+                    } catch (retryError) {
+                      console.log('Retry failed:', retryError)
+                    }
+                  }, backoffDelay)
+                }
+              }
             }
-          }, 1000)
+          }, restartDelay)
+        } else if (restartAttemptsRef.current >= 10) {
+          // Reset counter if we've hit the limit
+          console.log('Voice command restart limit reached, resetting...')
+          setTimeout(() => {
+            restartAttemptsRef.current = 0
+          }, 30000) // Reset after 30 seconds
         }
       }
 
@@ -426,6 +527,12 @@ export default function CaptainsLogPage() {
     }
 
     return () => {
+      // Clear restart timeout on cleanup
+      if (restartTimeoutRef.current) {
+        clearTimeout(restartTimeoutRef.current)
+        restartTimeoutRef.current = null
+      }
+
       if (commandRecognitionRef.current) {
         try {
           commandRecognitionRef.current.stop()
@@ -454,18 +561,41 @@ export default function CaptainsLogPage() {
       isRecordingRef.current = true
       setIsRecording(true)
 
+      // Mobile-friendly audio constraints
+      const audioConstraints = isMobileRef.current
+        ? {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true,
+            // Don't specify sampleRate on mobile - let the device choose
+          }
+        : {
+            echoCancellation: true,
+            noiseSuppression: true,
+            sampleRate: 44100,
+          }
+
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          sampleRate: 44100,
-        },
+        audio: audioConstraints,
       })
 
       setMicrophonePermission('granted')
 
+      // Choose best available mime type for the device
+      let mimeType = 'audio/webm;codecs=opus'
+      if (!MediaRecorder.isTypeSupported(mimeType)) {
+        // Fallback for devices that don't support webm/opus
+        if (MediaRecorder.isTypeSupported('audio/webm')) {
+          mimeType = 'audio/webm'
+        } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+          mimeType = 'audio/mp4'
+        } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
+          mimeType = 'audio/ogg;codecs=opus'
+        }
+      }
+
       const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus',
+        mimeType: mimeType,
       })
 
       mediaRecorderRef.current = mediaRecorder
@@ -483,17 +613,26 @@ export default function CaptainsLogPage() {
         })
         transcribeAudio(audioBlob)
 
+        // Stop all tracks immediately to release microphone
         for (const track of stream.getTracks()) {
           track.stop()
         }
 
-        // Wait a bit before restarting voice commands to avoid conflicts
+        // Clear the media recorder reference
+        mediaRecorderRef.current = null
+
+        // Wait longer on mobile devices before restarting voice commands
+        // This gives the OS time to properly release the microphone hardware
         if (voiceCommandsEnabled && commandRecognitionRef.current) {
+          const restartDelay = isMobileRef.current ? 3000 : 2000
+
           setTimeout(() => {
             if (!isRecordingRef.current) {
+              // Reset restart attempts counter when transitioning from recording
+              restartAttemptsRef.current = 0
               startCommandListening()
             }
-          }, 2000)
+          }, restartDelay)
         }
       }
 
@@ -872,15 +1011,31 @@ export default function CaptainsLogPage() {
                     animate={{ opacity: 1, height: 'auto' }}
                     className="flex flex-col items-center gap-2 w-full"
                   >
-                    <p className="text-xs text-center text-gray-500 dark:text-gray-400 px-4">
-                      {microphonePermission === 'denied'
-                        ? 'Microphone access denied. Check browser settings.'
-                        : !hasUserInteracted.current
-                          ? 'Start a recording first to enable voice commands.'
-                          : isListeningForCommands
-                            ? '🎤 Listening for "Start Transmission" or "End Transmission"'
-                            : 'Voice commands ready. Toggle to activate.'}
-                    </p>
+                    <div className="flex items-center justify-center gap-2">
+                      {isListeningForCommands && (
+                        <motion.div
+                          animate={{
+                            scale: [1, 1.2, 1],
+                            opacity: [0.5, 1, 0.5],
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Number.POSITIVE_INFINITY,
+                            ease: 'easeInOut',
+                          }}
+                          className="w-2 h-2 rounded-full bg-green-500"
+                        />
+                      )}
+                      <p className="text-xs text-center text-gray-500 dark:text-gray-400 px-4">
+                        {microphonePermission === 'denied'
+                          ? '🔴 Microphone access denied. Check browser settings.'
+                          : !hasUserInteracted.current
+                            ? 'Start a recording first to enable voice commands.'
+                            : isListeningForCommands
+                              ? '🎤 Actively listening for "Start Transmission" or "End Transmission"'
+                              : '⏸️ Voice commands ready. Toggle to activate.'}
+                      </p>
+                    </div>
                     {hasUserInteracted.current &&
                       microphonePermission !== 'denied' &&
                       !isListeningForCommands && (
@@ -889,7 +1044,7 @@ export default function CaptainsLogPage() {
                           onClick={startCommandListening}
                           className="text-xs px-3 py-1 rounded-lg border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                         >
-                          Test Voice Commands
+                          Start Voice Commands
                         </button>
                       )}
                   </motion.div>

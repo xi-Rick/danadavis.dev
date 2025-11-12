@@ -22,6 +22,16 @@ export default function AdminPage() {
   const publishedPosts = postsData?.posts?.filter((p) => !p.draft).length || 0
   const draftPosts = postsData?.posts?.filter((p) => p.draft).length || 0
 
+  const { data: captainsLogData, isLoading: captainsLogLoading } = useSWR(
+    '/api/captains-log?showPrivate=true&limit=1000',
+    fetcher,
+  )
+  const totalLogEntries = captainsLogData?.logEntries?.length || 0
+  const privateEntries =
+    captainsLogData?.logEntries?.filter((e) => e.isPrivate).length || 0
+  const blogPotentialEntries =
+    captainsLogData?.logEntries?.filter((e) => e.blogPotential).length || 0
+
   if (isLoading) return <div />
 
   return (
@@ -184,6 +194,39 @@ export default function AdminPage() {
             </div>
             <div className="text-gray-600 dark:text-gray-300 font-medium">
               Draft Posts
+            </div>
+          </RadiantCard>
+        </div>
+      </div>
+
+      {/* Captain's Log Stats Section */}
+      <div className="border-t border-gray-200 py-8 md:py-12 dark:border-gray-700">
+        <h2 className="mb-8 text-2xl font-bold tracking-tight text-gray-900 md:text-3xl dark:text-gray-100">
+          Captain&apos;s Log Statistics
+        </h2>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <RadiantCard className="p-6 text-center flex flex-col min-h-48 justify-center">
+            <div className="text-4xl font-bold accent mb-2">
+              {captainsLogLoading ? '--' : totalLogEntries}
+            </div>
+            <div className="text-gray-600 dark:text-gray-300 font-medium">
+              Total Entries
+            </div>
+          </RadiantCard>
+          <RadiantCard className="p-6 text-center flex flex-col min-h-48 justify-center">
+            <div className="text-4xl font-bold accent-green mb-2">
+              {captainsLogLoading ? '--' : privateEntries}
+            </div>
+            <div className="text-gray-600 dark:text-gray-300 font-medium">
+              Private Entries
+            </div>
+          </RadiantCard>
+          <RadiantCard className="p-6 text-center flex flex-col min-h-48 justify-center">
+            <div className="text-4xl font-bold text-orange-500 mb-2">
+              {captainsLogLoading ? '--' : blogPotentialEntries}
+            </div>
+            <div className="text-gray-600 dark:text-gray-300 font-medium">
+              Blog Potential
             </div>
           </RadiantCard>
         </div>
