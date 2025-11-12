@@ -30,21 +30,61 @@ export function AuthorLayout({}: Props) {
               <h3 className="mt-0">Hi there 👋🏾</h3>
               <p>
                 I&apos;m <strong>Dana</strong>, a{' '}
-                <strong>
-                  Full-Stack Developer • Digital Architect • Code Artist
-                </strong>{' '}
-                from <strong>United States</strong>. Building tomorrow&apos;s
-                web today, one commit at a time. I have a passion for{' '}
-                <strong>Full-Stack Development</strong>. I enjoy building
-                applications and stuff related to the web. I work mainly with{' '}
-                <strong>Next.js</strong>, <strong>TypeScript</strong>,{' '}
-                <strong>React</strong>, <strong>Node.js</strong>, and{' '}
-                <strong>TailwindCSS</strong>.
+                <strong>Full-Stack Developer</strong> from the{' '}
+                <strong>United States</strong>. Building tomorrow&apos;s web
+                today, one commit at a time.
               </p>
-              {/* <p>
-                I would greatly appreciate any comments and thoughts on my posts{' '}
-                <Twemoji emoji="clinking-beer-mugs" />.
-              </p> */}
+              <p>
+                What I love most about web development is that it gives me a
+                hobby I can pursue from home while constantly learning something
+                new. It&apos;s a field where you&apos;re never stuck in the
+                past—there&apos;s always something fresh to explore, which also
+                helps me keep up with younger generations and stay relevant in
+                an ever-evolving tech landscape <Twemoji emoji="rocket" />.
+              </p>
+              <p>
+                My journey into tech started way back with{' '}
+                <strong>Android development</strong>. I remember understanding
+                that phones could act as hotspots before the software was even
+                built into devices—that kind of forward-thinking got me hooked
+                on technology&apos;s potential <Twemoji emoji="mobile-phone" />.
+              </p>
+              <p>
+                These days, I work mainly with <strong>Next.js</strong>,{' '}
+                <strong>TypeScript</strong>, <strong>React</strong>,{' '}
+                <strong>Node.js</strong>, and <strong>TailwindCSS</strong>—tools
+                that let me bring ideas to life on the web.
+              </p>
+            </div>
+            <div>
+              <h3>Philosophy & Perspective</h3>
+              <p>
+                I believe in having a solid worldview—thinking in terms of
+                creating a place where everyone belongs, regardless of how
+                others perceive them. As Magneto would say:
+              </p>
+              <blockquote className="border-l-4 border-orange-500 dark:border-green-600 pl-4 italic">
+                &ldquo;A place for all who are hated and feared.&rdquo;
+              </blockquote>
+              <p>
+                I can entertain any idea, no matter how wild. I&apos;m not
+                easily swayed by one or two viewpoints—I take time to consider
+                different perspectives before forming my own conclusions. But
+                entertaining an idea and <em>believing</em> it for long are two
+                different things <Twemoji emoji="brain" />.
+              </p>
+            </div>
+            <div>
+              <h3>Beyond Code</h3>
+              <p>
+                When I&apos;m not coding, you&apos;ll probably find me reading{' '}
+                <strong>One Piece</strong>—I&apos;ve been following it since{' '}
+                <strong>1999</strong>, and yes, I&apos;m still waiting to see
+                how it all ends <Twemoji emoji="pirate-flag" />. There&apos;s
+                something about long-running stories that mirror the tech
+                journey: both require patience, persistence, and a love for the
+                adventure itself.
+              </p>
             </div>
             <div>
               <div className="mt-[2em] mb-[1em] flex items-center justify-between [&>h3]:my-0">
@@ -126,15 +166,22 @@ export function AuthorLayout({}: Props) {
           <section className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-700">
             <h2 className="mt-0">About This Blog</h2>
             <div>
-              <h3>Motivation</h3>
-              <blockquote>
+              <h3>Why I Write</h3>
+              <blockquote className="border-l-4 border-orange-500 dark:border-green-600 pl-4">
                 <p>Sharing is learning!</p>
               </blockquote>
               <p>
-                This blog serves as a journal for documenting and sharing the
-                insights and knowledge I&apos;ve gained as a software engineer.
-                Building, writing, and sharing things is a great way for me to
-                solidify my understanding of new concepts and ideas.
+                This blog is my digital journal—a place where I document the
+                insights, lessons, and occasional &ldquo;aha!&rdquo; moments
+                from my journey as a software engineer. Writing about what I
+                learn helps me understand it better, and if someone else finds
+                it useful along the way, that&apos;s even better{' '}
+                <Twemoji emoji="writing-hand" />.
+              </p>
+              <p>
+                Think of this as a conversation between friends, not a formal
+                textbook. I keep things simple, direct, and hopefully
+                entertaining. After all, learning should be fun, not a chore.
               </p>
             </div>
             <div>
@@ -307,7 +354,7 @@ export function AuthorLayout({}: Props) {
             </div>
           </section>
           <div className="mt-12 pt-8">
-            <blockquote className="text-lg italic text-green-600 dark:text-green-400 border-l-4 border-orange-500 pl-4">
+            <blockquote className="text-lg italic text-orange-600 dark:text-green-400 border-l-4 border-orange-500 dark:border-green-600 pl-4">
               &ldquo;Vision? What do you know about my vision? My vision would
               turn your world upside down, tear asunder your illusions, and send
               the sanctuary of your own ignorance crashing down around you. Now
