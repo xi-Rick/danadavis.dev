@@ -123,7 +123,7 @@ function jsonToHtml(json: TipTapNode | unknown): string {
     const src = (node.attrs?.src as string) || ''
     const alt = (node.attrs?.alt as string) || ''
     const title = (node.attrs?.title as string) || ''
-    return `<img src="${src}" alt="${alt}" title="${title}" class="rounded-lg my-4" />`
+    return `<Image src="${src}" alt="${alt}" title="${title}" class="rounded-lg my-4" />`
   }
 
   if (node.type === 'horizontalRule') {

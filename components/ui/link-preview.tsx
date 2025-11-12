@@ -7,6 +7,7 @@ import {
   useMotionValue,
   useSpring,
 } from 'motion/react'
+import Image from 'next/image'
 import { encode } from 'qss'
 import React from 'react'
 
@@ -77,7 +78,7 @@ export const LinkPreview = ({
       {isMounted ? (
         <span className="hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={src}
             width={width}
             height={height}
@@ -138,7 +139,7 @@ export const LinkPreview = ({
                     style={{ fontSize: 0 }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                       src={isStatic ? imageSrc : src}
                       width={width}
                       height={height}
