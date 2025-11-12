@@ -39,7 +39,7 @@ const FONT_NUNITO = Nunito({
   style: ['normal', 'italic'],
   weight: ['400', '500', '600', '700', '800'],
   variable: '--font-nunito',
-  preload: false,
+  preload: true,
 })
 
 const FONT_GEIST = Geist_Mono({
@@ -57,7 +57,7 @@ const FONT_JETBRAINS_MONO = JetBrains_Mono({
   style: ['normal', 'italic'],
   display: 'swap',
   variable: '--font-jetbrains-mono',
-  preload: false,
+  preload: true,
 })
 
 export const metadata: Metadata = {

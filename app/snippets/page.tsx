@@ -34,6 +34,10 @@ export const metadata = genPageMetadata({
     "My personal stash of code snippets that make my life easier. They're simple and reusable. Feel free to copy, tweak, and use them as you like. *Some snippets written by me, some are from the internet (Thanks to the open source community).",
 })
 
+// Enable static generation with revalidation
+export const revalidate = 3600 // Revalidate every hour
+export const dynamic = 'force-static' // Force static generation
+
 // Map language names to icon names from BrandsMap
 function getLanguageIcon(language: string): string {
   const languageMap: Record<string, string> = {
@@ -54,7 +58,19 @@ function getLanguageIcon(language: string): string {
   return languageMap[language.toLowerCase()] || 'Javascript' // default fallback
 }
 
+// Cache snippets data
+let cachedSnippets: SnippetContent[] | null = null
+let cacheTime = 0
+const CACHE_DURATION = 1000 * 60 * 60 // 1 hour
+
 async function loadSnippetsFromJson() {
+  const now = Date.now()
+
+  // Return cached data if available and not expired
+  if (cachedSnippets && now - cacheTime < CACHE_DURATION) {
+    return cachedSnippets
+  }
+
   try {
     const filePath = path.join(process.cwd(), 'json', 'snippets.json')
     const fileContents = await fs.readFile(filePath, 'utf8')
@@ -81,7 +97,7 @@ async function loadSnippetsFromJson() {
       authorId: string
     }>
 
-    return snippetsData
+    const processedSnippets = snippetsData
       .filter((snippet) => !snippet.draft)
       .map((snippet) => ({
         title: snippet.title,
@@ -119,6 +135,12 @@ async function loadSnippetsFromJson() {
           url: `/snippets/${snippet.slug}`,
         },
       })) as SnippetContent[]
+
+    // Update cache
+    cachedSnippets = processedSnippets
+    cacheTime = now
+
+    return processedSnippets
   } catch (error) {
     console.error('Error loading snippets from JSON:', error)
     return []

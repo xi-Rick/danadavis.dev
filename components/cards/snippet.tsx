@@ -21,12 +21,14 @@ export function SnippetCard({ snippet }: { snippet: CoreContent<Snippet> }) {
           'transition-shadow hover:shadow-md',
           'hover:shadow-zinc-900/5 dark:hover:shadow-black/15',
         ])}
+        prefetch={false}
       >
         <TiltedGridBackground className="inset-0" />
         <Brand
           name={icon as keyof typeof BrandsMap}
           as="icon"
           className="absolute -top-5 left-4 z-10 h-12 w-12 text-gray-900 dark:text-white"
+          aria-hidden="true"
         />
         <div className="relative w-full px-4 pt-6 pb-6">
           <h3 className="mt-4 text-xl leading-7 font-semibold">

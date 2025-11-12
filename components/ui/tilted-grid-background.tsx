@@ -8,6 +8,7 @@ export function TiltedGridBackground({ className }: { className?: string }) {
         'absolute overflow-hidden mask-[linear-gradient(white,transparent)]',
         className,
       ])}
+      aria-hidden="true"
     >
       <TiltedGrid
         className={clsx([
@@ -16,6 +17,7 @@ export function TiltedGridBackground({ className }: { className?: string }) {
           'dark:fill-white/1 dark:stroke-white/2.5',
           'fill-black/2 stroke-black/5',
         ])}
+        loading="lazy"
       />
     </div>
   )
