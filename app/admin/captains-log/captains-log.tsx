@@ -143,7 +143,7 @@ const voiceCommands = {
   ],
 }
 
-export function CaptainsLogClient() {
+export function CaptainsLog() {
   const [isRecording, setIsRecording] = useState(false)
   const [isTranscribing, setIsTranscribing] = useState(false)
   const [entries, setEntries] = useState<TranscriptionEntry[]>([])

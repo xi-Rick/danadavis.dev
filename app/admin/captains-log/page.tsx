@@ -1,7 +1,7 @@
 import { AdminNavigation } from '@/components/admin/admin-navigation'
 import { Container } from '~/components/ui/container'
 import { PageHeader } from '~/components/ui/page-header'
-import { CaptainsLogClient } from './captains-log-client'
+import { CaptainsLog } from './captains-log'
 
 export default function CaptainsLogPage() {
   return (
@@ -15,7 +15,7 @@ export default function CaptainsLogPage() {
           className="border-b border-gray-200 dark:border-gray-700"
         />
 
-        <CaptainsLogClient />
+        <CaptainsLog />
       </Container>
     </div>
   )
