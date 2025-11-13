@@ -74,7 +74,31 @@ export const CometCard = ({
     y.set(yPct)
   }
 
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!ref.current) return
+
+    const rect = ref.current.getBoundingClientRect()
+
+    const width = rect.width
+    const height = rect.height
+
+    const touch = e.touches[0]
+    const touchX = touch.clientX - rect.left
+    const touchY = touch.clientY - rect.top
+
+    const xPct = touchX / width - 0.5
+    const yPct = touchY / height - 0.5
+
+    x.set(xPct)
+    y.set(yPct)
+  }
+
   const handleMouseLeave = () => {
+    x.set(0)
+    y.set(0)
+  }
+
+  const handleTouchEnd = () => {
     x.set(0)
     y.set(0)
   }
@@ -85,6 +109,8 @@ export const CometCard = ({
         ref={ref}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         style={{
           rotateX,
           rotateY,
@@ -95,6 +121,11 @@ export const CometCard = ({
         }}
         initial={{ scale: 1, z: 0 }}
         whileHover={{
+          scale: 1.05,
+          z: 50,
+          transition: { duration: 0.2 },
+        }}
+        whileTap={{
           scale: 1.05,
           z: 50,
           transition: { duration: 0.2 },
