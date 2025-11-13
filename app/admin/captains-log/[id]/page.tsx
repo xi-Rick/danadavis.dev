@@ -2,7 +2,6 @@
 
 import {
   Archive,
-  ArrowLeft,
   BookOpen,
   Clock,
   Code2,
@@ -19,9 +18,9 @@ import {
   Volume2,
   X,
 } from 'lucide-react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { use, useEffect, useState } from 'react'
+import { AdminNavigation } from '~/components/admin/admin-navigation'
 import { Container } from '~/components/ui/container'
 import { PageHeader } from '~/components/ui/page-header'
 import { RadiantCard } from '~/components/ui/radiant-card'
@@ -261,17 +260,15 @@ export default function CaptainsLogDetailPage({
     return (
       <div className="min-h-screen bg-background">
         <Container className="pt-4 lg:pt-12 pb-12">
+          <AdminNavigation
+            currentPage="Log Entry Not Found"
+            backLink="/admin/captains-log"
+            backLabel="Back to Captain's Log"
+          />
           <RadiantCard className="p-12 text-center">
             <p className="text-gray-500 dark:text-gray-400 mb-4">
               Log entry not found.
             </p>
-            <Link
-              href="/admin/captains-log"
-              className="inline-flex items-center gap-2 px-4 py-2 border-2 border-black dark:border-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Captain&apos;s Log
-            </Link>
           </RadiantCard>
         </Container>
       </div>
@@ -285,13 +282,11 @@ export default function CaptainsLogDetailPage({
       <Container className="pt-4 lg:pt-12 pb-12">
         {/* Header */}
         <div className="mb-8">
-          <Link
-            href="/admin/captains-log"
-            className="inline-flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-lg border-2 border-black dark:border-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors mb-4"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Captain&apos;s Log
-          </Link>
+          <AdminNavigation
+            currentPage="Log Entry Details"
+            backLink="/admin/captains-log"
+            backLabel="Back to Captain's Log"
+          />
 
           <PageHeader
             title="Log Entry Details"

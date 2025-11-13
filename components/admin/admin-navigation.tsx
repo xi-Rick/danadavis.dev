@@ -2,6 +2,7 @@
 
 import { ArrowLeft, LayoutDashboard } from 'lucide-react'
 import Link from 'next/link'
+import { GrowingUnderline } from '~/components/ui/growing-underline'
 
 interface AdminNavigationProps {
   currentPage?: string
@@ -19,10 +20,10 @@ export function AdminNavigation({
       {/* Back Link */}
       <Link
         href={backLink}
-        className="inline-flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-lg border-2 border-black dark:border-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors w-fit"
+        className="inline-flex items-center gap-2 text-base font-semibold underline-offset-4 transition-colors hover:text-gray-900 dark:hover:text-gray-200 w-fit"
       >
         <ArrowLeft className="w-4 h-4" />
-        {backLabel}
+        <GrowingUnderline>{backLabel}</GrowingUnderline>
       </Link>
 
       {/* Breadcrumb / Current Page */}

@@ -105,15 +105,15 @@ const contentTypeIcons = {
 
 const contentTypeColors = {
   thought:
-    'bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800',
-  idea: 'bg-yellow-500/10 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800',
+    'bg-orange-500/10 text-orange-700 border-orange-200 dark:bg-green-500/10 dark:text-green-300 dark:border-green-800',
+  idea: 'bg-orange-500/10 text-orange-700 border-orange-200 dark:bg-green-500/10 dark:text-green-300 dark:border-green-800',
   'blog-draft':
-    'bg-orange-500/10 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800',
+    'bg-orange-500/10 text-orange-700 border-orange-200 dark:bg-green-500/10 dark:text-green-300 dark:border-green-800',
   'project-idea':
     'bg-green-500/10 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800',
-  note: 'bg-gray-500/10 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-800',
+  note: 'bg-black/5 text-black dark:text-white border-gray-200 dark:border-gray-800',
   other:
-    'bg-gray-500/10 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-800',
+    'bg-black/5 text-black dark:text-white border-gray-200 dark:border-gray-800',
 }
 
 const voiceCommands = {
@@ -889,7 +889,7 @@ export default function CaptainsLogPage() {
                         repeat: Number.POSITIVE_INFINITY,
                       }}
                     >
-                      <Mic className="w-10 h-10 md:w-12 md:h-12 accent" />
+                      <Mic className="w-10 h-10 md:w-12 md:h-12 text-orange-500 dark:text-green-500" />
                     </motion.div>
                   </div>
                 ) : (
@@ -904,7 +904,7 @@ export default function CaptainsLogPage() {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-3xl md:text-4xl font-bold accent"
+                  className="text-3xl md:text-4xl font-bold text-orange-500 dark:text-green-500"
                 >
                   {formatTime(recordingTime)}
                 </motion.div>
@@ -918,8 +918,8 @@ export default function CaptainsLogPage() {
                   disabled={isTranscribing}
                   className={`w-full px-6 py-4 rounded-lg font-semibold transition-all border-2 ${
                     isRecording
-                      ? 'bg-red-600 hover:bg-red-700 text-white border-red-700 dark:border-red-500'
-                      : 'border-black dark:border-white bg-white dark:bg-black hover:bg-orange-50 dark:hover:bg-green-900/20'
+                      ? 'bg-black hover:bg-gray-900 text-white border-black dark:bg-white dark:hover:bg-gray-100 dark:text-black dark:border-white'
+                      : 'border-black dark:border-white bg-white dark:bg-black hover:bg-orange-500 hover:text-white dark:hover:bg-green-500'
                   } disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md`}
                 >
                   {isRecording ? (
@@ -945,9 +945,9 @@ export default function CaptainsLogPage() {
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center p-4 rounded-lg border-2 border-red-500 bg-red-50 dark:bg-red-900/20"
+                    className="text-center p-4 rounded-lg border-2 border-black dark:border-white bg-white dark:bg-black"
                   >
-                    <p className="text-sm text-red-600 dark:text-red-400 font-medium">
+                    <p className="text-sm font-medium text-orange-500 dark:text-green-500">
                       Microphone access denied
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
@@ -966,7 +966,7 @@ export default function CaptainsLogPage() {
               {/* Settings */}
               <div className="flex flex-col items-center gap-4 w-full max-w-md border-t border-gray-200 dark:border-gray-700 pt-6">
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-                  <label className="flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg border-2 border-black dark:border-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
+                  <label className="flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg border-2 border-black dark:border-white hover:bg-orange-500 hover:text-white dark:hover:bg-green-500 transition-colors">
                     <input
                       type="checkbox"
                       checked={isPrivate}
@@ -975,7 +975,7 @@ export default function CaptainsLogPage() {
                     />
                     <span className="text-sm font-medium">Private Entry</span>
                   </label>
-                  <label className="flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg border-2 border-black dark:border-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors disabled:opacity-50">
+                  <label className="flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg border-2 border-black dark:border-white hover:bg-orange-500 hover:text-white dark:hover:bg-green-500 transition-colors disabled:opacity-50">
                     <input
                       type="checkbox"
                       checked={voiceCommandsEnabled}
@@ -1023,7 +1023,7 @@ export default function CaptainsLogPage() {
                             repeat: Number.POSITIVE_INFINITY,
                             ease: 'easeInOut',
                           }}
-                          className="w-2 h-2 rounded-full bg-green-500"
+                          className="w-2 h-2 rounded-full accent-green-bg"
                         />
                       )}
                       <p className="text-xs text-center text-gray-500 dark:text-gray-400 px-4">
@@ -1093,7 +1093,7 @@ export default function CaptainsLogPage() {
                     ))}
                   </select>
                 </div>
-                <label className="flex items-center gap-2 cursor-pointer px-4 py-3 border-2 border-black dark:border-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors whitespace-nowrap">
+                <label className="flex items-center gap-2 cursor-pointer px-4 py-3 border-2 border-black dark:border-white rounded-lg hover:bg-orange-500 hover:text-white dark:hover:bg-green-500 transition-colors whitespace-nowrap">
                   <input
                     type="checkbox"
                     checked={showPrivateOnly}
@@ -1154,13 +1154,13 @@ export default function CaptainsLogPage() {
                           </span>
                         )}
                         {entry.blogPotential && (
-                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300">
+                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-orange-500/10 text-orange-700 border border-orange-200 dark:bg-green-500/20 dark:text-green-300 dark:border-green-800">
                             <FileText className="w-3 h-3" />
                             Blog
                           </span>
                         )}
                         {entry.projectPotential && (
-                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300">
+                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800">
                             <Rocket className="w-3 h-3" />
                             Project
                           </span>
@@ -1169,7 +1169,7 @@ export default function CaptainsLogPage() {
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/admin/captains-log/${entry.id}`}
-                          className="p-2 rounded border-2 border-transparent hover:border-black dark:hover:border-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
+                          className="p-2 rounded border-2 border-transparent hover:border-black dark:hover:border-white hover:bg-orange-500 hover:text-white dark:hover:bg-green-500 transition-colors"
                           title="View and edit entry"
                         >
                           <Edit className="w-4 h-4" />
@@ -1177,7 +1177,7 @@ export default function CaptainsLogPage() {
                         <button
                           type="button"
                           onClick={() => deleteEntry(entry.id)}
-                          className="p-2 rounded border-2 border-transparent hover:border-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 transition-colors"
+                          className="p-2 rounded border-2 border-transparent hover:border-black dark:hover:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
