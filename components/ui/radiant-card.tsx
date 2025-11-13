@@ -1,4 +1,5 @@
 import { clsx } from 'clsx'
+import { GradientBorder } from './gradient-border'
 import { TiltedGridBackground } from './tilted-grid-background'
 
 export function RadiantCard({
@@ -11,46 +12,16 @@ export function RadiantCard({
   className?: string
 }) {
   return (
-    <div
-      className="relative mx-auto w-[calc(100vw-2.5rem)] md:w-full"
-      style={{ '--radius': radius } as React.CSSProperties}
-    >
+    <GradientBorder className={clsx('rounded-2xl', className)}>
       <div
         className={clsx([
-          'dark:hidden',
-          'absolute z-0 shadow-xs',
-          '-inset-1.5 md:-inset-2',
-          'rounded-[calc(var(--radius)+8px)]',
-          'ring-1 ring-black/5',
-        ])}
-      />
-      <div
-        className={clsx([
-          'relative z-1',
-          'rounded-(--radius) shadow-2xl',
-          '[background:conic-gradient(at_0%_0%,snow,white)]',
-          'dark:[background:rgb(255_255_255/0.05)]',
-          'border border-transparent dark:border-zinc-800',
-          className,
+          'relative h-full w-full rounded-2xl',
+          'bg-zinc-50 dark:bg-white/5',
         ])}
       >
-        <TiltedGridBackground className="inset-0 z-[-1] hidden dark:block" />
+        <TiltedGridBackground className="inset-0 z-[-1]" />
         {children}
-        <span
-          className={clsx([
-            'absolute hidden dark:inline-block',
-            '-top-px right-4 h-px w-[40%]',
-            'bg-linear-to-r dark:from-indigo-400/0 dark:via-indigo-400/40 dark:to-indigo-400/0',
-          ])}
-        />
-        <span
-          className={clsx([
-            'absolute hidden dark:inline-block',
-            'top-4 -left-px h-[40%] w-px',
-            'bg-linear-to-b dark:from-indigo-400/0 dark:via-indigo-400/40 dark:to-indigo-400/0',
-          ])}
-        />
       </div>
-    </div>
+    </GradientBorder>
   )
 }

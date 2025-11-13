@@ -9,6 +9,7 @@ import { useCallback, useState } from 'react'
 import { Container } from '~/components/ui/container'
 import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { PageHeader } from '~/components/ui/page-header'
+import { RadiantCard } from '~/components/ui/radiant-card'
 import { FADE_UP_ANIMATION_VARIANTS } from '~/lib/animations'
 
 const motion = {
@@ -147,154 +148,184 @@ export default function AddPostPage() {
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
           variants={FADE_UP_ANIMATION_VARIANTS}
         >
-          <div>
-            <label htmlFor="title" className="themed-label">
-              Title
-            </label>
-            <input
-              id="title"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="themed-input"
-              placeholder="Enter post title"
-            />
-          </div>
+          <RadiantCard>
+            <div className="p-6">
+              <label htmlFor="title" className="themed-label">
+                Title
+              </label>
+              <input
+                id="title"
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="themed-input"
+                placeholder="Enter post title"
+              />
+            </div>
+          </RadiantCard>
 
-          <div>
-            <label htmlFor="tags" className="themed-label">
-              Tags (comma-separated)
-            </label>
-            <input
-              id="tags"
-              type="text"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              className="themed-input"
-              placeholder="javascript, react, tutorial"
-            />
-          </div>
+          <RadiantCard>
+            <div className="p-6">
+              <label htmlFor="tags" className="themed-label">
+                Tags (comma-separated)
+              </label>
+              <input
+                id="tags"
+                type="text"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                className="themed-input"
+                placeholder="javascript, react, tutorial"
+              />
+            </div>
+          </RadiantCard>
         </motion.div>
         <motion.div variants={FADE_UP_ANIMATION_VARIANTS}>
-          <label htmlFor="summary" className="themed-label">
-            Summary
-          </label>
-          <textarea
-            id="summary"
-            value={summary}
-            onChange={(e) => setSummary(e.target.value)}
-            className="themed-textarea"
-            rows={3}
-            placeholder="Brief summary of the post"
-          />
+          <RadiantCard>
+            <div className="p-6">
+              <label htmlFor="summary" className="themed-label">
+                Summary
+              </label>
+              <textarea
+                id="summary"
+                value={summary}
+                onChange={(e) => setSummary(e.target.value)}
+                className="themed-textarea"
+                rows={3}
+                placeholder="Brief summary of the post"
+              />
+            </div>
+          </RadiantCard>
         </motion.div>
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
           variants={FADE_UP_ANIMATION_VARIANTS}
         >
-          <div>
-            <label htmlFor="categories" className="themed-label">
-              Categories (comma-separated)
-            </label>
-            <input
-              id="categories"
-              type="text"
-              value={categories}
-              onChange={(e) => setCategories(e.target.value)}
-              className="themed-input"
-              placeholder="web-development, tutorials"
-            />
-          </div>
+          <RadiantCard>
+            <div className="p-6">
+              <label htmlFor="categories" className="themed-label">
+                Categories (comma-separated)
+              </label>
+              <input
+                id="categories"
+                type="text"
+                value={categories}
+                onChange={(e) => setCategories(e.target.value)}
+                className="themed-input"
+                placeholder="web-development, tutorials"
+              />
+            </div>
+          </RadiantCard>
 
-          <div>
-            <label htmlFor="images" className="themed-label">
-              Images (comma-separated URLs)
-            </label>
-            <input
-              id="images"
-              type="text"
-              value={images}
-              onChange={(e) => setImages(e.target.value)}
-              className="themed-input"
-              placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
-            />
-          </div>
+          <RadiantCard>
+            <div className="p-6">
+              <label htmlFor="images" className="themed-label">
+                Images (comma-separated URLs)
+              </label>
+              <input
+                id="images"
+                type="text"
+                value={images}
+                onChange={(e) => setImages(e.target.value)}
+                className="themed-input"
+                placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
+              />
+            </div>
+          </RadiantCard>
         </motion.div>
         <motion.div
           className="grid grid-cols-1 md:grid-cols-3 gap-6"
           variants={FADE_UP_ANIMATION_VARIANTS}
         >
-          <div>
-            <label htmlFor="canonicalUrl" className="themed-label">
-              Canonical URL (optional)
-            </label>
-            <input
-              id="canonicalUrl"
-              type="url"
-              value={canonicalUrl}
-              onChange={(e) => setCanonicalUrl(e.target.value)}
-              className="themed-input"
-              placeholder="https://example.com/canonical-post"
-            />
-          </div>
+          <RadiantCard>
+            <div className="p-6">
+              <label htmlFor="canonicalUrl" className="themed-label">
+                Canonical URL (optional)
+              </label>
+              <input
+                id="canonicalUrl"
+                type="url"
+                value={canonicalUrl}
+                onChange={(e) => setCanonicalUrl(e.target.value)}
+                className="themed-input"
+                placeholder="https://example.com/canonical-post"
+              />
+            </div>
+          </RadiantCard>
 
-          <div>
-            <label htmlFor="layout" className="themed-label">
-              Layout (optional)
-            </label>
-            <input
-              id="layout"
-              type="text"
-              value={layout}
-              onChange={(e) => setLayout(e.target.value)}
-              className="themed-input"
-              placeholder="post-layout"
-            />
-          </div>
+          <RadiantCard>
+            <div className="p-6">
+              <label htmlFor="layout" className="themed-label">
+                Layout (optional)
+              </label>
+              <input
+                id="layout"
+                type="text"
+                value={layout}
+                onChange={(e) => setLayout(e.target.value)}
+                className="themed-input"
+                placeholder="post-layout"
+              />
+            </div>
+          </RadiantCard>
 
-          <div>
-            <label htmlFor="bibliography" className="themed-label">
-              Bibliography (optional)
-            </label>
-            <input
-              id="bibliography"
-              type="text"
-              value={bibliography}
-              onChange={(e) => setBibliography(e.target.value)}
-              className="themed-input"
-              placeholder="Bibliography content..."
-            />
-          </div>
+          <RadiantCard>
+            <div className="p-6">
+              <label htmlFor="bibliography" className="themed-label">
+                Bibliography (optional)
+              </label>
+              <input
+                id="bibliography"
+                type="text"
+                value={bibliography}
+                onChange={(e) => setBibliography(e.target.value)}
+                className="themed-input"
+                placeholder="Bibliography content..."
+              />
+            </div>
+          </RadiantCard>
         </motion.div>
         <motion.div
           className="flex gap-6"
           variants={FADE_UP_ANIMATION_VARIANTS}
         >
-          <label className="flex items-center space-x-3 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={draft}
-              onChange={(e) => setDraft(e.target.checked)}
-              className="themed-checkbox"
-            />
-            <span className="themed-label mb-0">Save as Draft</span>
-          </label>
+          <RadiantCard>
+            <div className="p-6">
+              <label className="flex items-center space-x-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={draft}
+                  onChange={(e) => setDraft(e.target.checked)}
+                  className="themed-checkbox"
+                />
+                <span className="themed-label mb-0">Save as Draft</span>
+              </label>
+            </div>
+          </RadiantCard>
 
-          <label className="flex items-center space-x-3 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={featured}
-              onChange={(e) => setFeatured(e.target.checked)}
-              className="themed-checkbox"
-            />
-            <span className="themed-label mb-0">Featured Post</span>
-          </label>
+          <RadiantCard>
+            <div className="p-6">
+              <label className="flex items-center space-x-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={featured}
+                  onChange={(e) => setFeatured(e.target.checked)}
+                  className="themed-checkbox"
+                />
+                <span className="themed-label mb-0">Featured Post</span>
+              </label>
+            </div>
+          </RadiantCard>
         </motion.div>{' '}
         <motion.div variants={FADE_UP_ANIMATION_VARIANTS}>
-          <label className="themed-label">Content</label>
-          <div>
-            <LazyNovelEditor markdown={content} onChange={setContent} />
-          </div>
+          <RadiantCard>
+            <div className="p-6">
+              <label className="themed-label">Content</label>
+              <div>
+                <LazyNovelEditor markdown={content} onChange={setContent} />
+              </div>
+            </div>
+          </RadiantCard>
         </motion.div>
         <motion.div
           className="flex flex-col sm:flex-row gap-3 sm:gap-6 pt-6 sm:items-center"

@@ -50,9 +50,7 @@ export function LastPlayed({
             </div>
           </div>
           <div className="hidden items-center gap-3 md:flex">
-            <span className="ml-4 flex-shrink-0 rounded-full bg-green-100 px-2.5 py-0.5 text-sm text-green-700 dark:bg-green-900 dark:text-green-300">
-              Playing
-            </span>
+            <span className="ml-4 themed-badge">Playing</span>
             <Link
               href="https://open.spotify.com/user/31uxi2mgkrjhj4agxmudr5cmfj7a"
               className="rounded p-2 text-gray-700 transition-colors hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -102,9 +100,7 @@ export function LastPlayed({
           </div>
         </div>
         <div className="hidden items-center gap-3 md:flex">
-          <span className="ml-4 flex-shrink-0 rounded-full bg-neutral-200 px-2.5 py-0.5 text-sm text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-            {getTimeAgo(song.playedAt)}
-          </span>
+          <span className="ml-4 themed-badge">{getTimeAgo(song.playedAt)}</span>
           <Link
             href="https://open.spotify.com/user/31uxi2mgkrjhj4agxmudr5cmfj7a"
             className="rounded p-2 text-gray-700 transition-colors hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"

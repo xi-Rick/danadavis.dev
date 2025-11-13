@@ -57,16 +57,16 @@ function ScrollButton({
 }) {
   const colorClasses = {
     orange: clsx([
-      'bg-white dark:bg-black',
-      'hover:bg-orange-100 dark:hover:bg-green-950',
-      'ring-2 ring-orange-500 dark:ring-white',
-      'text-orange-600 dark:text-green-400',
+      'inline-block rounded-lg border-2 font-semibold transition-all duration-200',
+      'border-black bg-white text-black hover:border-orange-500 hover:bg-orange-500 hover:text-white',
+      'dark:border-white dark:bg-black dark:text-white dark:hover:border-green-500 dark:hover:bg-green-500 dark:hover:text-white',
+      'p-2',
     ]),
     green: clsx([
-      'bg-white dark:bg-black',
-      'hover:bg-green-100 dark:hover:bg-green-950',
-      'ring-2 ring-green-500 dark:ring-white',
-      'text-green-600 dark:text-green-400',
+      'inline-block rounded-lg border-2 font-semibold transition-all duration-200',
+      'border-black bg-white text-black hover:border-green-500 hover:bg-green-500 hover:text-white',
+      'dark:border-white dark:bg-black dark:text-white dark:hover:border-green-500 dark:hover:bg-green-500 dark:hover:text-white',
+      'p-2',
     ]),
   }
 
@@ -75,7 +75,7 @@ function ScrollButton({
       type="button"
       aria-label={ariaLabel}
       onClick={onClick}
-      className={clsx(['rounded-lg p-2 transition-all', colorClasses[color]])}
+      className={colorClasses[color]}
     >
       <Icon className="h-5 w-5" />
     </button>

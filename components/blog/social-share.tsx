@@ -11,8 +11,6 @@ import {
 } from 'react-share'
 import { SITE_METADATA } from '~/data/site-metadata'
 import XIcon from '~/icons/x.svg'
-import { DiscussOnX } from './discuss-on-x'
-import { EditOnGithub } from './edit-on-github'
 
 type SocialButtonsProps = {
   postUrl: string
@@ -42,7 +40,7 @@ export function SocialShare({
       <MenuButton
         aria-label="More links"
         className={clsx(
-          'flex items-center gap-1 px-3 py-1 font-medium text-gray-500 dark:text-gray-400',
+          'flex items-center gap-1 px-3 py-1 font-medium text-[var(--color-text)] opacity-60 hover:opacity-100 transition-opacity',
           className,
         )}
         data-umami-event="social-share"
@@ -64,16 +62,16 @@ export function SocialShare({
             'mt-2 w-56',
             'absolute right-0 z-50 rounded-md',
             'origin-top-right translate-x-[calc(50%-42px)]',
-            'ring-1 ring-black/5 focus:outline-hidden dark:ring-gray-700',
-            'bg-white shadow-lg dark:bg-stone-950',
-            'divide-y divide-gray-200 dark:divide-gray-700',
+            'ring-1 ring-[var(--color-border)] focus:outline-hidden',
+            'bg-[var(--color-bg)] shadow-lg',
+            'divide-y divide-[var(--color-border)]',
           ])}
         >
           <div className="px-4 py-2">
             <button
               type="button"
               onClick={handleCopyLink}
-              className="flex items-center gap-2.5 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+              className="flex items-center gap-2.5 text-[var(--color-text)] opacity-60 hover:text-[var(--color-accent-orange)] dark:hover:text-[var(--color-accent-green)] transition-colors"
             >
               <Link strokeWidth={1.5} size={18} />
               <span>{copied ? 'Copied' : 'Copy link'}</span>
@@ -84,7 +82,7 @@ export function SocialShare({
               url={postUrl}
               title={title}
               via={SITE_METADATA.x}
-              className="flex items-center gap-2.5 text-gray-600! hover:text-gray-900! dark:text-gray-400! dark:hover:text-gray-100!"
+              className="flex items-center gap-2.5 text-[var(--color-text)]! opacity-60 hover:text-[var(--color-accent-orange)]! dark:hover:text-[var(--color-accent-green)]! transition-colors"
             >
               <XIcon className="h-4 w-4" fill="#fff" viewBox="0 0 1200 1227" />
               <span className="">Share on X (Twitter)</span>
@@ -92,22 +90,18 @@ export function SocialShare({
             <LinkedinShareButton
               url={postUrl}
               title={title}
-              className="flex items-center gap-2.5 text-gray-600! hover:text-gray-900! dark:text-gray-400! dark:hover:text-gray-100!"
+              className="flex items-center gap-2.5 text-[var(--color-text)]! opacity-60 hover:text-[var(--color-accent-orange)]! dark:hover:text-[var(--color-accent-green)]! transition-colors"
             >
               <Linkedin strokeWidth={1.5} size={18} />
               <span className="">Share on LinkedIn</span>
             </LinkedinShareButton>
             <FacebookShareButton
               url={postUrl}
-              className="flex items-center gap-2.5 text-gray-600! hover:text-gray-900! dark:text-gray-400! dark:hover:text-gray-100!"
+              className="flex items-center gap-2.5 text-[var(--color-text)]! opacity-60 hover:text-[var(--color-accent-orange)]! dark:hover:text-[var(--color-accent-green)]! transition-colors"
             >
               <Facebook strokeWidth={1.5} size={18} />
               <span className="">Share on Facebook</span>
             </FacebookShareButton>
-          </div>
-          <div className="flex flex-col gap-3 px-4 py-3">
-            <DiscussOnX postUrl={postUrl} />
-            <EditOnGithub filePath={filePath} />
           </div>
         </MenuItems>
       </Transition>

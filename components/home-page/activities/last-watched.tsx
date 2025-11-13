@@ -42,7 +42,7 @@ export function LastWatched({
           </div>
         </div>
         <div className="hidden items-center gap-3 md:flex">
-          <span className="ml-4 flex-shrink-0 rounded-full bg-neutral-200 px-2.5 py-0.5 text-sm text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+          <span className="ml-4 themed-badge">
             {getTimeAgo(lastWatchedMovie.dateRated)}
           </span>
           <Link

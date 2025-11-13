@@ -21,15 +21,15 @@ export function GradientBorder({
       <span
         className={clsx([
           'absolute -top-px right-(--offset) h-px w-[40%]',
-          'bg-linear-to-r from-blue-500/0 via-indigo-500/40 to-indigo-500/0',
-          'dark:from-indigo-400/0 dark:via-indigo-400/40 dark:to-indigo-400/0',
+          'bg-linear-to-r from-orange-500/0 via-orange-500/40 to-orange-500/0',
+          'dark:from-green-400/0 dark:via-green-400/40 dark:to-green-400/0',
         ])}
       />
       <span
         className={clsx([
           'absolute top-(--offset) -left-px h-[40%] w-px',
-          'bg-linear-to-b from-indigo-500/0 via-indigo-500/40 to-indigo-500/0',
-          'dark:from-indigo-400/0 dark:via-indigo-400/40 dark:to-indigo-400/0',
+          'bg-linear-to-b from-orange-500/0 via-orange-500/40 to-orange-500/0',
+          'dark:from-green-400/0 dark:via-green-400/40 dark:to-green-400/0',
         ])}
       />
       {children}
