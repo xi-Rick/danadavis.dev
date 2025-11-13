@@ -92,7 +92,12 @@ export function PostLayout({ content, next, prev, children }: LayoutProps) {
             prev={prev}
             prevLabel="Previous post"
           />
-          <Comments url={postUrl} identifier={slug} title={title} />
+          <Comments
+            url={postUrl}
+            identifier={slug}
+            title={title}
+            shortname={SITE_METADATA.comments.disqus.shortname}
+          />
         </div>
       </article>
     </Container>

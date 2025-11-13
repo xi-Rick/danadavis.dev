@@ -72,7 +72,12 @@ export function PostBanner({ content, children }: LayoutProps) {
             </div>
             {/* <SocialShare postUrl={postUrl} title={title} /> */}
           </div>
-          <Comments url={postUrl} identifier={slug} title={title} />
+          <Comments
+            url={postUrl}
+            identifier={slug}
+            title={title}
+            shortname={SITE_METADATA.comments.disqus.shortname}
+          />
         </div>
       </article>
     </Container>

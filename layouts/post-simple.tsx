@@ -56,7 +56,12 @@ export function PostSimple({ content, children }: PostSimpleProps) {
             </div>
             <SocialShare postUrl={postUrl} filePath={filePath} title={title} />
           </div> */}
-          <Comments url={postUrl} identifier={slug} title={title} />
+          <Comments
+            url={postUrl}
+            identifier={slug}
+            title={title}
+            shortname={SITE_METADATA.comments.disqus.shortname}
+          />
         </div>
       </article>
     </Container>

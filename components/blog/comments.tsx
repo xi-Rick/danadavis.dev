@@ -8,6 +8,7 @@ interface CommentsProps {
   identifier: string
   title: string
   className?: string
+  shortname?: string
 }
 
 export default function Comments({
@@ -15,9 +16,8 @@ export default function Comments({
   identifier,
   title,
   className,
+  shortname,
 }: CommentsProps) {
-  const shortname = process.env.NEXT_PUBLIC_DISQUS_SHORTNAME
-
   const [loadComments, setLoadComments] = useState(false) // Wait for theme to be resolved
   const [error, setError] = useState<string | null>(null)
   const [reloadKey, setReloadKey] = useState(0)
@@ -120,7 +120,7 @@ export default function Comments({
 
   // Handle missing shortname gracefully
   if (!shortname) {
-    console.error('NEXT_PUBLIC_DISQUS_SHORTNAME is not defined')
+    console.error('DISQUS_SHORTNAME is not defined')
     return null
   }
 

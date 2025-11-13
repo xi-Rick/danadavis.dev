@@ -120,10 +120,10 @@ export const metadata: Metadata = {
     description: SITE_METADATA.description,
   },
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
-    yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || '',
+    google: process.env.GOOGLE_SITE_VERIFICATION || '',
+    yandex: process.env.YANDEX_VERIFICATION || '',
     other: {
-      'msvalidate.01': process.env.NEXT_PUBLIC_MS_VALIDATE || '',
+      'msvalidate.01': process.env.MS_VALIDATE || '',
     },
   },
   keywords: [
@@ -218,7 +218,7 @@ export default async function RootLayout({
       >
         <TiltedGridBackground className="inset-x-0 top-0 z-[-1] h-[50vh]" />
         <ThemeProviders>
-          <AuthProvider>
+          <AuthProvider siteUrl={process.env.SITE_URL || SITE_METADATA.siteUrl}>
             <AutoPlayAudio />
             <Ascii />
             <Analytics />

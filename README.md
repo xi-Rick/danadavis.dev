@@ -92,7 +92,7 @@ This blog is forked and heavily customized from [leohuynh.dev](https://github.co
   - AI summarization and content type classification (thought, idea, blog-draft, project-idea, note)
   - Automatic tagging and potential identification for blog posts and projects
   - Full editing capabilities with privacy controls and metadata tracking
-- **Novel.sh Editor**: Advanced AI-powered WYSIWYG editor with support for formatting, links, images, code blocks, and slash commands
+- **[Novel.sh Editor](https://novel.sh)**: Advanced AI-powered WYSIWYG editor with support for formatting, links, images, code blocks, and slash commands
 - **Type-Safe Database**: PostgreSQL with Prisma ORM for dynamic content management and querying
 - **Admin Dashboard**: Secure access to manage all content through an authenticated interface
 
@@ -169,8 +169,7 @@ Before deploying to production, you'll need to gather API credentials from vario
 - `KINDE_SITE_URL` (your production URL)
 - `KINDE_POST_LOGOUT_REDIRECT_URL`
 - `KINDE_POST_LOGIN_REDIRECT_URL`
-- `NEXT_PUBLIC_KINDE_CLIENT_ID`
-- `NEXT_PUBLIC_KINDE_DOMAIN`
+- `SITE_URL` (your production URL, e.g., `https://danadavis.dev`)
 
 </details>
 
@@ -260,12 +259,10 @@ This will redirect to your callback page with an authorization code. Use this to
 1. Go to [stripe.com](https://stripe.com) and create an account
 2. Go to **Developers > API Keys**
 3. Copy your **Secret Key** (Test Mode) → `STRIPE_SECRET_KEY`
-4. Copy your **Publishable Key** (Test Mode) → `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
 
 **Environment Variables:**
 
 - `STRIPE_SECRET_KEY`
-- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
 
 </details>
 
@@ -286,7 +283,7 @@ This will redirect to your callback page with an authorization code. Use this to
 
 ### One Click Deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/xi-Rick/danadavis.dev&env=DATABASE_URL,ADMIN_EMAIL,KINDE_CLIENT_ID,KINDE_CLIENT_SECRET,KINDE_ISSUER_URL,KINDE_SITE_URL,KINDE_POST_LOGOUT_REDIRECT_URL,KINDE_POST_LOGIN_REDIRECT_URL,NEXT_PUBLIC_KINDE_CLIENT_ID,NEXT_PUBLIC_KINDE_DOMAIN,NEXT_PUBLIC_KINDE_EMAIL_CONNECTION_ID,NEXT_PUBLIC_KINDE_GOOGLE_CONNECTION_ID,NEXT_PUBLIC_KINDE_GITHUB_CONNECTION_ID,STRIPE_SECRET_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,NEXT_PUBLIC_DISQUS_SHORTNAME,GITHUB_API_TOKEN,SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET,SPOTIFY_REFRESH_TOKEN,NEXT_UMAMI_ID,OPENAI_API_KEY&envDescription=Environment%20variables%20required%20to%20run%20the%20Dana%20Davis%20Dev%20Blog)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/xi-Rick/danadavis.dev&env=DATABASE_URL,ADMIN_EMAIL,KINDE_CLIENT_ID,KINDE_CLIENT_SECRET,KINDE_ISSUER_URL,KINDE_SITE_URL,KINDE_POST_LOGOUT_REDIRECT_URL,KINDE_POST_LOGIN_REDIRECT_URL,SITE_URL,STRIPE_SECRET_KEY,DISQUS_SHORTNAME,GITHUB_API_TOKEN,SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET,SPOTIFY_REFRESH_TOKEN,NEXT_UMAMI_ID,OPENAI_API_KEY&envDescription=Environment%20variables%20required%20to%20run%20the%20Dana%20Davis%20Dev%20Blog)
 
 That's it! Your blog is now live. 🎉
 
@@ -308,11 +305,9 @@ KINDE_ISSUER_URL=
 KINDE_SITE_URL=
 KINDE_POST_LOGOUT_REDIRECT_URL=
 KINDE_POST_LOGIN_REDIRECT_URL=
-NEXT_PUBLIC_KINDE_CLIENT_ID=
-NEXT_PUBLIC_KINDE_DOMAIN=
-NEXT_PUBLIC_KINDE_EMAIL_CONNECTION_ID=
-NEXT_PUBLIC_KINDE_GOOGLE_CONNECTION_ID=
-NEXT_PUBLIC_KINDE_GITHUB_CONNECTION_ID=
+
+# Site Configuration
+SITE_URL=
 
 # GitHub
 GITHUB_API_TOKEN=
@@ -329,11 +324,10 @@ NEXT_UMAMI_ID=
 OPENAI_API_KEY=
 
 # Disqus Comments
-NEXT_PUBLIC_DISQUS_SHORTNAME=
+DISQUS_SHORTNAME=
 
 # Stripe (Optional)
 STRIPE_SECRET_KEY=
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 ```
 
 ---
