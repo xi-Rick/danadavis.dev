@@ -16,10 +16,10 @@
 </p>
 
 <p align="center">
-  <a href="#features">Features</a> •
-  <a href="#tech-stack">Tech Stack</a> •
-  <a href="#additions-and-changes">Additions & Changes</a> •
-  <a href="#contributing">Contributing</a>
+  <a href="#-features">Features</a> •
+  <a href="#%EF%B8%8F-tech-stack">Tech Stack</a> •
+  <a href="#-additions-and-changes-from-original-repository">Additions & Changes</a> •
+  <a href="#-contributing">Contributing</a>
 </p>
 
 ---
@@ -60,7 +60,7 @@ Welcome to **danadavis.dev**, my personal blog and portfolio built with modern w
 
 ## 🔄 Additions and Changes from Original Repository
 
-This blog is forked and heavily customized from [leohuynh.dev](https://github.com/hta218/leohuynh.dev), a Next.js starter blog. Here are the key additions and modifications:
+This blog is forked and heavily customized from <a href="https://github.com/hta218/leohuynh.dev" target="_blank" rel="noopener" referrerpolicy="origin">leohuynh.dev</a>, a Next.js starter blog. Here are the key additions and modifications:
 
 ### 🎨 Visual & UI Enhancements
 
@@ -92,7 +92,7 @@ This blog is forked and heavily customized from [leohuynh.dev](https://github.co
   - AI summarization and content type classification (thought, idea, blog-draft, project-idea, note)
   - Automatic tagging and potential identification for blog posts and projects
   - Full editing capabilities with privacy controls and metadata tracking
-- **[Novel.sh Editor](https://novel.sh)**: Advanced AI-powered WYSIWYG editor with support for formatting, links, images, code blocks, and slash commands
+- **<a href="https://novel.sh" target="_blank" rel="noopener" referrerpolicy="origin">Novel.sh Editor</a>**: Advanced AI-powered WYSIWYG editor with support for formatting, links, images, code blocks, and slash commands
 - **Type-Safe Database**: PostgreSQL with Prisma ORM for dynamic content management and querying
 - **Admin Dashboard**: Secure access to manage all content through an authenticated interface
 
@@ -125,8 +125,8 @@ Before deploying to production, you'll need to gather API credentials from vario
 
 ### Prerequisites
 
-- A [Vercel](https://vercel.com) account (for hosting)
-- A [GitHub](https://github.com) account (for repository connection)
+- A <a href="https://vercel.com" target="_blank" rel="noopener" referrerpolicy="origin">Vercel</a> account (for hosting)
+- A <a href="https://github.com" target="_blank" rel="noopener" referrerpolicy="origin">GitHub</a> account (for repository connection)
 - Browser access to set up services
 
 <details>
@@ -134,7 +134,7 @@ Before deploying to production, you'll need to gather API credentials from vario
 
 #### Supabase (PostgreSQL Database)
 
-1. Go to [supabase.com](https://supabase.com) and sign in
+1. Go to <a href="https://supabase.com" target="_blank" rel="noopener" referrerpolicy="origin">supabase.com</a> and sign in
 2. Click **"New Project"** and select your organization
 3. Enter a project name and set a strong database password
 4. Choose a region close to your users
@@ -151,7 +151,7 @@ Before deploying to production, you'll need to gather API credentials from vario
 
 #### Kinde Auth (Admin Dashboard Protection)
 
-1. Visit [kinde.com](https://kinde.com) and create a free account
+1. Visit <a href="https://kinde.com" target="_blank" rel="noopener" referrerpolicy="origin">kinde.com</a> and create a free account
 2. Go to **Settings > Applications** in your dashboard
 3. Click **"Create Application"** and name it (e.g., "My Blog")
 4. Copy these credentials:
@@ -178,7 +178,7 @@ Before deploying to production, you'll need to gather API credentials from vario
 
 #### GitHub API Token
 
-1. Go to [github.com/settings/tokens](https://github.com/settings/tokens)
+1. Go to <a href="https://github.com/settings/tokens" target="_blank" rel="noopener" referrerpolicy="origin">github.com/settings/tokens</a>
 2. Click **"Generate new token"** → **"Generate new token (classic)"**
 3. Name it "Blog API" and set expiration (90 days recommended)
 4. Check these scopes:
@@ -195,7 +195,7 @@ Before deploying to production, you'll need to gather API credentials from vario
 
 #### Spotify API Credentials
 
-1. Go to [developer.spotify.com/dashboard](https://developer.spotify.com/dashboard)
+1. Go to <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener" referrerpolicy="origin">developer.spotify.com/dashboard</a>
 2. Log in with or create a Spotify account
 3. Click **"Create App"** and accept the Developer Terms
 4. Fill in the form:
@@ -230,7 +230,7 @@ This will redirect to your callback page with an authorization code. Use this to
 
 #### Umami Analytics
 
-1. Go to [umami.is](https://umami.is) and create an account
+1. Go to <a href="https://umami.is" target="_blank" rel="noopener" referrerpolicy="origin">umami.is</a> and create an account
 2. Create a new website and enter your domain
 3. Copy the **Tracking ID**
 
@@ -243,7 +243,7 @@ This will redirect to your callback page with an authorization code. Use this to
 
 #### OpenAI API Key (For Captain's Log Transcription)
 
-1. Go to [platform.openai.com](https://platform.openai.com) and sign in or create an account
+1. Go to <a href="https://platform.openai.com" target="_blank" rel="noopener" referrerpolicy="origin">platform.openai.com</a> and sign in or create an account
 2. Navigate to **API Keys** in your account settings
 3. Click **"Create new secret key"**
 4. Name it "My Blog's - Captain's Log" and copy the key immediately (it won't show again)
@@ -256,7 +256,7 @@ This will redirect to your callback page with an authorization code. Use this to
 <details>
 <summary><strong>7. Stripe (Optional - For Store Feature) 💳</strong></summary>
 
-1. Go to [stripe.com](https://stripe.com) and create an account
+1. Go to <a href="https://stripe.com" target="_blank" rel="noopener" referrerpolicy="origin">stripe.com</a> and create an account
 2. Go to **Developers > API Keys**
 3. Copy your **Secret Key** (Test Mode) → `STRIPE_SECRET_KEY`
 
@@ -269,7 +269,7 @@ This will redirect to your callback page with an authorization code. Use this to
 <details>
 <summary><strong>8. Deployment on Vercel ☁️</strong></summary>
 
-1. Go to [vercel.com](https://vercel.com) and sign in with GitHub
+1. Go to <a href="https://vercel.com" target="_blank" rel="noopener" referrerpolicy="origin">vercel.com</a> and sign in with GitHub
 2. Click **"Add New" > "Project"**
 3. Select your blog repository from GitHub
 4. Click **"Import"**
@@ -348,8 +348,8 @@ Contributions, issues, and feature requests are super welcome! 🍻
 
 Feel free to:
 
-- [Open an issue](https://github.com/xi-Rick/danadavis.dev/issues) for bugs or suggestions
-- [Submit a pull request](https://github.com/xi-Rick/danadavis.dev/pulls) with improvements
+- <a href="https://github.com/xi-Rick/danadavis.dev/issues" target="_blank" rel="noopener" referrerpolicy="origin">Open an issue</a> for bugs or suggestions
+- <a href="https://github.com/xi-Rick/danadavis.dev/pulls" target="_blank" rel="noopener" referrerpolicy="origin">Submit a pull request</a> with improvements
 - Share your thoughts in the discussions
 
 ## 📄 License
@@ -360,6 +360,6 @@ Copyright © 2019-present | Dana's dev blog – stories, insights, and ideas.
 
 <div align="center">
 
-Made with ❤️ by [Dana Davis](https://danadavis.dev)
+Made with ❤️ by <a href="https://danadavis.dev" target="_blank" rel="noopener" referrerpolicy="origin">Dana Davis</a>
 
 </div>
