@@ -50,21 +50,27 @@ export default async function ProjectPage(props: {
   const params = await props.params
 
   // Try to find project in database first
-  let dbProject = await prisma.project.findUnique({
-    where: { slug: params.slug },
-  })
+  let dbProject: Awaited<ReturnType<typeof prisma.project.findUnique>> = null
+  try {
+    dbProject = await prisma.project.findUnique({
+      where: { slug: params.slug },
+    })
 
-  // If not found by slug, try to find by matching the title-based slug
-  if (!dbProject) {
-    const allProjects = await prisma.project.findMany()
-    dbProject =
-      allProjects.find(
-        (p) =>
-          p.title
-            .toLowerCase()
-            .replace(/[^\w\s-]/g, '')
-            .replace(/\s+/g, '-') === params.slug,
-      ) || null
+    // If not found by slug, try to find by matching the title-based slug
+    if (!dbProject) {
+      const allProjects = await prisma.project.findMany()
+      dbProject =
+        allProjects.find(
+          (p) =>
+            p.title
+              .toLowerCase()
+              .replace(/[^\w\s-]/g, '')
+              .replace(/\s+/g, '-') === params.slug,
+        ) || null
+    }
+  } catch {
+    // Database unavailable during build - fall back to static data
+    console.warn('Database unavailable, using static project data')
   }
 
   // Fallback to static PROJECTS data if not in database
