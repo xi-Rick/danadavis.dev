@@ -23,6 +23,7 @@ import AutoPlayAudio from '~/components/ui/autoplay'
 import PageTransitionWrapper from '~/components/ui/page-transition-wrapper'
 import { TiltedGridBackground } from '~/components/ui/tilted-grid-background'
 import { SITE_METADATA } from '~/data/site-metadata'
+import { getSiteSettings } from '~/lib/site-settings'
 import { AuthProvider } from './auth-provider'
 import { ThemeProviders } from './theme-providers'
 
@@ -139,12 +140,13 @@ export const metadata: Metadata = {
   ],
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   const basePath = process.env.BASE_PATH || ''
+  const siteSettings = await getSiteSettings()
 
   return (
     <html
@@ -165,19 +167,19 @@ export default function RootLayout({
         <link
           rel="apple-touch-icon"
           sizes="76x76"
-          href={`${basePath}/static/favicons/favicon.ico`}
+          href={siteSettings.faviconPath}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href={`${basePath}/static/favicons/favicon.png`}
+          href={siteSettings.faviconPath}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={`${basePath}/static/favicons/favicon.png`}
+          href={siteSettings.faviconPath}
         />
         <link
           rel="manifest"

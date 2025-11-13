@@ -121,25 +121,35 @@ export default function AdminPage() {
               <p className="text-gray-600 dark:text-gray-300 flex-grow">
                 Manage and showcase your projects portfolio.
               </p>
-              <div className="w-full text-center text-base font-semibold text-gray-400 dark:text-gray-500 cursor-not-allowed">
-                Coming Soon
-              </div>
+              <Link
+                href="/admin/manage-projects"
+                className="inline-block w-full text-center text-base font-semibold underline-offset-4 transition-colors hover:text-gray-900 dark:hover:text-gray-200"
+              >
+                <GrowingUnderline data-umami-event="admin-manage-projects">
+                  Manage Projects
+                </GrowingUnderline>
+              </Link>
             </div>
           </RadiantCard>
 
-          {/* Analytics */}
+          {/* Site Settings */}
           <RadiantCard className="p-6 flex flex-col min-h-80">
             <div className="space-y-4 flex flex-col h-full">
-              <div className="text-4xl">📊</div>
+              <div className="text-4xl">⚙️</div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                Analytics
+                Site Settings
               </h3>
               <p className="text-gray-600 dark:text-gray-300 flex-grow">
-                View detailed statistics and performance metrics.
+                Configure site metadata, social links, and favicon.
               </p>
-              <div className="w-full text-center text-base font-semibold text-gray-400 dark:text-gray-500 cursor-not-allowed">
-                Coming Soon
-              </div>
+              <Link
+                href="/admin/site-settings"
+                className="inline-block w-full text-center text-base font-semibold underline-offset-4 transition-colors hover:text-gray-900 dark:hover:text-gray-200"
+              >
+                <GrowingUnderline data-umami-event="admin-site-settings">
+                  Manage Settings
+                </GrowingUnderline>
+              </Link>
             </div>
           </RadiantCard>
 

@@ -3,6 +3,7 @@ import path from 'node:path'
 import csv from 'csv-parser'
 import Parser from 'rss-parser'
 import { SITE_METADATA } from '~/data/site-metadata'
+import { prisma } from '~/db'
 import { upsertBooks } from '~/db/queries'
 import { type InsertBook, insertBookSchema } from '~/db/schema'
 import type { GoodreadsBook, GoodreadsCsvBook } from '~/types/data'
@@ -249,7 +250,50 @@ export async function seedBooksByParsingCSV() {
   }
 }
 
+export async function seedSiteSettings() {
+  try {
+    console.log('Setting up site settings...')
+    const settings = await prisma.siteSettings.upsert({
+      where: { id: 'default' },
+      update: {},
+      create: {
+        id: 'default',
+        title: SITE_METADATA.title,
+        author: SITE_METADATA.author,
+        headerTitle: SITE_METADATA.headerTitle,
+        description: SITE_METADATA.description,
+        language: SITE_METADATA.language,
+        locale: SITE_METADATA.locale,
+        siteUrl: SITE_METADATA.siteUrl,
+        siteRepo: SITE_METADATA.siteRepo,
+        siteLogo: SITE_METADATA.siteLogo,
+        socialBanner: SITE_METADATA.socialBanner,
+        faviconPath: '/favicon.ico',
+        email: SITE_METADATA.email,
+        github: SITE_METADATA.github,
+        x: SITE_METADATA.x,
+        youtube: SITE_METADATA.youtube,
+        linkedin: SITE_METADATA.linkedin,
+        threads: SITE_METADATA.threads,
+        instagram: SITE_METADATA.instagram,
+        buyMeACoffee: SITE_METADATA.support.buyMeACoffee,
+        paypal: SITE_METADATA.support.paypal,
+        kofi: SITE_METADATA.support.kofi,
+        goodreadsBookshelf: SITE_METADATA.goodreadsBookshelfUrl,
+        imdbRatingsList: SITE_METADATA.imdbRatingsList,
+        umamiWebsiteId: SITE_METADATA.analytics.umamiAnalytics.websiteId,
+        umamiShareUrl: SITE_METADATA.analytics.umamiAnalytics.shareUrl,
+        disqusShortname: SITE_METADATA.comments.disqus.shortname,
+      },
+    })
+    console.log('⚙️  Site settings initialized.')
+  } catch (error) {
+    console.error('❌ Error initializing site settings:', error)
+  }
+}
+
 export async function seed() {
+  await seedSiteSettings()
   await seedBooksUsingRssFeed()
   // await seedBooksByParsingCSV()
 }

@@ -177,12 +177,12 @@ export default function ManagePostsPage() {
                           {post.title}
                         </h3>
                         {post.draft && (
-                          <span className="px-2 py-1 text-xs bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 rounded-full">
+                          <span className="px-2 py-1 text-xs bg-orange-100 text-orange-800 dark:bg-green-900 dark:text-green-200 rounded-full">
                             Draft
                           </span>
                         )}
                         {post.featured && (
-                          <span className="px-2 py-1 text-xs accent-green-bg text-white rounded-full">
+                          <span className="px-2 py-1 text-xs bg-orange-500 text-white dark:bg-green-600 rounded-full">
                             Featured
                           </span>
                         )}

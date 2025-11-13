@@ -1,5 +1,7 @@
 import { genPageMetadata } from 'app/seo'
 import { notFound } from 'next/navigation'
+import { remark } from 'remark'
+import html from 'remark-html'
 import Comments from '~/components/blog/comments'
 import { Badge } from '~/components/ui/badge'
 import { Container } from '~/components/ui/container'
@@ -9,6 +11,7 @@ import { MacbookScroll } from '~/components/ui/macbook-scroll'
 import { PageHeader } from '~/components/ui/page-header'
 import { PROJECTS } from '~/data/projects'
 import { SITE_METADATA } from '~/data/site-metadata'
+import { prisma } from '~/db'
 
 export async function generateStaticParams() {
   return PROJECTS.map((project) => ({
@@ -45,7 +48,27 @@ export default async function ProjectPage(props: {
   params: Promise<{ slug: string }>
 }) {
   const params = await props.params
-  const project = PROJECTS.find(
+
+  // Try to find project in database first
+  let dbProject = await prisma.project.findUnique({
+    where: { slug: params.slug },
+  })
+
+  // If not found by slug, try to find by matching the title-based slug
+  if (!dbProject) {
+    const allProjects = await prisma.project.findMany()
+    dbProject =
+      allProjects.find(
+        (p) =>
+          p.title
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/\s+/g, '-') === params.slug,
+      ) || null
+  }
+
+  // Fallback to static PROJECTS data if not in database
+  const staticProject = PROJECTS.find(
     (p) =>
       p.title
         .toLowerCase()
@@ -53,11 +76,32 @@ export default async function ProjectPage(props: {
         .replace(/\s+/g, '-') === params.slug,
   )
 
-  if (!project) {
+  if (!dbProject && !staticProject) {
     notFound()
   }
 
-  const { title, description, imgSrc, builtWith, links, type } = project
+  // Use database project if available, otherwise use static
+  const project = dbProject || staticProject
+
+  // Convert Markdown content to HTML if it exists
+  let htmlContent = ''
+  if (dbProject?.content) {
+    const processedContent = await remark()
+      .use(html, { sanitize: false })
+      .process(dbProject.content)
+    htmlContent = processedContent.toString()
+  } else if (staticProject?.content) {
+    htmlContent = staticProject.content
+  }
+
+  const { title, description, imgSrc, builtWith, links, type } = project as {
+    title: string
+    description: string
+    imgSrc: string
+    builtWith: string[]
+    links: Array<{ title: string; url: string }>
+    type: string
+  }
 
   return (
     <Container className="pt-4 lg:pt-12">
@@ -87,10 +131,10 @@ export default async function ProjectPage(props: {
             {/* Main Content */}
             <div className="space-y-4 lg:col-span-2 lg:space-y-6 overflow-x-hidden">
               <div className="prose dark:prose-invert sm:prose-base lg:prose-lg max-w-none project-content break-words">
-                {project.content ? (
+                {htmlContent ? (
                   <div
                     className="overflow-x-auto"
-                    dangerouslySetInnerHTML={{ __html: project.content }}
+                    dangerouslySetInnerHTML={{ __html: htmlContent }}
                   />
                 ) : (
                   <>

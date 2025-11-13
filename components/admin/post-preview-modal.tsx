@@ -149,7 +149,7 @@ export function PostPreviewModal({
                         repeat: Number.POSITIVE_INFINITY,
                         ease: 'linear',
                       }}
-                      className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full"
+                      className="w-12 h-12 border-4 border-t-transparent rounded-full border-orange-500 dark:border-green-600"
                     />
                     <p className="text-gray-600 dark:text-gray-400 font-medium">
                       Rendering preview...
@@ -219,14 +219,14 @@ export function PostPreviewModal({
 
                       {/* Summary */}
                       {summary && (
-                        <div className="text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 italic border-l-2 sm:border-l-4 border-orange-500 pl-2 sm:pl-3 lg:pl-4 py-1.5 sm:py-2 bg-gray-50 dark:bg-gray-900 rounded-r-md sm:rounded-r-lg">
+                        <div className="text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 italic border-l-2 sm:border-l-4 border-orange-500 dark:border-green-600 pl-2 sm:pl-3 lg:pl-4 py-1.5 sm:py-2 bg-gray-50 dark:bg-gray-900 rounded-r-md sm:rounded-r-lg">
                           {summary}
                         </div>
                       )}
                     </div>
 
                     {/* Divider */}
-                    <div className="mt-3 sm:mt-4 lg:mt-6 mb-4 sm:mb-6 lg:mb-8 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent" />
+                    <div className="mt-3 sm:mt-4 lg:mt-6 mb-4 sm:mb-6 lg:mb-8 h-px bg-gradient-to-r from-transparent via-orange-500 dark:via-green-600 to-transparent" />
 
                     {/* Content */}
                     <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:gap-8 pt-2 sm:pt-4 lg:pt-6 pb-4 sm:pb-6 lg:pb-8 lg:grid-cols-12">
@@ -248,7 +248,7 @@ export function PostPreviewModal({
                     </div>
 
                     {/* Bottom Divider */}
-                    <div className="h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent" />
+                    <div className="h-px bg-gradient-to-r from-transparent via-orange-500 dark:via-green-600 to-transparent" />
 
                     {/* Footer Placeholder */}
                     <div className="mt-4 sm:mt-6 lg:mt-8 space-y-2 sm:space-y-3 lg:space-y-4">

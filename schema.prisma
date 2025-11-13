@@ -56,25 +56,23 @@ model Post {
 }
 
 model Project {
-  id           String   @id @default(cuid())
-  title        String
-  slug         String   @unique
-  summary      String?
-  content      String
-  date         DateTime @default(now())
-  lastmod      DateTime @updatedAt
-  tags         String[]
-  categories   String[]
-  images       String[]
-  authors      String[]
-  draft        Boolean  @default(true)
-  featured     Boolean  @default(false)
-  layout       String?
-  github       String?
-  demo         String?
-  technologies String[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id          String   @id @default(cuid())
+  type        String   @default("self") // 'work' or 'self'
+  title       String
+  slug        String   @unique
+  description String?
+  imgSrc      String   @default("")
+  url         String?
+  repo        String?
+  builtWith   String[] @default([])
+  links       Json? // Array of {title: string, url: string}
+  content     String?
+  date        DateTime @default(now())
+  lastmod     DateTime @updatedAt
+  draft       Boolean  @default(false)
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relations
   author   User   @relation(fields: [authorId], references: [id])
@@ -328,4 +326,38 @@ model CaptainsLog {
   updatedAt        DateTime @updatedAt
 
   @@map("captains_logs")
+}
+
+model SiteSettings {
+  id                 String   @id @default("default")
+  title              String   @default("Dana's dev blog – stories, insights, and ideas")
+  author             String   @default("Dana Davis")
+  headerTitle        String   @default("Dana's dev blog")
+  description        String   @default("A personal space on the cloud where I document my programming journey, sharing lessons, insights, and resources for fellow developers.")
+  language           String   @default("en-us")
+  locale             String   @default("en-US")
+  siteUrl            String   @default("https://danadavis.dev")
+  siteRepo           String   @default("https://github.com/xi-Rick/danadavis.dev")
+  siteLogo           String   @default("/static/images/logo.png")
+  socialBanner       String   @default("/static/images/twitter-card.jpeg")
+  faviconPath        String   @default("/favicon.ico")
+  email              String   @default("dana@danadavis.dev")
+  github             String   @default("https://github.com/xi-Rick")
+  x                  String   @default("https://twitter.com/cortrale")
+  youtube            String   @default("https://youtube.com/@danadavisyt")
+  linkedin           String   @default("https://www.linkedin.com/in/danadavisdev/")
+  threads            String   @default("https://www.threads.net/cortrale")
+  instagram          String   @default("https://www.instagram.com/cortrale")
+  buyMeACoffee       String   @default("https://www.buymeacoffee.com/danadavis")
+  paypal             String?
+  kofi               String   @default("https://ko-fi.com/danadavisdev")
+  goodreadsBookshelf String?
+  imdbRatingsList    String?
+  umamiWebsiteId     String?
+  umamiShareUrl      String?
+  disqusShortname    String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("site_settings")
 }
