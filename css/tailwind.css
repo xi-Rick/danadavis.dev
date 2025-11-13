@@ -985,3 +985,17 @@ mark[style] > strong {
   border-color: var(--color-accent-green);
   background-color: rgba(22, 163, 74, 0.1);
 }
+
+/* Hide common Disqus ad containers (helps remove empty ad spaces if ads are blocked by CSP) */
+.dsq-brlink,
+.dsq-ad,
+.dsq-sponsored,
+.dsq-ads,
+.dsq-ad-container {
+  display: none !important;
+}
+
+/* Hide Disqus ad iframes using sandbox attribute (latest method) */
+#disqus_thread > iframe[sandbox] {
+  display: none !important;
+}
