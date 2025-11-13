@@ -19,6 +19,17 @@ const PageTransitionWrapper = ({ children }: PageTransitionWrapperProps) => {
         animate="show"
         exit="exit"
         variants={PAGE_TRANSITION_VARIANTS}
+        // notify when page transition finishes so other UI (like Footer)
+        // can wait to appear until the content has faded in.
+        onAnimationComplete={() => {
+          try {
+            if (typeof window !== 'undefined' && 'CustomEvent' in window) {
+              window.dispatchEvent(new CustomEvent('page-transition:complete'))
+            }
+          } catch (e) {
+            // noop
+          }
+        }}
       >
         {children}
       </motion.div>

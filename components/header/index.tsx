@@ -70,7 +70,7 @@ export function Header() {
             {isAuthenticated ? (
               <div className="flex items-center gap-2">
                 <span className="text-sm">Hi, {user?.given_name}</span>
-                <LogoutLink className="px-3 py-1 text-sm hover:underline">
+                <LogoutLink className="px-3 py-1 text-sm hover:underline hover:text-orange-600 dark:hover:text-green-400 transition-colors">
                   Logout
                 </LogoutLink>
               </div>

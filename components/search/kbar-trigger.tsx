@@ -8,7 +8,7 @@ export function KbarSearchTrigger() {
     <button
       type="button"
       aria-label="Search"
-      className="rounded p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700"
+      className="rounded p-1.5 hover:bg-orange-100 hover:text-orange-600 dark:hover:bg-green-900/20 dark:hover:text-green-400 transition-colors"
       data-umami-event="search-the-site"
       onClick={() => query.toggle()}
     >

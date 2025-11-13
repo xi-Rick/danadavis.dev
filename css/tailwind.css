@@ -145,7 +145,7 @@
   --color-text: #0b0b0b;
   --color-border: #e5e7eb;
   --color-accent-orange: var(--color-primary-500);
-  --color-accent-green: var(--color-spotify);
+  --color-accent-green: var(--color-accent-orange);
 }
 
 .dark,

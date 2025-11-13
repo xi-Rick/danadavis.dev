@@ -99,7 +99,7 @@ function TagsList() {
 
   return (
     <div className="hidden max-h-screen w-[300px] shrink-0 py-5 md:flex md:py-10">
-      <div className="h-full overflow-auto rounded-sm bg-gray-50 dark:bg-gray-900/70 dark:shadow-gray-800/40">
+      <div className="h-full overflow-auto rounded-sm bg-gray-50 dark:bg-black/20 dark:shadow-gray-800/40">
         <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 px-6 py-4">
           {sortedTags.map((t) => {
             return (

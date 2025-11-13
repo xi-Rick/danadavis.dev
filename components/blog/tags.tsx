@@ -19,16 +19,19 @@ export function TagsList({ tags }: { tags: string[] }) {
 export function Tag({
   text,
   size = 'sm',
-}: { text: string; size?: 'sm' | 'md' }) {
+}: {
+  text: string
+  size?: 'sm' | 'md'
+}) {
   const tagName = text.split(' ').join('-')
   return (
     <Link
       href={`/tags/${slug(text)}`}
       className={clsx([
-        'rounded-lg px-2 py-0.5 font-semibold',
-        'bg-slate-100 text-gray-600 hover:text-gray-800',
-        'dark:bg-gray-700 dark:text-gray-300 dark:hover:text-gray-100',
-        size === 'sm' ? 'text-sm' : 'text-base',
+        'inline-block rounded-lg border-2 font-semibold transition-all duration-200',
+        'border-black bg-white text-black hover:border-orange-500 hover:bg-orange-500 hover:text-white',
+        'dark:border-white dark:bg-black dark:text-white dark:hover:border-green-500 dark:hover:bg-green-500 dark:hover:text-white',
+        size === 'sm' ? 'px-2 py-0.5 text-sm' : 'px-3 py-1 text-base',
       ])}
     >
       <span data-umami-event={`tag-${tagName}`}>#{tagName}</span>

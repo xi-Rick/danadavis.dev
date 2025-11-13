@@ -43,7 +43,7 @@ export function MoreLinks() {
                   {({ close }) => (
                     <Link
                       href={href}
-                      className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 hover:bg-gray-200 dark:hover:bg-gray-800"
+                      className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 hover:bg-orange-100 dark:hover:bg-green-900"
                       onClick={close}
                     >
                       <Twemoji emoji={emoji} />

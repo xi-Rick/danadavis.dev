@@ -14,12 +14,12 @@ import 'react-medium-image-zoom/dist/styles.css'
 import 'remark-github-blockquote-alert/alert.css'
 import { Toaster } from 'sonner'
 import { UmamiAnalytics } from '~/components/analytics/umami'
-import { Footer } from '~/components/footer'
 import { Header } from '~/components/header'
 import { KBarSearchProvider } from '~/components/search/kbar-provider'
 import { PersonJsonLd, WebsiteJsonLd } from '~/components/structured-data'
 import Ascii from '~/components/ui/ascii'
 import AutoPlayAudio from '~/components/ui/autoplay'
+import FooterController from '~/components/ui/footer-controller'
 import PageTransitionWrapper from '~/components/ui/page-transition-wrapper'
 import { TiltedGridBackground } from '~/components/ui/tilted-grid-background'
 import { SITE_METADATA } from '~/data/site-metadata'
@@ -227,11 +227,14 @@ export default async function RootLayout({
             />
             <KBarSearchProvider configs={SITE_METADATA.search.kbarConfigs}>
               <Header />
-              <main className="mb-auto grow">
+              <main className="mb-auto grow min-h-screen">
                 <PageTransitionWrapper>{children}</PageTransitionWrapper>
               </main>
             </KBarSearchProvider>
-            <Footer />
+            {/* Footer is controlled client-side so admin routes can delay it until
+                the page transition finishes. This prevents the footer from
+                appearing before admin content finishes animating. */}
+            <FooterController />
             <Toaster richColors position="top-right" />
           </AuthProvider>
         </ThemeProviders>

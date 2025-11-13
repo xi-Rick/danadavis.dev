@@ -50,7 +50,7 @@ export function MobileNav() {
     <>
       <div
         className={clsx([
-          'rounded-sm p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700',
+          'rounded-sm p-1.5 hover:bg-orange-100 hover:text-orange-600 dark:hover:bg-green-900/20 dark:hover:text-green-400 transition-colors',
           'flex items-center justify-center sm:hidden',
         ])}
         data-umami-event="mobile-nav-toggle"
@@ -96,7 +96,7 @@ export function MobileNav() {
                   <Link
                     key={link.title}
                     href={link.href}
-                    className="hover:text-primary-500 dark:hover:text-primary-400 py-1 text-xl font-bold tracking-widest text-gray-900 outline-0 outline-solid dark:text-gray-100"
+                    className="hover:text-orange-500 dark:hover:text-green-500 py-1 text-xl font-bold tracking-widest text-gray-900 outline-0 outline-solid dark:text-gray-100"
                     onClick={onToggleNav}
                   >
                     <Twemoji emoji={link.emoji} />
@@ -106,7 +106,7 @@ export function MobileNav() {
                 {isAuthenticated && (
                   <Link
                     href={ADMIN_NAV_LINK.href}
-                    className="hover:text-primary-500 dark:hover:text-primary-400 py-1 text-xl font-bold tracking-widest text-gray-900 outline-0 outline-solid dark:text-gray-100"
+                    className="hover:text-orange-500 dark:hover:text-green-500 py-1 text-xl font-bold tracking-widest text-gray-900 outline-0 outline-solid dark:text-gray-100"
                     onClick={onToggleNav}
                   >
                     <Twemoji emoji={ADMIN_NAV_LINK.emoji} />
@@ -116,7 +116,7 @@ export function MobileNav() {
               </nav>
               <button
                 type="button"
-                className="hover:text-primary-500 dark:hover:text-primary-400 fixed top-5 right-4 z-80 h-16 w-16 p-4 text-gray-900 dark:text-gray-100"
+                className="hover:text-primary-500 dark:hover:text-green-500 fixed top-5 right-4 z-80 h-16 w-16 p-4 text-gray-900 dark:text-gray-100"
                 aria-label="Toggle Menu"
                 onClick={onToggleNav}
               >
