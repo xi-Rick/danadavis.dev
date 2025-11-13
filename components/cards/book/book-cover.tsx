@@ -1,19 +1,22 @@
 import { clsx } from 'clsx'
+import { CometCard } from '~/components/ui/comet-card'
 import { Image } from '~/components/ui/image'
 
 export function BookCover({
   image,
   alt,
   scale = 1,
+  useComet = false,
 }: {
   image: string
   alt: string
   scale?: number
+  useComet?: boolean
 }) {
   // We apply the scale to the container so image and shadows scale together.
   const wrapperClasses = clsx(['break-inside-avoid'])
 
-  return (
+  const bookContent = (
     <div className={wrapperClasses}>
       <div
         className="relative"
@@ -63,4 +66,10 @@ export function BookCover({
       </div>
     </div>
   )
+
+  if (useComet) {
+    return <CometCard className="w-fit">{bookContent}</CometCard>
+  }
+
+  return bookContent
 }

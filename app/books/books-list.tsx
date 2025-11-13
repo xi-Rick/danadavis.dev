@@ -53,7 +53,7 @@ export function BooksList({ books }: { books: SelectBook[] }) {
             <h3 className="text-xl leading-9 font-bold tracking-tight md:text-2xl">
               Currently Reading
             </h3>
-            <BookCard book={currentlyReading[0]} scale={1} />
+            <BookCard book={currentlyReading[0]} scale={1} useComet />
           </div>
           {currentlyReading.length > 1 && (
             <div className="mb-8">
@@ -128,10 +128,10 @@ function BookListItem({ book }: { book: SelectBook }) {
         alt={book.title}
         width={40}
         height={60}
-        className="object-cover rounded-r-md shadow-sm border border-gray-200 dark:border-gray-700"
+        className="object-cover rounded-r-md shadow-sm border border-gray-200 dark:border-gray-700 flex-shrink-0"
       />
       <div className="flex-1 min-w-0 flex justify-between gap-4">
-        <div className="space-y-1">
+        <div className="space-y-1 flex-1 min-w-0">
           {/* Title with shelf status */}
           <div className="flex items-center gap-2 flex-wrap">
             <h4 className="font-bold text-lg">
@@ -157,11 +157,19 @@ function BookListItem({ book }: { book: SelectBook }) {
         </div>
 
         {/* Right side info */}
-        <div className="flex flex-col items-end justify-start gap-1 text-sm text-gray-500 dark:text-gray-400">
-          {book.bookPublished && <span>published {book.bookPublished}</span>}
-          {book.numPages && <span>{book.numPages} pages</span>}
+        <div className="flex flex-col items-end justify-start gap-1 text-sm text-gray-500 dark:text-gray-400 flex-shrink-0 min-w-[120px] text-right">
+          {book.bookPublished && (
+            <span className="whitespace-nowrap">
+              published {book.bookPublished}
+            </span>
+          )}
+          {book.numPages && (
+            <span className="whitespace-nowrap">{book.numPages} pages</span>
+          )}
           {book.userRating && Number(book.userRating) > 0 && (
-            <span>my rating {book.userRating}/5</span>
+            <span className="whitespace-nowrap">
+              my rating {book.userRating}/5
+            </span>
           )}
         </div>
       </div>

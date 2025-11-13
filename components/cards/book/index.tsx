@@ -8,9 +8,11 @@ import { BookDetails } from './book-details'
 export function BookCard({
   book,
   scale = 0.2,
+  useComet = false,
 }: {
   book: SelectBook
   scale?: number
+  useComet?: boolean
 }) {
   return (
     <div className="flex flex-col gap-8 md:flex-row">
@@ -19,6 +21,7 @@ export function BookCard({
           image={book.bookLargeImageUrl}
           alt={book.title}
           scale={scale}
+          useComet={useComet}
         />
       </div>
       <div className="flex grow flex-col justify-between gap-8">
