@@ -17,6 +17,7 @@
     "biome:fix": "biome check --write",
     "prepare": "husky",
     "seed": "tsx ./scripts/seed.ts",
+    "check-db": "tsx ./scripts/check-db.ts",
     "typecheck": "npx tsc -b"
   },
   "dependencies": {

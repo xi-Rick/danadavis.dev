@@ -2,15 +2,21 @@
 
 import { AdminNavigation } from '@/components/admin/admin-navigation'
 import { PostPreviewModal } from '@/components/admin/post-preview-modal'
-import NovelEditor from '@/components/novel-editor'
+import { LazyNovelEditor } from '@/components/lazy/lazy-novel-editor'
 import { LoginLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import { motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Container } from '~/components/ui/container'
 import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { PageHeader } from '~/components/ui/page-header'
 import { FADE_UP_ANIMATION_VARIANTS } from '~/lib/animations'
+
+const motion = {
+  div: dynamic(() => import('framer-motion').then((mod) => mod.motion.div), {
+    ssr: false,
+  }),
+}
 
 interface EditPostPageProps {
   params: Promise<{
@@ -337,7 +343,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
         <motion.div variants={FADE_UP_ANIMATION_VARIANTS}>
           <label className="themed-label">Content</label>
           <div>
-            <NovelEditor markdown={content} onChange={setContent} />
+            <LazyNovelEditor markdown={content} onChange={setContent} />
           </div>
         </motion.div>
 

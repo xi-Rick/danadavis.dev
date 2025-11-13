@@ -43,18 +43,29 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     return cachedSettings
   }
 
-  try {
-    const settings = await prisma.siteSettings.findUnique({
-      where: { id: 'default' },
-    })
+  // Skip database connection during build time
+  const isBuildTime =
+    process.env.NEXT_PHASE === 'phase-production-build' ||
+    (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL)
 
-    if (settings) {
-      cachedSettings = settings
-      cacheTime = now
-      return settings
+  if (!isBuildTime) {
+    try {
+      const settings = await prisma.siteSettings.findUnique({
+        where: { id: 'default' },
+      })
+
+      if (settings) {
+        cachedSettings = settings
+        cacheTime = now
+        return settings
+      }
+    } catch (error) {
+      // Only log database errors in development
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching site settings from database:', error)
+      }
+      // In production/build, silently fall back to static metadata
     }
-  } catch (error) {
-    console.error('Error fetching site settings from database:', error)
   }
 
   // Fallback to static metadata
