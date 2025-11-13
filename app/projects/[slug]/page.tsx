@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { remark } from 'remark'
 import html from 'remark-html'
 import Comments from '~/components/blog/comments'
+import { ScrollButtons } from '~/components/blog/scroll-buttons'
 import { Badge } from '~/components/ui/badge'
 import { Container } from '~/components/ui/container'
 import { GradientDivider } from '~/components/ui/gradient-divider'
@@ -100,17 +101,20 @@ export default async function ProjectPage(props: {
     htmlContent = staticProject.content
   }
 
-  const { title, description, imgSrc, builtWith, links, type } = project as {
-    title: string
-    description: string
-    imgSrc: string
-    builtWith: string[]
-    links: Array<{ title: string; url: string }>
-    type: string
-  }
+  const { title, description, imgSrc, builtWith, links, type, color } =
+    project as {
+      title: string
+      description: string
+      imgSrc: string
+      builtWith: string[]
+      links: Array<{ title: string; url: string }>
+      type: string
+      color?: 'orange' | 'green'
+    }
 
   return (
     <Container className="pt-4 lg:pt-12">
+      <ScrollButtons color={color || 'orange'} />
       <PageHeader
         title={title}
         description={description}
@@ -217,6 +221,7 @@ export default async function ProjectPage(props: {
               identifier={`project-${params.slug}`}
               title={title}
               className="max-w-none"
+              shortname={SITE_METADATA.comments.disqus.shortname}
             />
           </div>
         </div>

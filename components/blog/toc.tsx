@@ -32,7 +32,7 @@ export function TableOfContents({
         {toc.map(({ value, depth, url }, index) => (
           <li
             key={`${url}-${index}`}
-            className="font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+            className="font-medium text-gray-500 transition-colors hover:text-primary-500 dark:text-gray-400 dark:hover:text-green-600"
             style={{ paddingLeft: (depth - 2) * 16 }}
           >
             <Link href={url}>{value}</Link>

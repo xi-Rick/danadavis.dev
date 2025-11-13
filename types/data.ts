@@ -30,6 +30,7 @@ export type Project = {
   repo?: string
   builtWith: string[]
   links?: { title: string; url: string }[]
+  color?: 'orange' | 'green'
 }
 
 export type GoodreadsBook = {

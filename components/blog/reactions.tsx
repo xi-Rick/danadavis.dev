@@ -151,7 +151,7 @@ function Reaction({
         <span
           className={clsx(
             'absolute inset-0',
-            'font-semibold text-gray-600 dark:text-gray-300',
+            'font-semibold text-primary-500 dark:text-green-600',
             'transition-all',
             reacting ? '-translate-y-6 opacity-0' : 'translate-y-0 opacity-100',
           )}
@@ -162,7 +162,7 @@ function Reaction({
           ref={countRef}
           className={clsx(
             'absolute inset-0',
-            'text-gray-500 dark:text-gray-400',
+            'text-primary-500 dark:text-green-600',
             'transition-all',
             reacting ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0',
           )}
