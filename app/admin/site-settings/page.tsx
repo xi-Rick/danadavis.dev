@@ -3,6 +3,7 @@
 import { AdminNavigation } from '@/components/admin/admin-navigation'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { Container } from '~/components/ui/container'
 import { GrowingUnderline } from '~/components/ui/growing-underline'
@@ -280,7 +281,7 @@ export default function SiteSettingsPage() {
                       Favicon
                     </label>
                     <div className="flex items-center gap-4">
-                      <img
+                      <Image
                         src={settings.faviconPath}
                         alt="Current favicon"
                         className="w-8 h-8"

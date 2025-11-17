@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,19 +8,19 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  id        String    @id @default(cuid())
+  email     String    @unique
   name      String?
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  posts    Post[]
-  projects Project[]
-  snippets Snippet[]
-  movies   Movie[]
-  books    Book[]
+  role      Role      @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  books     Book[]
+  comments  Comment[]
+  movies    Movie[]
+  posts     Post[]
+  projects  Project[]
+  snippets  Snippet[]
+  commentReactions CommentReaction[]
 
   @@map("users")
 }
@@ -47,17 +44,15 @@ model Post {
   bibliography String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-
-  // Relations
-  author   User   @relation(fields: [authorId], references: [id])
-  authorId String
+  authorId     String
+  author       User     @relation(fields: [authorId], references: [id])
 
   @@map("posts")
 }
 
 model Project {
   id          String   @id @default(cuid())
-  type        String   @default("self") // 'work' or 'self'
+  type        String   @default("self")
   title       String
   slug        String   @unique
   description String?
@@ -65,7 +60,7 @@ model Project {
   url         String?
   repo        String?
   builtWith   String[] @default([])
-  links       Json? // Array of {title: string, url: string}
+  links       Json?
   content     String?
   date        DateTime @default(now())
   lastmod     DateTime @updatedAt
@@ -73,10 +68,8 @@ model Project {
   featured    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  // Relations
-  author   User   @relation(fields: [authorId], references: [id])
-  authorId String
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
 
   @@map("projects")
 }
@@ -101,10 +94,8 @@ model Snippet {
   difficulty String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-
-  // Relations
-  author   User   @relation(fields: [authorId], references: [id])
-  authorId String
+  authorId   String
+  author     User     @relation(fields: [authorId], references: [id])
 
   @@map("snippets")
 }
@@ -126,16 +117,14 @@ model Movie {
   layout     String?
   director   String?
   year       Int?
-  titleType  String? // 'movie' or 'tv-series'
+  titleType  String?
   yourRating Int?
   imdbRating Float?
   imdbUrl    String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-
-  // Relations
-  author   User   @relation(fields: [authorId], references: [id])
-  authorId String
+  authorId   String
+  author     User     @relation(fields: [authorId], references: [id])
 
   @@map("movies")
 }
@@ -162,22 +151,10 @@ model Book {
   goodreadsUrl String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-
-  // Relations
-  author   User   @relation(fields: [authorId], references: [id])
-  authorId String
+  authorId     String
+  author       User     @relation(fields: [authorId], references: [id])
 
   @@map("books")
-}
-
-enum Role {
-  USER
-  ADMIN
-}
-
-enum StatsType {
-  blog
-  snippet
 }
 
 model Stats {
@@ -194,8 +171,8 @@ model Stats {
 }
 
 model Product {
-  id               String   @id @default(cuid())
-  slug             String   @unique
+  id               String           @id @default(cuid())
+  slug             String           @unique
   name             String
   description      String
   shortDescription String
@@ -204,19 +181,17 @@ model Product {
   category         String
   tags             String[]
   images           String[]
-  featured         Boolean  @default(false)
-  inStock          Boolean  @default(true)
+  featured         Boolean          @default(false)
+  inStock          Boolean          @default(true)
   stripeProductId  String?
   stripePriceId    String?
   specifications   Json?
   rating           Float?
   reviewCount      Int?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-
-  // Relations
-  variants ProductVariant[]
-  reviews  Review[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  variants         ProductVariant[]
+  reviews          Review[]
 
   @@map("products")
 }
@@ -226,27 +201,23 @@ model ProductVariant {
   name          String
   price         Float
   stripePriceId String?
-  attributes    Json // e.g., { color: "black", size: "L" }
+  attributes    Json
   inStock       Boolean @default(true)
-
-  // Relations
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId String
+  productId     String
+  product       Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@map("product_variants")
 }
 
 model Review {
-  id       String   @id @default(cuid())
-  author   String
-  rating   Int
-  comment  String
-  date     DateTime
-  verified Boolean  @default(false)
-
-  // Relations
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  author    String
+  rating    Int
+  comment   String
+  date      DateTime
+  verified  Boolean  @default(false)
   productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@map("reviews")
 }
@@ -360,4 +331,46 @@ model SiteSettings {
   updatedAt          DateTime @updatedAt
 
   @@map("site_settings")
+}
+
+model Comment {
+  id          String    @id @default(cuid())
+  postSlug    String
+  parentId    String?
+  content     String
+  authorName  String?
+  authorEmail String?
+  authorImage String?
+  isDeleted   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  authorId    String?
+  author      User?     @relation(fields: [authorId], references: [id])
+  parent      Comment?  @relation("CommentChildren", fields: [parentId], references: [id])
+  replies     Comment[] @relation("CommentChildren")
+  reactions   CommentReaction[]
+
+  @@map("comments")
+}
+
+model CommentReaction {
+  id        String   @id @default(cuid())
+  commentId String
+  userId    String
+  createdAt DateTime @default(now())
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId])
+  @@map("comment_reactions")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum StatsType {
+  blog
+  snippet
 }

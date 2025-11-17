@@ -30,7 +30,23 @@ export function ScrollButtons({ color = 'orange' }: ScrollButtonsProps) {
     >
       <ScrollButton
         ariaLabel="Scroll To Comment"
-        onClick={() => document.getElementById('comment')?.scrollIntoView()}
+        onClick={() => {
+          // Prefer a dedicated comments container if present — this avoids
+          // targeting individual textarea ids which may appear multiple times
+          // (reply forms). Fallback to the last '#comment' element if needed.
+          const container =
+            document.querySelector<HTMLElement>('.comments-section')
+          if (container) {
+            container.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            return
+          }
+
+          const els = document.querySelectorAll<HTMLElement>('#comment')
+          const el = els.length ? els[els.length - 1] : null
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+        }}
         icon={MessageSquareText}
         color={color}
       />

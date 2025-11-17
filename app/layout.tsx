@@ -12,7 +12,6 @@ import {
 } from 'next/font/google'
 import 'react-medium-image-zoom/dist/styles.css'
 import 'remark-github-blockquote-alert/alert.css'
-import { Toaster } from 'sonner'
 import { UmamiAnalytics } from '~/components/analytics/umami'
 import { Header } from '~/components/header'
 import { KBarSearchProvider } from '~/components/search/kbar-provider'
@@ -235,7 +234,6 @@ export default async function RootLayout({
                 the page transition finishes. This prevents the footer from
                 appearing before admin content finishes animating. */}
             <FooterController />
-            <Toaster richColors position="top-right" />
           </AuthProvider>
         </ThemeProviders>
         <SpeedInsights />

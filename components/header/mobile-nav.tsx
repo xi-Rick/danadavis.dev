@@ -15,6 +15,7 @@ import {
 import { clsx } from 'clsx'
 import { Menu, X } from 'lucide-react'
 import { Fragment, useEffect, useRef, useState } from 'react'
+import useSWR from 'swr'
 import { Link } from '~/components/ui/link'
 import { Twemoji } from '~/components/ui/twemoji'
 import {
@@ -23,12 +24,18 @@ import {
   MORE_NAV_LINKS,
 } from '~/data/navigation'
 import { SITE_METADATA } from '~/data/site-metadata'
+import { fetcher } from '~/utils/misc'
 import { Logo } from './logo'
 
 export function MobileNav() {
   const [navShow, setNavShow] = useState(false)
   const navRef = useRef(null)
   const { isAuthenticated } = useKindeBrowserClient()
+  // Check server for admin-status/email - only use adminInfo.isAdmin (server normalized)
+  const { data: adminInfo } = useSWR<{ isAdmin: boolean; adminEmail: string }>(
+    '/api/admin/is-admin',
+    fetcher,
+  )
 
   const onToggleNav = () => {
     setNavShow((status) => {
@@ -103,7 +110,7 @@ export function MobileNav() {
                     <span className="ml-2">{link.title}</span>
                   </Link>
                 ))}
-                {isAuthenticated && (
+                {isAuthenticated && adminInfo?.isAdmin && (
                   <Link
                     href={ADMIN_NAV_LINK.href}
                     className="hover:text-orange-500 dark:hover:text-green-500 py-1 text-xl font-bold tracking-widest text-gray-900 outline-0 outline-solid dark:text-gray-100"

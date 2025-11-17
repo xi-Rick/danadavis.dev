@@ -79,7 +79,6 @@ export default function CaptainsLogDetailPage({
   const router = useRouter()
   const { toast } = useToast()
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: toast is stable from useToast
   useEffect(() => {
     const loadEntry = async () => {
       if (!id) {
@@ -144,7 +143,7 @@ export default function CaptainsLogDetailPage({
     }
 
     loadEntry()
-  }, [id])
+  }, [id, toast])
 
   const handleSave = async () => {
     if (!entry) return

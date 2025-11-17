@@ -20,6 +20,14 @@ export function capitalize(str: string): string {
   return `${str.charAt(0).toUpperCase()}${str.slice(1)}`
 }
 
+/**
+ * Normalize email address for consistent comparisons
+ * Trims whitespace and lowercases; returns empty string for falsy values
+ */
+export function normalizeEmail(email?: string | null) {
+  return (email ?? '').toString().trim().toLowerCase()
+}
+
 function is(interval: number, cycle: number) {
   return cycle >= interval ? Math.floor(cycle / interval) : 0
 }

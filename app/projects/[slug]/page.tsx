@@ -13,6 +13,7 @@ import { PageHeader } from '~/components/ui/page-header'
 import { PROJECTS } from '~/data/projects'
 import { SITE_METADATA } from '~/data/site-metadata'
 import { prisma } from '~/db'
+import { getCommentsBySlug } from '~/db/queries'
 
 export async function generateStaticParams() {
   return PROJECTS.map((project) => ({
@@ -111,6 +112,8 @@ export default async function ProjectPage(props: {
       type: string
       color?: 'orange' | 'green'
     }
+
+  const comments = await getCommentsBySlug(`project-${params.slug}`)
 
   return (
     <Container className="pt-4 lg:pt-12">
@@ -221,7 +224,8 @@ export default async function ProjectPage(props: {
               identifier={`project-${params.slug}`}
               title={title}
               className="max-w-none"
-              shortname={SITE_METADATA.comments.disqus.shortname}
+              postSlug={`project-${params.slug}`}
+              comments={comments}
             />
           </div>
         </div>

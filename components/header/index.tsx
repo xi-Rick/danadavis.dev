@@ -4,13 +4,17 @@ import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { LogoutLink } from '@kinde-oss/kinde-auth-nextjs/components'
 import clsx from 'clsx'
 import { usePathname } from 'next/navigation'
+import useSWR from 'swr'
 import { KbarSearchTrigger } from '~/components/search/kbar-trigger'
+import { Badge } from '~/components/ui/badge'
 import { Container } from '~/components/ui/container'
 import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { Link } from '~/components/ui/link'
 import { HEADER_NAV_LINKS } from '~/data/navigation'
 import { SITE_METADATA } from '~/data/site-metadata'
+import { fetcher } from '~/utils/misc'
 import { Logo } from './logo'
+// normalizeEmail was used by earlier admin detection approach; server endpoint now supplies admin info
 import { MobileNav } from './mobile-nav'
 import { MoreLinks } from './more-links'
 import { ThemeSwitcher } from './theme-switcher'
@@ -18,6 +22,12 @@ import { ThemeSwitcher } from './theme-switcher'
 export function Header() {
   const pathname = usePathname()
   const { isAuthenticated, user } = useKindeBrowserClient()
+  // Use server API to learn whether the current user is admin and the normalized admin email
+  const { data: adminInfo } = useSWR<{ isAdmin: boolean; adminEmail: string }>(
+    '/api/admin/is-admin',
+    fetcher,
+  )
+  // admin email normalization performed on server; we rely on adminInfo.isAdmin for client checks
 
   return (
     <Container
@@ -45,7 +55,7 @@ export function Header() {
                 </Link>
               )
             })}
-            {isAuthenticated && (
+            {isAuthenticated && adminInfo?.isAdmin && (
               <Link href="/admin" className="px-3 py-1 font-medium">
                 <GrowingUnderline
                   className={clsx(
@@ -69,7 +79,12 @@ export function Header() {
             <KbarSearchTrigger />
             {isAuthenticated ? (
               <div className="flex items-center gap-2">
-                <span className="text-sm">Hi, {user?.given_name}</span>
+                {adminInfo?.isAdmin ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm">Hi, {user?.given_name}</span>
+                    <Badge variant="themed">Admin</Badge>
+                  </div>
+                ) : null}
                 <LogoutLink className="px-3 py-1 text-sm hover:underline hover:text-orange-600 dark:hover:text-green-400 transition-colors">
                   Logout
                 </LogoutLink>

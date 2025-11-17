@@ -95,6 +95,10 @@ This blog is forked and heavily customized from <a href="https://github.com/hta2
 - **<a href="https://novel.sh" target="_blank" rel="noopener" referrerpolicy="origin">Novel.sh Editor</a>**: Advanced AI-powered WYSIWYG editor with support for formatting, links, images, code blocks, and slash commands
 - **Type-Safe Database**: PostgreSQL with Prisma ORM for dynamic content management and querying
 - **Admin Dashboard**: Secure access to manage all content through an authenticated interface
+- **Comments**: User authentication via Kinde Auth for secure commenting
+  - Threaded conversations with nested replies
+  - Like/reaction system for comment engagement
+  - Markdown support for rich text formatting
 
 ### 🔗 API Integrations & Data
 
@@ -105,19 +109,6 @@ This blog is forked and heavily customized from <a href="https://github.com/hta2
 - **Post Metadata**: Dynamic post views tracking and engagement metrics
 
 ### 📊 Analytics & Features
-
-- **Umami Analytics**: Privacy-focused website analytics integration
-- **Admin Dashboard**: View site statistics, post performance, and user engagement
-- **Search Functionality**: KBar command palette for content search and navigation
-- **Social Sharing**: Built-in share buttons for social media distribution
-- **Comments System**: Disqus integration for reader engagement
-
-### 🎯 Technical Improvements
-
-- **Performance Optimization**: Advanced animation optimization, lazy loading, and bundle analysis
-- **Error Handling**: Improved error boundaries and logging across the application
-- **TypeScript Coverage**: Full type safety with Prisma schema definitions
-- **SEO**: Enhanced meta tags, JSON-LD structured data, and dynamic sitemaps
 
 ## 🚀 Getting Started with Deployment
 
@@ -283,7 +274,7 @@ This will redirect to your callback page with an authorization code. Use this to
 
 ### One Click Deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/xi-Rick/danadavis.dev&env=DATABASE_URL,ADMIN_EMAIL,KINDE_CLIENT_ID,KINDE_CLIENT_SECRET,KINDE_ISSUER_URL,KINDE_SITE_URL,KINDE_POST_LOGOUT_REDIRECT_URL,KINDE_POST_LOGIN_REDIRECT_URL,SITE_URL,STRIPE_SECRET_KEY,DISQUS_SHORTNAME,GITHUB_API_TOKEN,SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET,SPOTIFY_REFRESH_TOKEN,NEXT_UMAMI_ID,OPENAI_API_KEY&envDescription=Environment%20variables%20required%20to%20run%20the%20Dana%20Davis%20Dev%20Blog)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/xi-Rick/danadavis.dev&env=DATABASE_URL,ADMIN_EMAIL,KINDE_CLIENT_ID,KINDE_CLIENT_SECRET,KINDE_ISSUER_URL,KINDE_SITE_URL,KINDE_POST_LOGOUT_REDIRECT_URL,KINDE_POST_LOGIN_REDIRECT_URL,SITE_URL,STRIPE_SECRET_KEY,GITHUB_API_TOKEN,SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET,SPOTIFY_REFRESH_TOKEN,NEXT_UMAMI_ID,OPENAI_API_KEY&envDescription=Environment%20variables%20required%20to%20run%20the%20Dana%20Davis%20Dev%20Blog)
 
 That's it! Your blog is now live. 🎉
 
@@ -322,9 +313,6 @@ NEXT_UMAMI_ID=
 
 # OpenAI
 OPENAI_API_KEY=
-
-# Disqus Comments
-DISQUS_SHORTNAME=
 
 # Stripe (Optional)
 STRIPE_SECRET_KEY=

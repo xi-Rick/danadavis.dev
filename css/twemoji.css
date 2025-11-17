@@ -205,6 +205,9 @@
 .twa-cross-mark {
   background-image: url("https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/274c.svg");
 }
+.twa-lock {
+  background-image: url("https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f512.svg");
+}
 .twa-clinking-beer-mugs {
   background-image: url("https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f37b.svg");
 }

@@ -4,6 +4,7 @@ import { AdminNavigation } from '@/components/admin/admin-navigation'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Container } from '~/components/ui/container'
@@ -166,7 +167,7 @@ export default function ManageProjectsPage() {
                   <div className="flex flex-col md:flex-row gap-4">
                     {/* Project Image */}
                     <div className="w-full md:w-48 h-32 flex-shrink-0">
-                      <img
+                      <Image
                         src={project.imgSrc}
                         alt={project.title}
                         className="w-full h-full object-cover rounded-lg"

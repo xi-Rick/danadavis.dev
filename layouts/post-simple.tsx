@@ -8,6 +8,7 @@ import { TagsList } from '~/components/blog/tags'
 import { Container } from '~/components/ui/container'
 import { GradientDivider } from '~/components/ui/gradient-divider'
 import { SITE_METADATA } from '~/data/site-metadata'
+import { getCommentsBySlug } from '~/db/queries'
 import type { StatsType } from '~/db/schema'
 import type { CoreContent } from '~/types/data'
 
@@ -18,9 +19,10 @@ interface PostSimpleProps {
   prev?: { path: string; title: string }
 }
 
-export function PostSimple({ content, children }: PostSimpleProps) {
+export async function PostSimple({ content, children }: PostSimpleProps) {
   const { slug, date, lastmod, title, type, tags, readingTime } = content
   const postUrl = `${SITE_METADATA.siteUrl}/${type.toLowerCase()}/${slug}`
+  const comments = await getCommentsBySlug(slug)
 
   return (
     <Container className="pt-4 lg:pt-12">
@@ -60,7 +62,8 @@ export function PostSimple({ content, children }: PostSimpleProps) {
             url={postUrl}
             identifier={slug}
             title={title}
-            shortname={SITE_METADATA.comments.disqus.shortname}
+            postSlug={slug}
+            comments={comments}
           />
         </div>
       </article>

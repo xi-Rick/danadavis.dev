@@ -1,11 +1,21 @@
 import { clsx } from 'clsx'
+import dynamic from 'next/dynamic'
 import { Container } from '~/components/ui/container'
 import { SITE_METADATA } from '~/data/site-metadata'
 import { FooterBottom } from './footer-bottom'
-import { FooterMeta } from './footer-meta'
 import { FooterNav } from './footer-nav'
 import { LogoAndRepo } from './logo-and-repo'
 import { Signature } from './signature'
+
+// FooterMeta shows dynamic time and uses `Date`/`Intl` which can vary between
+// server and client rendering; to avoid hydration mismatch, import it only on
+// the client with SSR disabled.
+const FooterMeta = dynamic(
+  () => import('./footer-meta').then((mod) => mod.FooterMeta),
+  {
+    ssr: false,
+  },
+)
 
 export function Footer() {
   return (

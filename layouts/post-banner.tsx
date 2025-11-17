@@ -10,6 +10,7 @@ import { ScrollButtons } from '~/components/blog/scroll-buttons'
 import { TagsList } from '~/components/blog/tags'
 import { Container } from '~/components/ui/container'
 import { SITE_METADATA } from '~/data/site-metadata'
+import { getCommentsBySlug } from '~/db/queries'
 import type { StatsType } from '~/db/schema'
 import type { CoreContent } from '~/types/data'
 
@@ -20,7 +21,7 @@ interface LayoutProps {
   prev?: { path: string; title: string }
 }
 
-export function PostBanner({ content, children }: LayoutProps) {
+export async function PostBanner({ content, children }: LayoutProps) {
   const {
     slug,
     type,
@@ -33,6 +34,7 @@ export function PostBanner({ content, children }: LayoutProps) {
     filePath,
   } = content
   const postUrl = `${SITE_METADATA.siteUrl}/${type.toLowerCase()}/${slug}`
+  const comments = await getCommentsBySlug(slug)
 
   return (
     <Container className="pt-4 lg:pt-12">
@@ -76,7 +78,8 @@ export function PostBanner({ content, children }: LayoutProps) {
             url={postUrl}
             identifier={slug}
             title={title}
-            shortname={SITE_METADATA.comments.disqus.shortname}
+            postSlug={slug}
+            comments={comments}
           />
         </div>
       </article>

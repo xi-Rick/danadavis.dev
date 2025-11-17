@@ -13,6 +13,7 @@ import { TableOfContents } from '~/components/blog/toc'
 import { Container } from '~/components/ui/container'
 import { GradientDivider } from '~/components/ui/gradient-divider'
 import { SITE_METADATA } from '~/data/site-metadata'
+import { getCommentsBySlug } from '~/db/queries'
 import type { StatsType } from '~/db/schema'
 import type { CoreContent } from '~/types/data'
 
@@ -24,7 +25,12 @@ interface LayoutProps {
   children: ReactNode
 }
 
-export function PostLayout({ content, next, prev, children }: LayoutProps) {
+export async function PostLayout({
+  content,
+  next,
+  prev,
+  children,
+}: LayoutProps) {
   const {
     slug,
     images,
@@ -38,6 +44,7 @@ export function PostLayout({ content, next, prev, children }: LayoutProps) {
     type,
   } = content
   const postUrl = `${SITE_METADATA.siteUrl}/${type.toLowerCase()}/${slug}`
+  const comments = await getCommentsBySlug(slug)
 
   return (
     <Container className="pt-4 lg:pt-12">
@@ -96,7 +103,8 @@ export function PostLayout({ content, next, prev, children }: LayoutProps) {
             url={postUrl}
             identifier={slug}
             title={title}
-            shortname={SITE_METADATA.comments.disqus.shortname}
+            postSlug={slug}
+            comments={comments}
           />
         </div>
       </article>

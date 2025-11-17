@@ -1,10 +1,11 @@
 'use client'
 
+import { useCallback } from 'react'
 import { toast as sonnerToast } from 'sonner'
 
 export function useToast() {
-  return {
-    toast: ({
+  const toast = useCallback(
+    ({
       title,
       description,
       variant,
@@ -23,5 +24,8 @@ export function useToast() {
         })
       }
     },
-  }
+    [],
+  )
+
+  return { toast }
 }

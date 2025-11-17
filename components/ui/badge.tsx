@@ -15,6 +15,9 @@ const badgeVariants = cva(
         destructive:
           'border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80',
         outline: 'text-foreground',
+        // Themed variant uses a project-specific UI styling defined in global css
+        // See css/tailwind.css for `.themed-badge` which enforces the accent color
+        themed: 'themed-badge',
       },
     },
     defaultVariants: {

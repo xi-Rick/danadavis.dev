@@ -1,6 +1,7 @@
 import { withAuth } from '@kinde-oss/kinde-auth-nextjs/middleware'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { NextResponse } from 'next/server'
+import { normalizeEmail } from '~/utils/misc'
 
 export default withAuth(
   async function middleware(req) {
@@ -24,7 +25,8 @@ export default withAuth(
     if (
       req.nextUrl.pathname.startsWith('/admin') &&
       user &&
-      user.email !== process.env.ADMIN_EMAIL
+      normalizeEmail(user.email) !==
+        normalizeEmail(process.env.ADMIN_EMAIL || '')
     ) {
       // Redirect to logout and home
       const logoutUrl = new URL('/api/auth/logout', req.url)
@@ -45,6 +47,8 @@ export default withAuth(
       '/movies',
       '/tags',
       '/api/activities',
+      // Allow Kinde auth routes without requiring a session (login/register/callback)
+      '/api/auth/:path*',
       '/audio/',
     ],
   },

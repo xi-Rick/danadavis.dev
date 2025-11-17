@@ -79,8 +79,16 @@ export function FooterMeta() {
             className="font-medium"
             data-umami-event="footer-time"
           >
-            {time}{' '}
-            <span className="text-gray-500 dark:text-gray-400">- {diff}</span>
+            {/* Time is dynamic — avoid hydration mismatch by ensuring this is rendered on the client.
+                Also add suppressHydrationWarning to avoid React warnings if the server and client
+                output differ by a small amount (e.g., one minute). */}
+            <span suppressHydrationWarning>{time} </span>
+            <span
+              className="text-gray-500 dark:text-gray-400"
+              suppressHydrationWarning
+            >
+              - {diff}
+            </span>
           </GrowingUnderline>
         </Link>
       </div>

@@ -113,6 +113,10 @@ module.exports = () => {
         },
         {
           protocol: 'https',
+          hostname: 'lh3.googleusercontent.com', // Google profile images (Kinde)
+        },
+        {
+          protocol: 'https',
           hostname: 'res.cloudinary.com', // Cloudinary images for projects
         },
         {

@@ -54,10 +54,10 @@ export async function seedBooksUsingRssFeed() {
         book.userShelves = book.userShelves || 'read'
 
         // Convert ratings to numbers
-        ;(book as any).userRating =
-          Number.parseFloat(String(book.userRating)) || 0
-        ;(book as any).averageRating =
-          Number.parseFloat(String(book.averageRating)) || 0
+        // Parse and normalize ratings safely without using `any` cast
+        book.userRating = Number.parseFloat(String(book.userRating ?? '0')) || 0
+        book.averageRating =
+          Number.parseFloat(String(book.averageRating ?? '0')) || 0
 
         // Add numPages to book object for later use
         if (book.numPages && typeof book.numPages === 'object') {
@@ -92,14 +92,18 @@ export async function seedBooksUsingRssFeed() {
           console.log(
             `📚 ${savedBooks.length}/${data.items.length} books saved to database.`,
           )
-        } catch (error) {
-          console.error(`❌ Error saving books to database: ${error.message}`)
+        } catch (error: unknown) {
+          const errorMessage =
+            error instanceof Error ? error.message : String(error)
+          console.error(`❌ Error saving books to database: ${errorMessage}`)
         }
       } else {
         console.log('📚 No valid books to save.')
       }
-    } catch (error) {
-      console.error(`Error fetching the Goodreads RSS feed: ${error.message}`)
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error)
+      console.error(`Error fetching the Goodreads RSS feed: ${errorMessage}`)
     }
   } else {
     console.log('📚 No Goodreads RSS feed found.')
@@ -155,8 +159,10 @@ export async function seedBooksByParsingCSV() {
         .on('data', (book: GoodreadsCsvBook) => {
           csvBooks.push(book)
         })
-        .on('error', (error) => {
-          console.error(`Error parsing Goodreads CSV file: ${error.message}`)
+        .on('error', (error: unknown) => {
+          const errorMessage =
+            error instanceof Error ? error.message : String(error)
+          console.error(`Error parsing Goodreads CSV file: ${errorMessage}`)
           reject(error)
         })
         .on('end', async () => {
