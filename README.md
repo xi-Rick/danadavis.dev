@@ -92,13 +92,14 @@ This blog is forked and heavily customized from <a href="https://github.com/hta2
   - AI summarization and content type classification (thought, idea, blog-draft, project-idea, note)
   - Automatic tagging and potential identification for blog posts and projects
   - Full editing capabilities with privacy controls and metadata tracking
-- **<a href="https://novel.sh" target="_blank" rel="noopener" referrerpolicy="origin">Novel.sh Editor</a>**: Advanced AI-powered WYSIWYG editor with support for formatting, links, images, code blocks, and slash commands
-- **Type-Safe Database**: PostgreSQL with Prisma ORM for dynamic content management and querying
-- **Admin Dashboard**: Secure access to manage all content through an authenticated interface
 - **Comments**: User authentication via Kinde Auth for secure commenting
   - Threaded conversations with nested replies
   - Like/reaction system for comment engagement
   - Markdown support for rich text formatting
+
+- **<a href="https://novel.sh" target="_blank" rel="noopener" referrerpolicy="origin">Novel.sh Editor</a>**: Advanced AI-powered WYSIWYG editor with support for formatting, links, images, code blocks, and slash commands
+- **Type-Safe Database**: PostgreSQL with Prisma ORM for dynamic content management and querying
+- **Admin Dashboard**: Secure access to manage all content through an authenticated interface
 
 ### 🔗 API Integrations & Data
 
