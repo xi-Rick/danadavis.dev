@@ -28,7 +28,7 @@ function TabContent(props: {
       <Icon
         size={20}
         strokeWidth={1.5}
-        className="absolute -top-20 right-8 z-[-1] h-10 w-10 accent md:-top-20"
+        className="absolute -top-20 right-8 z-[-1] h-10 w-10 text-orange-600 dark:text-green-400 md:-top-20"
       />
       <p className="line-clamp-5 text-gray-500 italic dark:text-gray-400">
         {content || 'N/A'}

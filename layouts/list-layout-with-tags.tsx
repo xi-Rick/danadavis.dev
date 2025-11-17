@@ -7,6 +7,7 @@ import { PostCardGridView } from '~/components/blog/post-card-grid-view'
 import { Tag } from '~/components/blog/tags'
 import { SnippetCard } from '~/components/cards/snippet'
 import { Container } from '~/components/ui/container'
+import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { PageHeader } from '~/components/ui/page-header'
 import tagData from '~/json/tag-data.json'
 import type { CoreContent } from '~/types/data'
@@ -45,14 +46,16 @@ export function ListLayoutWithTags({
               <button
                 type="button"
                 className={clsx(
-                  'underline-offset-4',
+                  'underline-offset-4 transition-colors',
                   view === 'blogs'
                     ? 'underline'
-                    : 'text-gray-400 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100',
+                    : 'text-gray-300 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-200',
                 )}
                 onClick={() => setView('blogs')}
               >
-                Blogs
+                <GrowingUnderline data-umami-event="tag-blogs">
+                  Blogs
+                </GrowingUnderline>
               </button>
             )}
             {hasBlogs && hasSnippets ? <span>/</span> : null}
@@ -60,14 +63,16 @@ export function ListLayoutWithTags({
               <button
                 type="button"
                 className={clsx(
-                  'underline-offset-4',
+                  'underline-offset-4 transition-colors',
                   view === 'snippets'
                     ? 'underline'
-                    : 'text-gray-400 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100',
+                    : 'text-gray-300 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-200',
                 )}
                 onClick={() => setView('snippets')}
               >
-                Snippets
+                <GrowingUnderline data-umami-event="tag-snippets">
+                  Snippets
+                </GrowingUnderline>
               </button>
             )}
           </div>

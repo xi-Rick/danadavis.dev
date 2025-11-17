@@ -72,18 +72,22 @@ export function BooksList({ books }: { books: SelectBook[] }) {
       <div className="space-y-4">
         <div className="flex flex-col-reverse items-center justify-between gap-5 md:flex-row md:gap-4">
           <div className="flex items-center gap-2 text-xl font-medium">
-            <span>Books</span>
+            <span className="dark:text-green-400 text-orange-600 ">Books</span>
             <span className="font-normal text-gray-600 dark:text-gray-400">
               ({otherBooks.length} titles)
             </span>
           </div>
           <div className="flex gap-5">
             <div className="flex items-center gap-2">
-              <span>Shelf: </span>
+              <span className="dark:text-green-400 text-orange-600 ">
+                Shelf:{' '}
+              </span>
               <ShelveSelect shelf={shelf} rate={rate} />
             </div>
             <div className="flex items-center gap-2">
-              <span>My rate: </span>
+              <span className="dark:text-green-400 text-orange-600 ">
+                My rate:{' '}
+              </span>
               <RateFilter shelf={shelf} rate={rate} />
             </div>
           </div>
@@ -144,7 +148,7 @@ function BookListItem({ book }: { book: SelectBook }) {
               )}
             </h4>
             {book.userShelves && (
-              <span className="inline-block px-2 py-0.5 text-sm font-medium rounded-full bg-gray-200 dark:bg-gray-700">
+              <span className="inline-block px-2 py-0.5 text-sm font-medium rounded-full bg-orange-600/10 text-orange-600 dark:bg-green-400/10 dark:text-green-400">
                 {getShelfLabel(book.userShelves)}
               </span>
             )}

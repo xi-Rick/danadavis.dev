@@ -10,6 +10,7 @@ import {
 import clsx from 'clsx'
 import { ChevronDown } from 'lucide-react'
 import { Fragment } from 'react'
+import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { Link } from '~/components/ui/link'
 import { Twemoji } from '~/components/ui/twemoji'
 import type { TitleType } from './title-type-filter'
@@ -47,7 +48,10 @@ export type RateType = '10' | '9' | '8' | '7' | '<=6'
 export function RateFilter({
   rate,
   type,
-}: { rate: RateType; type: TitleType }) {
+}: {
+  rate: RateType
+  type: TitleType
+}) {
   const { label, value: selectedValue } =
     RATES.find(({ value }) => value === rate) || RATES[0]
   return (
@@ -55,13 +59,15 @@ export function RateFilter({
       <Menu as="div" className="relative inline-block text-left">
         <MenuButton
           aria-label="More links"
-          className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5 font-medium dark:border-gray-700"
+          className="px-3 py-1 font-medium"
           data-umami-event="movies-rate-filter"
         >
-          <span>
-            {label}/10 <span className="hidden md:inline">stars</span>
-          </span>
-          <ChevronDown strokeWidth={1.5} size={20} />
+          <GrowingUnderline className="inline-flex items-center gap-2">
+            <span>
+              {label}/10 <span className="hidden md:inline">stars</span>
+            </span>
+            <ChevronDown strokeWidth={1.5} size={20} />
+          </GrowingUnderline>
         </MenuButton>
         <Transition
           as={Fragment}
@@ -75,9 +81,10 @@ export function RateFilter({
           <MenuItems
             className={clsx([
               'absolute right-0 z-50',
-              'mt-2 origin-top-right rounded-lg text-right shadow-lg',
+              'mt-2 w-48 origin-top-right rounded-lg text-right shadow-lg',
               'bg-white dark:bg-black',
               'ring-1 ring-black/5 focus:outline-hidden',
+              'translate-x-[calc(50%-42px)]',
             ])}
           >
             <div className="space-y-1 p-1">
@@ -87,9 +94,7 @@ export function RateFilter({
                     <Link
                       className={clsx([
                         'flex w-full items-center gap-2 rounded-md px-2 py-1.5',
-                        value === selectedValue
-                          ? 'bg-gray-200 dark:bg-gray-800'
-                          : 'hover:bg-gray-200 dark:hover:bg-gray-800',
+                        'hover:bg-orange-100 dark:hover:bg-green-900',
                       ])}
                       href={`/movies?type=${type}&rate=${value}`}
                       onClick={close}

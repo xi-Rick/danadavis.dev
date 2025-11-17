@@ -41,17 +41,21 @@ export function MoviesList({ movies }: { movies: SelectMovie[] }) {
       <div className="flex flex-col-reverse items-center justify-between gap-5 md:flex-row md:gap-4">
         <div className="flex items-center gap-2 text-xl font-medium">
           <Twemoji emoji={emoji} /> {description}{' '}
-          <span className="font-normal text-gray-600 dark:text-gray-400">
+          <span className="font-normal dark:text-accent-green text-accent-orange">
             ({displayMovies.length} titles)
           </span>
         </div>
         <div className="flex gap-5">
           <div className="flex items-center gap-2">
-            <span>Type: </span>
+            <span className="dark:text-accent-green text-accent-orange">
+              Type:{' '}
+            </span>
             <TitleTypeFilter type={type} rate={rate} />
           </div>
           <div className="flex items-center gap-2">
-            <span>My rate: </span>
+            <span className="dark:text-accent-green text-accent-orange">
+              My rate:{' '}
+            </span>
             <RateFilter type={type} rate={rate} />
           </div>
         </div>
