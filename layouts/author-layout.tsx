@@ -278,9 +278,8 @@ export function AuthorLayout({}: Props) {
                   url="https://tailwindcss.com/"
                   className="font-bold"
                 >
-                  Tailwind CSS
+                  Tailwind CSS.
                 </LinkPreview>{' '}
-                using <strong>Tailwind Nextjs Starter Blog</strong>.
               </p>
               <p>
                 A huge thanks to{' '}
