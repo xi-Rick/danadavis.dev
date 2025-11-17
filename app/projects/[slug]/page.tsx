@@ -143,7 +143,7 @@ export default async function ProjectPage(props: {
           <div className="grid max-w-6xl gap-8 mx-auto items-start md:grid-cols-1 lg:grid-cols-3 lg:gap-12">
             {/* Main Content */}
             <div className="space-y-4 lg:col-span-2 lg:space-y-6 overflow-x-hidden">
-              <div className="prose dark:prose-invert sm:prose-base lg:prose-lg max-w-none project-content break-words">
+              <div className="prose sm:prose-base lg:prose-lg max-w-none project-content break-words">
                 {htmlContent ? (
                   <div
                     className="overflow-x-auto"
