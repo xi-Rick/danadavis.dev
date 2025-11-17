@@ -97,10 +97,7 @@ export function CommentItem({
       user?.email &&
       comment.authorEmail &&
       normalizeEmail(user.email) === normalizeEmail(comment.authorEmail)
-    ) ||
-    (!!user?.given_name &&
-      (user.given_name === comment.authorName ||
-        user.family_name === comment.authorName))
+    )
 
   const handleDelete = async () => {
     const ok = window.confirm('Delete this comment? This cannot be undone.')

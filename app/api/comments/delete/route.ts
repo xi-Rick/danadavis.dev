@@ -1,4 +1,5 @@
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
+import { revalidatePath } from 'next/cache'
 import { NextResponse } from 'next/server'
 import { prisma } from '~/db'
 import { deleteComment } from '~/db/queries'
@@ -45,6 +46,18 @@ export async function POST(request: Request) {
     }
 
     const res = await deleteComment(commentId)
+
+    // Revalidate the post page so server components fetch the latest comments
+    try {
+      let pathToRevalidate = `/blog/${comment.postSlug}`
+      if (comment.postSlug.startsWith('project-')) {
+        pathToRevalidate = `/projects/${comment.postSlug.replace(/^project-/, '')}`
+      }
+      revalidatePath(pathToRevalidate)
+    } catch (revalErr) {
+      console.warn('deleteComment: revalidatePath failed', revalErr)
+    }
+
     return NextResponse.json({ success: true, comment: res })
   } catch (error) {
     console.error('delete comment error:', error)
