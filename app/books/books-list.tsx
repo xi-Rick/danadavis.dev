@@ -4,14 +4,18 @@ import { useSearchParams } from 'next/navigation'
 import { BookCard } from '~/components/cards/book'
 import { Image } from '~/components/ui/image'
 import { Link } from '~/components/ui/link'
+import { Twemoji } from '~/components/ui/twemoji'
 import type { SelectBook } from '~/db/schema'
-import { RateFilter, type RateType } from './rate-filter'
+import { RATES, RateFilter, type RateType } from './rate-filter'
 import { type ShelfType, ShelveSelect } from './shelve-select'
 
 export function BooksList({ books }: { books: SelectBook[] }) {
   const searchParams = useSearchParams()
   const shelf = (searchParams.get('shelf') as ShelfType) || 'all'
   const rate = (searchParams.get('rate') as RateType) || '5'
+
+  const { description, emoji } =
+    RATES.find(({ value }) => value === rate) || RATES[0]
 
   // keep currently reading separated and always visible
   const currentlyReading = books.filter(
@@ -72,8 +76,8 @@ export function BooksList({ books }: { books: SelectBook[] }) {
       <div className="space-y-4">
         <div className="flex flex-col-reverse items-center justify-between gap-5 md:flex-row md:gap-4">
           <div className="flex items-center gap-2 text-xl font-medium">
-            <span className="dark:text-green-400 text-orange-600 ">Books</span>
-            <span className="font-normal text-gray-600 dark:text-gray-400">
+            <Twemoji emoji={emoji} /> {description}
+            <span className="font-normal dark:text-green-400 text-orange-600">
               ({otherBooks.length} titles)
             </span>
           </div>
@@ -161,7 +165,7 @@ function BookListItem({ book }: { book: SelectBook }) {
         </div>
 
         {/* Right side info */}
-        <div className="flex flex-col items-end justify-start gap-1 text-sm text-gray-500 dark:text-gray-400 flex-shrink-0 min-w-[120px] text-right">
+        <div className="flex flex-col items-end justify-start gap-1 text-sm dark:text-white text-black flex-shrink-0 min-w-[120px] text-right">
           {book.bookPublished && (
             <span className="whitespace-nowrap">
               published {book.bookPublished}
