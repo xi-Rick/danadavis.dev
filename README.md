@@ -222,7 +222,7 @@ This will redirect to your callback page with an authorization code. Use this to
 
 #### Umami Analytics
 
-1. Go to <a href="https://umami.is" target="_blank" rel="noopener" referrerpolicy="origin">umami.is</a> and create an account
+1. Go to <a href="https://cloud.umami.is/" target="_blank" rel="noopener" referrerpolicy="origin">umami.is</a> and create an account
 2. Create a new website and enter your domain
 3. Copy the **Tracking ID**
 
