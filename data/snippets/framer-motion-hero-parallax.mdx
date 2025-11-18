@@ -1,0 +1,121 @@
+---
+title: "Framer Motion Hero Parallax Animation"
+heading: "Framer Motion Hero Parallax Animation"
+icon: "Animation"
+date: "2025-11-18"
+summary: "Create stunning parallax hero sections with Framer Motion featuring scroll-triggered animations and smooth transitions."
+tags: ["framer-motion", "animation", "react", "parallax"]
+---
+
+# Framer Motion Hero Parallax Animation
+
+Build an eye-catching hero section with parallax scrolling effects using Framer Motion.
+
+## Component Implementation
+
+```typescript
+'use client'
+
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
+
+export function ParallaxHero() {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start']
+  })
+
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%'])
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0])
+
+  return (
+    <div ref={ref} className="relative h-screen overflow-hidden">
+      {/* Background Layer */}
+      <motion.div
+        style={{ y }}
+        className="absolute inset-0 z-0"
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent" />
+        <img
+          src="/hero-bg.jpg"
+          alt="Hero background"
+          className="w-full h-full object-cover"
+        />
+      </motion.div>
+
+      {/* Content Layer */}
+      <motion.div
+        style={{ opacity }}
+        className="relative z-10 flex items-center justify-center h-full"
+      >
+        <div className="text-center text-white">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-6xl font-bold mb-4"
+          >
+            Welcome to My Site
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-xl"
+          >
+            Building amazing experiences
+          </motion.p>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+```
+
+## Advanced Parallax Grid
+
+```typescript
+const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4']
+
+export function ParallaxGrid() {
+  const { scrollYProgress } = useScroll()
+  
+  return (
+    <div className="grid grid-cols-2 gap-4 p-8">
+      {items.map((item, i) => {
+        const y = useTransform(
+          scrollYProgress,
+          [0, 1],
+          [0, (i % 2 === 0 ? 100 : -100)]
+        )
+        
+        return (
+          <motion.div
+            key={i}
+            style={{ y }}
+            className="bg-gray-800 p-8 rounded-lg"
+          >
+            <h3 className="text-white text-2xl">{item}</h3>
+          </motion.div>
+        )
+      })}
+    </div>
+  )
+}
+```
+
+## Features
+
+- Smooth scroll-triggered animations
+- Multiple parallax layers
+- Performance optimized with useTransform
+- Responsive and mobile-friendly
+- Easy to customize speeds and directions
+
+## Performance Tips
+
+- Use `transform` and `opacity` for best performance
+- Avoid animating `width`, `height`, or `top/left`
+- Use `will-change: transform` for heavy animations
+- Consider reducing motion for accessibility

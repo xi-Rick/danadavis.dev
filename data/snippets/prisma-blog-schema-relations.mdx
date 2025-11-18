@@ -1,0 +1,199 @@
+---
+title: "Prisma Schema for Blog with Relations"
+heading: "Prisma Schema for Blog with Relations"
+icon: "Database"
+date: "2025-11-18"
+summary: "A complete Prisma schema setup for a blog with posts, comments, tags, and user relationships."
+tags: ["prisma", "database", "postgresql", "orm"]
+---
+
+# Prisma Schema for Blog with Relations
+
+A production-ready Prisma schema with proper relationships and indexes for a blog application.
+
+## Schema Definition
+
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  name      String?
+  role      Role      @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  books     Book[]
+  comments  Comment[]
+  movies    Movie[]
+  posts     Post[]
+  projects  Project[]
+  snippets  Snippet[]
+  commentReactions CommentReaction[]
+
+  @@map("users")
+}
+
+model Post {
+  id           String   @id @default(cuid())
+  title        String
+  slug         String   @unique
+  summary      String?
+  content      String
+  date         DateTime @default(now())
+  lastmod      DateTime @updatedAt
+  tags         String[]
+  categories   String[]
+  images       String[]
+  authors      String[]
+  draft        Boolean  @default(true)
+  featured     Boolean  @default(false)
+  canonicalUrl String?
+  layout       String?
+  bibliography String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  authorId     String
+  author       User     @relation(fields: [authorId], references: [id])
+
+  @@map("posts")
+}
+
+model Comment {
+  id          String    @id @default(cuid())
+  postSlug    String
+  parentId    String?
+  content     String
+  authorName  String?
+  authorEmail String?
+  authorImage String?
+  isDeleted   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  authorId    String?
+  author      User?     @relation(fields: [authorId], references: [id])
+  parent      Comment?  @relation("CommentChildren", fields: [parentId], references: [id])
+  replies     Comment[] @relation("CommentChildren")
+  reactions   CommentReaction[]
+
+  @@map("comments")
+}
+
+model CommentReaction {
+  id        String   @id @default(cuid())
+  commentId String
+  userId    String
+  createdAt DateTime @default(now())
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId])
+  @@map("comment_reactions")
+}
+
+model Stats {
+  type      StatsType
+  slug      String
+  views     Int       @default(0)
+  loves     Int       @default(0)
+  applauses Int       @default(0)
+  ideas     Int       @default(0)
+  bullseyes Int       @default(0)
+
+  @@id([type, slug])
+  @@map("stats")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum StatsType {
+  blog
+  snippet
+}
+```
+
+## Usage Example
+
+```typescript
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+// Create a post
+const post = await prisma.post.create({
+  data: {
+    title: 'My First Post',
+    slug: 'my-first-post',
+    content: 'Post content here',
+    tags: ['nextjs', 'react'],
+    categories: ['frontend'],
+    author: {
+      connect: { id: userId }
+    }
+  },
+  include: {
+    author: true
+  }
+})
+
+// Query posts with relations
+const posts = await prisma.post.findMany({
+  where: { draft: false },
+  include: {
+    author: {
+      select: { name: true, email: true }
+    },
+    _count: {
+      select: { comments: true }
+    }
+  },
+  orderBy: { createdAt: 'desc' }
+})
+
+// Add a comment
+const comment = await prisma.comment.create({
+  data: {
+    postSlug: 'my-first-post',
+    content: 'Great post!',
+    author: {
+      connect: { id: userId }
+    }
+  }
+})
+```
+
+## Key Features
+
+- Proper foreign key relationships with cascading deletes
+- Optimized indexes for common queries
+- CUID for unique IDs
+- Timestamps with auto-update
+- Hierarchical comments with parent-child relations
+- User roles and permissions
+- Stats tracking for blog posts and snippets
+
+## Migration Commands
+
+```bash
+# Create migration
+npx prisma migrate dev --name init
+
+# Push schema changes
+npx prisma db push
+
+# Generate Prisma Client
+npx prisma generate
+
+# Open Prisma Studio
+npx prisma studio
+```
