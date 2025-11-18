@@ -50,7 +50,7 @@ export function LastPlayed({
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="ml-2 md:ml-4 themed-badge">Playing</span>
+            <span className="ml-4 themed-badge">Playing</span>
             <Link
               href="https://open.spotify.com/user/31uxi2mgkrjhj4agxmudr5cmfj7a"
               className="rounded p-2 text-gray-700 transition-colors hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"

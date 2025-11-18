@@ -42,7 +42,7 @@ export function LastWatched({
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="ml-2 md:ml-4 themed-badge">
+          <span className="ml-4 themed-badge">
             {getTimeAgo(lastWatchedMovie.dateRated)}
           </span>
           <Link
