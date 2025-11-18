@@ -81,7 +81,21 @@ export function RateFilter({ rate, shelf }: { rate: RateType; shelf: string }) {
                       ])}
                       href={`/books?shelf=${shelf}&rate=${value}`}
                       scroll={false}
-                      onClick={close}
+                      onClick={() => {
+                        try {
+                          if (
+                            typeof window !== 'undefined' &&
+                            'CustomEvent' in window
+                          ) {
+                            window.dispatchEvent(
+                              new CustomEvent('page-transition:disable-layout'),
+                            )
+                          }
+                        } catch (e) {
+                          // noop
+                        }
+                        close()
+                      }}
                     >
                       <span>({label})</span>
                       <span>{description}</span>

@@ -89,7 +89,21 @@ export function TitleTypeFilter({
                         'hover:bg-orange-100 dark:hover:bg-green-900',
                       ])}
                       href={`/movies?type=${value}&rate=${rate}`}
-                      onClick={close}
+                      onClick={() => {
+                        try {
+                          if (
+                            typeof window !== 'undefined' &&
+                            'CustomEvent' in window
+                          ) {
+                            window.dispatchEvent(
+                              new CustomEvent('page-transition:disable-layout'),
+                            )
+                          }
+                        } catch (e) {
+                          // noop
+                        }
+                        close()
+                      }}
                     >
                       <Twemoji emoji={emoji} />
                       <span>{label}</span>

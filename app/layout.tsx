@@ -12,6 +12,7 @@ import {
 } from 'next/font/google'
 import 'react-medium-image-zoom/dist/styles.css'
 import 'remark-github-blockquote-alert/alert.css'
+import { Suspense } from 'react'
 import { UmamiAnalytics } from '~/components/analytics/umami'
 import { Header } from '~/components/header'
 import { KBarSearchProvider } from '~/components/search/kbar-provider'
@@ -227,7 +228,9 @@ export default async function RootLayout({
             <KBarSearchProvider configs={SITE_METADATA.search.kbarConfigs}>
               <Header />
               <main className="mb-auto grow min-h-screen">
-                <PageTransitionWrapper>{children}</PageTransitionWrapper>
+                <Suspense fallback={<div className="min-h-[4px]" />}>
+                  <PageTransitionWrapper>{children}</PageTransitionWrapper>
+                </Suspense>
               </main>
             </KBarSearchProvider>
             {/* Footer is controlled client-side so admin routes can delay it until

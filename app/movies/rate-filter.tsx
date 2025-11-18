@@ -97,7 +97,21 @@ export function RateFilter({
                         'hover:bg-orange-100 dark:hover:bg-green-900',
                       ])}
                       href={`/movies?type=${type}&rate=${value}`}
-                      onClick={close}
+                      onClick={() => {
+                        try {
+                          if (
+                            typeof window !== 'undefined' &&
+                            'CustomEvent' in window
+                          ) {
+                            window.dispatchEvent(
+                              new CustomEvent('page-transition:disable-layout'),
+                            )
+                          }
+                        } catch (e) {
+                          // noop
+                        }
+                        close()
+                      }}
                     >
                       <span>({label})</span>
                       <span>{description}</span>
