@@ -1,0 +1,201 @@
+---
+title: "Next.js Custom Build Script with Progress Tracking"
+heading: "Next.js Custom Build Script with Progress Tracking"
+icon: "Nextjs"
+date: "2025-11-18"
+lastmod: "2025-11-18"
+tags: ["nextjs", "build", "typescript", "automation", "cli"]
+draft: false
+summary: "A custom Next.js build script with clean progress tracking, ASCII art branding, and post-build task automation."
+images: []
+authors: ["Dana"]
+---
+
+# Next.js Custom Build Script with Progress Tracking
+
+A custom build script that wraps Next.js build process with enhanced progress tracking, clean logging, and automated post-build tasks.
+
+## Features
+
+- Clean, simplified build output
+- ASCII art branding
+- Progress tracking for all build phases
+- Automatic RSS feed generation
+- Noise filtering (deprecation warnings, verbose logs)
+- Colored terminal output
+- Build statistics tracking
+
+## Installation
+
+Install required dependencies:
+
+```bash
+npm install figlet
+npm install --save-dev @types/figlet
+```
+
+## Build Script (build.ts)
+
+```typescript
+import { spawn } from "child_process";
+import figlet from "figlet";
+import { generateRssFeed } from "./rss";
+
+const ASCII_COLORS = {
+  ORANGE: "\x1b[38;5;208m",
+  GREEN: "\x1b[32m",
+  BLUE: "\x1b[34m",
+  YELLOW: "\x1b[33m",
+  RESET: "\x1b[0m",
+  BOLD: "\x1b[1m",
+  DIM: "\x1b[2m",
+};
+
+interface BuildStats {
+  compiled: boolean;
+  linted: boolean;
+  pagesCollected: boolean;
+  staticGenerated: boolean;
+  tracesCollected: boolean;
+  optimized: boolean;
+  totalPages: number;
+  totalRoutes: number;
+}
+
+function logStep(message: string, emoji = "⚡") {
+  console.log(`${ASCII_COLORS.GREEN}${emoji} ${message}${ASCII_COLORS.RESET}`);
+}
+
+function logSuccess(message: string) {
+  console.log(
+    `${ASCII_COLORS.BOLD}${ASCII_COLORS.GREEN}✓ ${message}${ASCII_COLORS.RESET}`
+  );
+}
+
+function processLine(line: string): boolean {
+  // Filter out noise
+  if (
+    line.includes("DeprecationWarning") ||
+    line.includes("Use `node --trace-deprecation") ||
+    line.includes("Experiments (use with caution)") ||
+    line.trim() === ""
+  ) {
+    return false;
+  }
+
+  // Track compilation
+  if (line.includes("Compiled successfully")) {
+    const timeMatch = line.match(/in ([\d.]+)s/);
+    const time = timeMatch ? timeMatch[1] : "unknown";
+    logSuccess(`Compiled successfully in ${time}s`);
+    return false;
+  }
+
+  // Track static generation
+  if (line.includes("Generating static pages")) {
+    const match = line.match(/\((\d+)\/(\d+)\)/);
+    if (match) {
+      const current = Number.parseInt(match[1], 10);
+      const total = Number.parseInt(match[2], 10);
+      if (current === total) {
+        logSuccess(`Generated ${total} static pages`);
+      }
+    }
+    return false;
+  }
+
+  return false;
+}
+
+async function runBuild() {
+  return new Promise<void>((resolve, reject) => {
+    const nextBuild = spawn("next", ["build"], {
+      env: { ...process.env, INIT_CWD: process.cwd() },
+      shell: false,
+    });
+
+    let buffer = "";
+
+    nextBuild.stdout.on("data", (data: Buffer) => {
+      buffer += data.toString();
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+      lines.forEach(processLine);
+    });
+
+    nextBuild.on("close", (code: number) => {
+      code === 0
+        ? resolve()
+        : reject(new Error(`Build failed with exit code ${code}`));
+    });
+  });
+}
+
+async function showAscii() {
+  const text = await figlet.text("Your Site", {
+    font: "Standard",
+    horizontalLayout: "default",
+  });
+  console.log(`\n${ASCII_COLORS.ORANGE}${text}${ASCII_COLORS.RESET}\n`);
+}
+
+async function main() {
+  const startTime = Date.now();
+
+  try {
+    await showAscii();
+    logStep("Starting build process...", "🚀");
+    await runBuild();
+
+    logStep("Running post-build tasks...", "⚙️");
+    await generateRssFeed();
+
+    const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+    console.log(`\n✨ Build completed successfully in ${duration}s\n`);
+  } catch (error) {
+    console.error(`\n❌ Build failed: ${error.message}\n`);
+    process.exit(1);
+  }
+}
+
+main();
+```
+
+## Package.json Scripts
+
+Update your package.json:
+
+```json
+{
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "build:standard": "next build"
+  }
+}
+```
+
+## Post-Build Tasks
+
+Create a post-build task file (e.g., `rss.ts`):
+
+```typescript
+export async function generateRssFeed() {
+  console.log("📡 Generating RSS feed...");
+  // Your RSS generation logic here
+}
+```
+
+## Customization
+
+- Modify `ASCII_COLORS` for different color schemes
+- Add more post-build tasks in `runPostbuildTasks()`
+- Customize `processLine()` to filter different log messages
+- Change the ASCII art text in `showAscii()`
+
+## Benefits
+
+- Cleaner build output without verbose Next.js logs
+- Easy tracking of build progress
+- Automated post-build tasks
+- Professional branding with ASCII art
+- Better error visibility

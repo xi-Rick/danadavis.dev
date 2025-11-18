@@ -1,0 +1,334 @@
+---
+title: "Next.js Partial Prerendering (PPR) - Static Shell with Dynamic Streaming"
+heading: "Next.js Partial Prerendering (PPR) - Static Shell with Dynamic Streaming"
+icon: "Nextjs"
+date: "2025-11-18"
+lastmod: "2025-11-18"
+tags: ["nextjs", "ppr", "performance", "streaming", "suspense", "rendering"]
+draft: false
+summary: "Advanced rendering strategy combining static edge delivery with dynamic streaming using Partial Prerendering for ultra-fast initial loads."
+images: []
+authors: ["Dana"]
+---
+
+# Next.js Partial Prerendering (PPR) - Static Shell with Dynamic Streaming
+
+Partial Prerendering (PPR) is an experimental Next.js feature that combines the best of static site generation and server-side rendering. It allows you to prerender static parts of a page at build time while streaming dynamic content at request time - all in a single HTTP request.
+
+## What Problem Does PPR Solve?
+
+Traditional Next.js pages are either fully static or fully dynamic. PPR lets you have both:
+
+- **Static shell** - Prerendered at build time, served instantly from the edge
+- **Dynamic holes** - Streamed in parallel at request time with fresh data
+
+## Enabling PPR
+
+Add to your `next.config.ts`:
+
+```typescript
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  experimental: {
+    ppr: "incremental",
+  },
+};
+
+export default nextConfig;
+```
+
+Then opt-in per route:
+
+```typescript
+// app/dashboard/layout.tsx
+export const experimental_ppr = true
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return <div>{children}</div>
+}
+```
+
+## Basic PPR Pattern
+
+```typescript
+import { Suspense } from 'react'
+import { UserAvatar, UserAvatarSkeleton } from './user-avatar'
+import { RecentActivity } from './recent-activity'
+
+// This component will be prerendered (static)
+export default async function DashboardPage() {
+  // Static data fetched at build time
+  const staticData = await fetch('https://api.example.com/config', {
+    cache: 'force-cache',
+  }).then(res => res.json())
+
+  return (
+    <div className="dashboard">
+      {/* Static content - prerendered */}
+      <header>
+        <h1>Dashboard</h1>
+        <p>{staticData.welcomeMessage}</p>
+      </header>
+
+      {/* Dynamic content - streamed at request time */}
+      <Suspense fallback={<UserAvatarSkeleton />}>
+        <UserAvatar />
+      </Suspense>
+
+      {/* More dynamic content */}
+      <Suspense fallback={<div>Loading activity...</div>}>
+        <RecentActivity />
+      </Suspense>
+
+      {/* Static footer - prerendered */}
+      <footer>
+        <p>© 2025 Company</p>
+      </footer>
+    </div>
+  )
+}
+```
+
+## Dynamic Component Example
+
+```typescript
+// components/user-avatar.tsx
+import { cookies } from 'next/headers'
+
+export async function UserAvatar() {
+  // This accesses request-time data
+  const cookieStore = await cookies()
+  const userId = cookieStore.get('userId')?.value
+
+  // Fetch user-specific data
+  const user = await fetch(`https://api.example.com/users/${userId}`, {
+    cache: 'no-store', // Always fresh
+  }).then(res => res.json())
+
+  return (
+    <div className="flex items-center gap-2">
+      <img
+        src={user.avatar}
+        alt={user.name}
+        className="w-10 h-10 rounded-full"
+      />
+      <span>{user.name}</span>
+    </div>
+  )
+}
+
+export function UserAvatarSkeleton() {
+  return (
+    <div className="flex items-center gap-2">
+      <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+      <div className="w-24 h-4 bg-gray-200 animate-pulse rounded" />
+    </div>
+  )
+}
+```
+
+## E-commerce Product Page Example
+
+```typescript
+// app/products/[id]/page.tsx
+import { Suspense } from 'react'
+import { ProductDetails } from './product-details'
+import { ProductReviews } from './product-reviews'
+import { PersonalizedRecommendations } from './recommendations'
+
+export const experimental_ppr = true
+
+interface PageProps {
+  params: Promise<{ id: string }>
+}
+
+export default async function ProductPage({ params }: PageProps) {
+  const { id } = await params
+
+  // Static product data - prerendered
+  const product = await fetch(`https://api.example.com/products/${id}`, {
+    next: { revalidate: 3600 }, // Revalidate hourly
+  }).then(res => res.json())
+
+  return (
+    <div className="product-page">
+      {/* Static content - instant load */}
+      <div className="grid grid-cols-2 gap-8">
+        <img src={product.image} alt={product.name} />
+        <div>
+          <h1>{product.name}</h1>
+          <p>{product.description}</p>
+          <p className="text-2xl font-bold">${product.price}</p>
+        </div>
+      </div>
+
+      {/* Dynamic: User-specific cart status */}
+      <Suspense fallback={<div>Loading...</div>}>
+        <AddToCartButton productId={id} />
+      </Suspense>
+
+      {/* Dynamic: Real-time inventory */}
+      <Suspense fallback={<div>Checking availability...</div>}>
+        <InventoryStatus productId={id} />
+      </Suspense>
+
+      {/* Static: Product specs - prerendered */}
+      <div className="specs">
+        <h2>Specifications</h2>
+        <ul>
+          {product.specs.map((spec: any) => (
+            <li key={spec.name}>
+              {spec.name}: {spec.value}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Dynamic: Personalized recommendations */}
+      <Suspense fallback={<div>Loading recommendations...</div>}>
+        <PersonalizedRecommendations />
+      </Suspense>
+
+      {/* Dynamic: User reviews with real-time data */}
+      <Suspense fallback={<div>Loading reviews...</div>}>
+        <ProductReviews productId={id} />
+      </Suspense>
+    </div>
+  )
+}
+```
+
+## Advanced: Nested Suspense for Progressive Loading
+
+```typescript
+// app/dashboard/page.tsx
+import { Suspense } from 'react'
+
+export const experimental_ppr = true
+
+export default function DashboardPage() {
+  return (
+    <div>
+      <h1>Analytics Dashboard</h1>
+
+      {/* Load quickly - show skeleton immediately */}
+      <Suspense fallback={<ChartSkeleton />}>
+        {/* Outer suspense for fast data */}
+        <QuickStats />
+
+        {/* Nested suspense for slower data */}
+        <Suspense fallback={<DetailedChartSkeleton />}>
+          <DetailedAnalytics />
+        </Suspense>
+      </Suspense>
+
+      {/* Parallel streaming - both load simultaneously */}
+      <div className="grid grid-cols-2 gap-4">
+        <Suspense fallback={<CardSkeleton />}>
+          <RevenueCard />
+        </Suspense>
+        <Suspense fallback={<CardSkeleton />}>
+          <ConversionCard />
+        </Suspense>
+      </div>
+    </div>
+  )
+}
+```
+
+## Dynamic Component Accessing Request Data
+
+```typescript
+// components/personalized-greeting.tsx
+import { headers, cookies } from 'next/headers'
+
+export async function PersonalizedGreeting() {
+  const headersList = await headers()
+  const cookieStore = await cookies()
+
+  const userAgent = headersList.get('user-agent')
+  const userId = cookieStore.get('userId')?.value
+  const timezone = cookieStore.get('timezone')?.value || 'UTC'
+
+  const userData = await fetch(`https://api.example.com/users/${userId}`)
+    .then(res => res.json())
+
+  const hour = new Date().getHours()
+  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening'
+
+  return (
+    <div>
+      <h2>{greeting}, {userData.name}!</h2>
+      <p>Your local time: {new Date().toLocaleString('en-US', { timeZone: timezone })}</p>
+    </div>
+  )
+}
+```
+
+## Key Benefits
+
+- **Instant Initial Load** - Static shell serves from edge in milliseconds
+- **Fresh Dynamic Data** - Real-time data streams in without blocking
+- **SEO Friendly** - Static content is immediately crawlable
+- **Reduced Server Load** - Static parts cached globally
+- **Progressive Enhancement** - Works without JavaScript
+- **Single HTTP Request** - No waterfall loading
+
+## Best Practices
+
+1. **Identify Static vs Dynamic** - Anything using `cookies()`, `headers()`, or `searchParams` is dynamic
+2. **Use Meaningful Fallbacks** - Skeleton UIs should match final content layout
+3. **Parallel Streaming** - Wrap independent dynamic sections in separate Suspense boundaries
+4. **Cache Wisely** - Use appropriate cache strategies for different data types
+5. **Measure Performance** - Monitor Core Web Vitals improvements
+
+## When to Use PPR
+
+- E-commerce product pages (static product info, dynamic cart/inventory)
+- Social media feeds (static layout, dynamic posts)
+- News sites (static article content, dynamic comments)
+- Dashboards (static navigation, dynamic user data)
+- Marketing pages (static content, dynamic personalization)
+
+## Production Considerations
+
+- Currently experimental - not recommended for production
+- Requires edge runtime support (Vercel recommended)
+- Test thoroughly with your deployment platform
+- Monitor cache hit rates and stream performance
+
+## Migration Strategy
+
+```typescript
+// Before: Fully dynamic page
+export default async function Page() {
+  const user = await getCurrentUser()
+  const posts = await getPosts()
+  return <div>{/* render */}</div>
+}
+
+// After: PPR with strategic Suspense boundaries
+export const experimental_ppr = true
+
+export default function Page() {
+  return (
+    <div>
+      {/* Static parts render immediately */}
+      <Header />
+      <Nav />
+
+      {/* Dynamic parts stream in */}
+      <Suspense fallback={<Skeleton />}>
+        <UserSection />
+      </Suspense>
+
+      <Suspense fallback={<PostsSkeleton />}>
+        <PostsList />
+      </Suspense>
+    </div>
+  )
+}
+```
+
+**Best practices**, pitfalls and examples for production usage are included above.

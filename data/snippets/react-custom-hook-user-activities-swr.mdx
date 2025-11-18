@@ -1,0 +1,84 @@
+---
+title: "React Custom Hook for User Activities with SWR"
+heading: "React Custom Hook for User Activities with SWR"
+icon: "React"
+date: "2025-11-18"
+lastmod: "2025-11-18"
+tags: ["react", "hooks", "swr", "typescript", "data-fetching"]
+draft: false
+summary: "A custom React hook that fetches and manages user activities data including currently reading books, last watched movies, recently played music, and GitHub activities using SWR for efficient caching and revalidation."
+images: []
+authors: ["Dana"]
+---
+
+# React Custom Hook for User Activities with SWR
+
+This custom hook provides a clean interface for fetching user activities data in React applications using SWR for efficient data fetching, caching, and revalidation.
+
+## Usage
+
+```typescript
+import { useActivities } from './useActivities'
+
+function ActivitiesComponent() {
+  const { data, error, isLoading } = useActivities(true)
+
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error loading activities</div>
+
+  return (
+    <div>
+      <h2>Current Activities</h2>
+      {data?.currentlyReading && (
+        <p>Currently reading: {data.currentlyReading.title}</p>
+      )}
+      {data?.lastWatchedMovie && (
+        <p>Last watched: {data.lastWatchedMovie.title}</p>
+      )}
+      {/* Other activity data */}
+    </div>
+  )
+}
+```
+
+## Implementation
+
+```typescript
+import useSWR from "swr";
+import type { SelectBook, SelectMovie } from "~/db/schema";
+import type { GithubUserActivity, RecentlyPlayedData } from "~/types/data";
+import { fetcher } from "~/utils/misc";
+
+interface ActivitiesData {
+  currentlyReading: SelectBook | null;
+  lastWatchedMovie: SelectMovie | null;
+  recentlyPlayed: RecentlyPlayedData;
+  githubActivities: GithubUserActivity | null;
+}
+
+export function useActivities(shouldFetch: boolean) {
+  const { data, error, isLoading } = useSWR<ActivitiesData>(
+    shouldFetch ? "/api/activities" : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  );
+
+  return {
+    data,
+    error,
+    isLoading,
+  };
+}
+```
+
+## Features
+
+- Efficient data fetching with SWR
+- Conditional fetching based on shouldFetch parameter
+- TypeScript support with proper interfaces
+- Automatic caching and revalidation
+- Error handling
+- Optimized for performance (no revalidation on focus/reconnect)

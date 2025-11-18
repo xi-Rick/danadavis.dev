@@ -1,0 +1,412 @@
+---
+title: "Next.js Intercepting & Parallel Routes - Advanced Modal Patterns"
+heading: "Next.js Intercepting & Parallel Routes - Advanced Modal Patterns"
+icon: "Nextjs"
+date: "2025-11-18"
+lastmod: "2025-11-18"
+tags:
+  [
+    "nextjs",
+    "routing",
+    "modals",
+    "parallel-routes",
+    "intercepting-routes",
+    "ux",
+  ]
+draft: false
+summary: "Build shareable URL modals with preserved context, proper back navigation, and deep linking using intercepting and parallel routes."
+images: []
+authors: ["Dana"]
+---
+
+# Next.js Intercepting & Parallel Routes - Advanced Modal Patterns
+
+Learn how to build sophisticated modal experiences that support deep linking, preserve page context, and handle navigation elegantly using Next.js intercepting and parallel routes.
+
+## The Problem with Traditional Modals
+
+Traditional client-side modals have limitations:
+
+- ❌ Not shareable via URL
+- ❌ Context lost on page refresh
+- ❌ Back button doesn't close modal
+- ❌ No deep linking support
+- ❌ Poor accessibility and SEO
+
+## The Solution: Intercepting + Parallel Routes
+
+Combine these two powerful features:
+
+- **Parallel Routes (@slots)** - Render multiple pages in same layout
+- **Intercepting Routes ((.)notation)** - Intercept navigation to show modals
+
+## Basic Setup: Photo Gallery Modal
+
+### File Structure
+
+```
+app/
+├── @modal/
+│   ├── (.)photos/
+│   │   └── [id]/
+│   │       └── page.tsx      # Modal view
+│   └── default.tsx            # Return null when no modal
+├── photos/
+│   └── [id]/
+│       └── page.tsx           # Full page view
+├── layout.tsx                 # Root layout with modal slot
+└── page.tsx                   # Home page
+```
+
+### Root Layout with Modal Slot
+
+```typescript
+// app/layout.tsx
+export default function RootLayout({
+  children,
+  modal,
+}: {
+  children: React.ReactNode
+  modal: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        {modal}
+      </body>
+    </html>
+  )
+}
+```
+
+### Modal Default (Hide when not active)
+
+```typescript
+// app/@modal/default.tsx
+export default function Default() {
+  return null;
+}
+```
+
+### Photo Modal (Intercepted Route)
+
+```typescript
+// app/@modal/(.)photos/[id]/page.tsx
+import { Modal } from '@/components/modal'
+import { getPhoto } from '@/lib/photos'
+
+interface PageProps {
+  params: Promise<{ id: string }>
+}
+
+export default async function PhotoModal({ params }: PageProps) {
+  const { id } = await params
+  const photo = await getPhoto(id)
+
+  return (
+    <Modal>
+      <div className="max-w-4xl">
+        <img
+          src={photo.url}
+          alt={photo.title}
+          className="w-full h-auto"
+        />
+        <div className="p-4">
+          <h2 className="text-2xl font-bold">{photo.title}</h2>
+          <p className="text-gray-600">{photo.description}</p>
+        </div>
+      </div>
+    </Modal>
+  )
+}
+```
+
+### Photo Full Page (Direct Access)
+
+```typescript
+// app/photos/[id]/page.tsx
+import { getPhoto } from '@/lib/photos'
+
+interface PageProps {
+  params: Promise<{ id: string }>
+}
+
+export default async function PhotoPage({ params }: PageProps) {
+  const { id } = await params
+  const photo = await getPhoto(id)
+
+  return (
+    <div className="container mx-auto py-8">
+      <img src={photo.url} alt={photo.title} className="w-full" />
+      <h1 className="text-3xl font-bold mt-4">{photo.title}</h1>
+      <p className="text-gray-600 mt-2">{photo.description}</p>
+    </div>
+  )
+}
+```
+
+### Modal Component with Router
+
+```typescript
+// components/modal.tsx
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { useEffect, useRef } from 'react'
+
+export function Modal({ children }: { children: React.ReactNode }) {
+  const router = useRouter()
+  const dialogRef = useRef<HTMLDialogElement>(null)
+
+  useEffect(() => {
+    dialogRef.current?.showModal()
+  }, [])
+
+  const handleClose = () => {
+    router.back()
+  }
+
+  const handleClickOutside = (e: React.MouseEvent<HTMLDialogElement>) => {
+    if (e.target === dialogRef.current) {
+      handleClose()
+    }
+  }
+
+  return (
+    <dialog
+      ref={dialogRef}
+      onClick={handleClickOutside}
+      onClose={handleClose}
+      className="backdrop:bg-black/50 rounded-lg shadow-xl"
+    >
+      <button
+        onClick={handleClose}
+        className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        aria-label="Close modal"
+      >
+        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      {children}
+    </dialog>
+  )
+}
+```
+
+## Advanced: Multiple Modal Types
+
+### File Structure for Multiple Modals
+
+```
+app/
+├── @modal/
+│   ├── (.)photos/
+│   │   └── [id]/
+│   │       └── page.tsx
+│   ├── (.)login/
+│   │   └── page.tsx
+│   ├── (.)settings/
+│   │   └── page.tsx
+│   └── default.tsx
+├── photos/[id]/page.tsx
+├── login/page.tsx
+├── settings/page.tsx
+└── layout.tsx
+```
+
+### Login Modal with Form
+
+```typescript
+// app/@modal/(.)login/page.tsx
+'use client'
+
+import { Modal } from '@/components/modal'
+import { usePathname } from 'next/navigation'
+
+export default function LoginModal() {
+  const pathname = usePathname()
+
+  // Only show modal when pathname matches
+  if (pathname !== '/login') return null
+
+  return (
+    <Modal>
+      <div className="p-6 w-96">
+        <h2 className="text-2xl font-bold mb-4">Login</h2>
+        <form className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full px-4 py-2 border rounded"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full px-4 py-2 border rounded"
+          />
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+    </Modal>
+  )
+}
+```
+
+## Advanced: Nested Modals
+
+```typescript
+// app/@modal/(.)photos/[id]/page.tsx
+'use client'
+
+import { useState } from 'react'
+import { Modal } from '@/components/modal'
+import Link from 'next/link'
+
+export default function PhotoModal({ params }: PageProps) {
+  const [showShare, setShowShare] = useState(false)
+
+  return (
+    <>
+      <Modal>
+        <div className="relative">
+          <img src={photo.url} alt={photo.title} />
+          <button
+            onClick={() => setShowShare(true)}
+            className="absolute bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            Share
+          </button>
+        </div>
+      </Modal>
+
+      {showShare && (
+        <Modal onClose={() => setShowShare(false)}>
+          <div className="p-6">
+            <h3 className="text-xl font-bold mb-4">Share Photo</h3>
+            <div className="space-y-2">
+              <button className="w-full p-2 bg-gray-100 rounded">Twitter</button>
+              <button className="w-full p-2 bg-gray-100 rounded">Facebook</button>
+              <button className="w-full p-2 bg-gray-100 rounded">Copy Link</button>
+            </div>
+          </div>
+        </Modal>
+      )}
+    </>
+  )
+}
+```
+
+## Intercepting Route Notations
+
+```typescript
+// (.) - Same level
+app/@modal/(.)photos/[id]/page.tsx    // Intercepts /photos/[id]
+
+// (..) - One level up
+app/feed/@modal/(..)/photos/[id]/page.tsx   // From /feed, intercept /photos/[id]
+
+// (..)(..) - Two levels up
+app/dashboard/analytics/@modal/(..)(..)photos/[id]/page.tsx
+
+// (...) - From app root
+app/@modal/(...)photos/[id]/page.tsx
+```
+
+## Handling State Preservation
+
+```typescript
+// app/page.tsx
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+
+export default function HomePage() {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [photos] = useState([/* photo data */])
+
+  return (
+    <div>
+      <input
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search photos..."
+        className="w-full p-2 border rounded"
+      />
+
+      <div className="grid grid-cols-3 gap-4 mt-4">
+        {photos.map(photo => (
+          <Link href={`/photos/${photo.id}`} key={photo.id}>
+            <img src={photo.thumbnail} alt={photo.title} />
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+## Advanced: Catch-All for Modal Close
+
+```typescript
+// app/@modal/[...catchAll]/page.tsx
+export default function CatchAll() {
+  return null;
+}
+```
+
+## Best Practices
+
+1. **Always Provide Both Views** - Modal (intercepted) and full page
+2. **Use Pathname Checks** - Prevent multiple modals rendering
+3. **Handle Edge Cases** - Direct navigation, refresh, back/forward
+4. **Accessibility** - Use semantic HTML (`<dialog>`), ARIA labels
+5. **Progressive Enhancement** - Ensure full page works without JS
+
+## Common Pitfalls
+
+### ❌ Multiple Parallel Routes for Modals
+
+```typescript
+// Don't do this:
+app/@loginModal/
+app/@photoModal/
+app/@settingsModal/
+// Both will render simultaneously!
+```
+
+### ✅ Single Parallel Route
+
+```typescript
+// Do this:
+app/@modal/
+  (.)login/
+  (.)photos/[id]/
+  (.)settings/
+// Only one renders at a time
+```
+
+## Use Cases
+
+- **E-commerce** - Product quick view
+- **Social Media** - Post details, image viewer
+- **SaaS** - Settings panels, user profiles
+- **Content Sites** - Article previews, media galleries
+- **Admin Dashboards** - Forms, detail views
+
+## Benefits
+
+✅ **SEO Friendly** - Full pages are crawlable
+✅ **Shareable URLs** - Every modal has a unique URL
+✅ **Context Preservation** - Background page state maintained
+✅ **Natural Navigation** - Back button closes modal
+✅ **Deep Linking** - Direct access to modal content
+✅ **Progressive Enhancement** - Works without JavaScript
+✅ **Improved UX** - Smooth transitions, preserved scroll position
