@@ -63,7 +63,12 @@ export function Reactions({
   }
 
   return (
-    <div className={clsx('flex items-center gap-6', className)}>
+    <div
+      className={clsx(
+        'flex items-center gap-4 md:gap-6 flex-nowrap justify-center py-2',
+        className,
+      )}
+    >
       {REACTIONS.map(({ key, emoji }) => (
         <Reaction
           key={String(key)}

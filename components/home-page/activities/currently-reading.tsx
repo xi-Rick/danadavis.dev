@@ -41,8 +41,8 @@ export function CurrentlyReading({
             </p>
           </div>
         </div>
-        <div className="hidden items-center gap-3 md:flex">
-          <span className="ml-4 themed-badge">
+        <div className="flex items-center gap-3">
+          <span className="ml-2 md:ml-4 themed-badge">
             {getTimeAgo(currentlyReading.userDateAdded)}
           </span>
           <Link

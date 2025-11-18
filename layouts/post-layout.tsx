@@ -91,6 +91,11 @@ export async function PostLayout({
             </div>
           </div>
         </div>
+        <Reactions
+          className="border-t border-gray-200 pt-6 dark:border-gray-700 lg:hidden overflow-x-auto -mx-4 px-4 whitespace-nowrap"
+          type={type.toLowerCase() as StatsType}
+          slug={slug}
+        />
         <GradientDivider />
         <div className="space-y-4">
           <PostNav

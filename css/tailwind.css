@@ -326,10 +326,21 @@
 
 /* Themed badge styles for activities */
 .themed-badge {
-  display: inline-block;
+  /* Use inline-flex to vertically center content and prevent inconsistent heights */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+
+  /* Prevent label wrapping on small screens so height stays consistent */
+  white-space: nowrap;
+  line-height: 1;
+
+  /* Keep the spacing compact and match text-xs (same as Tailwind `text-xs`) */
   padding: 0.125rem 0.5rem;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   font-weight: 500;
+  min-height: 1.25rem;
   border-radius: 9999px;
   background-color: rgba(234, 88, 12, 0.1);
   color: rgb(234, 88, 12);
