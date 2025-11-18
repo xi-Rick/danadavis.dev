@@ -12,14 +12,13 @@ const PageTransitionWrapper = ({ children }: PageTransitionWrapperProps) => {
   const pathname = usePathname()
 
   return (
-    <AnimatePresence mode="popLayout">
+    <AnimatePresence>
       <motion.div
         key={pathname}
         initial="hidden"
         animate="show"
         exit="exit"
         variants={PAGE_TRANSITION_VARIANTS}
-        layout
         // notify when page transition finishes so other UI (like Footer)
         // can wait to appear until the content has faded in.
         onAnimationComplete={() => {
