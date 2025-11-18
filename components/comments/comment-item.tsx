@@ -178,13 +178,19 @@ export function CommentItem({
                 </span>
               </div>
 
-              <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 whitespace-pre-wrap">
-                {comment.content}
-              </p>
+              {deleted ? (
+                <div className="mt-2">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+                    This comment was deleted by the author.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 whitespace-pre-wrap">
+                    {comment.content}
+                  </p>
 
-              <div className="mt-2 flex items-center gap-3 text-sm">
-                {!deleted && (
-                  <>
+                  <div className="mt-2 flex items-center gap-3 text-sm">
                     <button
                       onClick={() => setShowReply((s) => !s)}
                       className="text-sm font-medium text-orange-500 dark:text-green-400 bg-transparent p-0"
@@ -214,34 +220,26 @@ export function CommentItem({
                         Delete
                       </button>
                     )}
-                  </>
-                )}
-              </div>
+                  </div>
 
-              <AnimatePresence>
-                {showReply && postSlug && !deleted && (
-                  <motion.div
-                    variants={FADE_UP_ANIMATION_VARIANTS}
-                    initial="hidden"
-                    animate="show"
-                    exit="exit"
-                    className="mt-3"
-                  >
-                    <CommentForm
-                      postSlug={postSlug}
-                      parentId={comment.id}
-                      onCancel={() => setShowReply(false)}
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {deleted && (
-                <div className="mt-2">
-                  <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-                    This comment was deleted by the author.
-                  </p>
-                </div>
+                  <AnimatePresence>
+                    {showReply && postSlug && !deleted && (
+                      <motion.div
+                        variants={FADE_UP_ANIMATION_VARIANTS}
+                        initial="hidden"
+                        animate="show"
+                        exit="exit"
+                        className="mt-3"
+                      >
+                        <CommentForm
+                          postSlug={postSlug}
+                          parentId={comment.id}
+                          onCancel={() => setShowReply(false)}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </>
               )}
             </div>
           </div>
@@ -344,19 +342,25 @@ export function CommentItem({
           </span>
         </div>
 
-        <div className={'prose prose-sm dark:prose-invert max-w-none'}>
-          <p
-            className={
-              'text-gray-700 dark:text-gray-300 leading-relaxed mb-0 whitespace-pre-wrap'
-            }
-          >
-            {comment.content}
-          </p>
-        </div>
+        {deleted ? (
+          <div className="mt-3">
+            <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+              This comment was deleted by the author.
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className={'prose prose-sm dark:prose-invert max-w-none'}>
+              <p
+                className={
+                  'text-gray-700 dark:text-gray-300 leading-relaxed mb-0 whitespace-pre-wrap'
+                }
+              >
+                {comment.content}
+              </p>
+            </div>
 
-        <div className="mt-2 flex items-center gap-3">
-          {!deleted && (
-            <>
+            <div className="mt-2 flex items-center gap-3">
               <button
                 onClick={() => setShowReply((s) => !s)}
                 className="text-sm font-medium text-orange-500 dark:text-green-400 bg-transparent p-0"
@@ -386,75 +390,67 @@ export function CommentItem({
                   Delete
                 </button>
               )}
-            </>
-          )}
-        </div>
+            </div>
 
-        <AnimatePresence>
-          {showReply && postSlug && !deleted && (
-            <motion.div
-              variants={FADE_UP_ANIMATION_VARIANTS}
-              initial="hidden"
-              animate="show"
-              exit="exit"
-              className="mt-3"
-            >
-              <CommentForm
-                postSlug={postSlug}
-                parentId={comment.id}
-                onCancel={() => setShowReply(false)}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {deleted ? (
-          <div className="mt-3">
-            <p className="text-sm text-gray-500 dark:text-gray-400 italic">
-              This comment was deleted by the author.
-            </p>
-          </div>
-        ) : null}
-
-        {!deleted && comment.replies && comment.replies.length > 0 && (
-          <div className="mt-2 space-y-2">
-            {!showReplies ? (
-              <button
-                onClick={() => setShowReplies(true)}
-                className="text-sm text-gray-600 dark:text-gray-300 hover:underline"
-              >
-                View {comment.replies.length}{' '}
-                {comment.replies.length === 1 ? 'reply' : 'replies'}
-              </button>
-            ) : (
-              <div className="space-y-2">
-                <button
-                  onClick={() => setShowReplies(false)}
-                  className="text-xs text-gray-500 dark:text-gray-400 hover:underline mb-1"
+            <AnimatePresence>
+              {showReply && postSlug && !deleted && (
+                <motion.div
+                  variants={FADE_UP_ANIMATION_VARIANTS}
+                  initial="hidden"
+                  animate="show"
+                  exit="exit"
+                  className="mt-3"
                 >
-                  Hide replies
-                </button>
-                <AnimatePresence initial={false} mode="sync">
-                  {comment.replies.map((reply) => (
-                    <motion.div
-                      key={reply.id}
-                      variants={FADE_IN_ANIMATION_VARIANTS}
-                      initial="hidden"
-                      animate="show"
-                      exit="exit"
+                  <CommentForm
+                    postSlug={postSlug}
+                    parentId={comment.id}
+                    onCancel={() => setShowReply(false)}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {comment.replies && comment.replies.length > 0 && (
+              <div className="mt-2 space-y-2">
+                {!showReplies ? (
+                  <button
+                    onClick={() => setShowReplies(true)}
+                    className="text-sm text-gray-600 dark:text-gray-300 hover:underline"
+                  >
+                    View {comment.replies.length}{' '}
+                    {comment.replies.length === 1 ? 'reply' : 'replies'}
+                  </button>
+                ) : (
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => setShowReplies(false)}
+                      className="text-xs text-gray-500 dark:text-gray-400 hover:underline mb-1"
                     >
-                      <CommentItem
-                        comment={reply}
-                        postSlug={postSlug}
-                        depth={depth + 1}
-                        compact={true}
-                      />
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
+                      Hide replies
+                    </button>
+                    <AnimatePresence initial={false} mode="sync">
+                      {comment.replies.map((reply) => (
+                        <motion.div
+                          key={reply.id}
+                          variants={FADE_IN_ANIMATION_VARIANTS}
+                          initial="hidden"
+                          animate="show"
+                          exit="exit"
+                        >
+                          <CommentItem
+                            comment={reply}
+                            postSlug={postSlug}
+                            depth={depth + 1}
+                            compact={true}
+                          />
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                )}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </motion.div>

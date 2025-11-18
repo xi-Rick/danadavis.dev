@@ -34,9 +34,9 @@ export function BlogMeta({
             </time>
           )}
         </time>
-        <span className="text-gray-300 dark:text-gray-700">/</span>
+        <span className="dark:text-accent-green text-accent-orange">/</span>
         <span>{Math.ceil(readingTime.minutes)} mins read</span>
-        <span className="text-gray-300 dark:text-gray-700">/</span>
+        <span className="dark:text-accent-green text-accent-orange">/</span>
         <ViewsCounter type={type} slug={slug} />
       </dd>
     </dl>
