@@ -1,21 +1,5 @@
 import type { Author, Blog } from 'contentlayer/generated'
 import { allAuthors, allBlogs } from 'contentlayer/generated'
-import { prisma } from '~/db'
-type DBPost = {
-  slug: string
-  title: string
-  summary?: string | null
-  images?: string[] | string
-  canonicalUrl?: string | null
-  layout?: string | null
-  bibliography?: string | null
-  draft?: boolean
-  featured?: boolean
-  content?: string | null
-  date: Date
-  lastmod?: Date | null
-  authors?: string[]
-}
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { MDX_COMPONENTS } from '~/components/mdx'
@@ -39,16 +23,7 @@ export async function generateMetadata(props: {
 }): Promise<Metadata | undefined> {
   const params = await props.params
   const slug = decodeURI(params.slug.join('/'))
-  // Try to load post from DB (admin edits) first
-  let dbPost: DBPost | null = null
-  try {
-    dbPost = (await prisma.post.findUnique({
-      where: { slug },
-    })) as DBPost | null
-  } catch (e) {
-    // ignore
-  }
-  const post = dbPost || allBlogs.find((p) => p.slug === slug)
+  const post = allBlogs.find((p) => p.slug === slug)
   const authorList = post?.authors || ['default']
   const authorDetails = authorList.map((author) => {
     const authorResults = allAuthors.find((p) => p.slug === author)
@@ -65,10 +40,6 @@ export async function generateMetadata(props: {
   if (post.images) {
     imageList = typeof post.images === 'string' ? [post.images] : post.images
   }
-  // Ensure image list contains absolute URLs for twitter and other metadata
-  imageList = imageList.map((img) =>
-    img.includes('http') ? img : SITE_METADATA.siteUrl + img,
-  )
   const ogImages = imageList.map((img) => {
     return {
       url: img.includes('http') ? img : SITE_METADATA.siteUrl + img,
@@ -77,10 +48,10 @@ export async function generateMetadata(props: {
 
   return {
     title: post.title,
-    description: post.summary ?? undefined,
+    description: post.summary,
     openGraph: {
       title: post.title,
-      description: post.summary ?? undefined,
+      description: post.summary,
       siteName: SITE_METADATA.title,
       locale: 'en_US',
       type: 'article',
@@ -93,7 +64,7 @@ export async function generateMetadata(props: {
     twitter: {
       card: 'summary_large_image',
       title: post.title,
-      description: post.summary ?? undefined,
+      description: post.summary,
       images: imageList,
     },
   }
@@ -105,78 +76,35 @@ export const generateStaticParams = async () => {
   }))
 }
 
-export const dynamic = 'force-dynamic'
-
 export default async function Page(props: {
   params: Promise<{ slug: string[] }>
 }) {
   const params = await props.params
   const slug = decodeURI(params.slug.join('/'))
-  // Filter out drafts in production - prefer DB posts first for dynamic updates
-  let dbPost: DBPost | null = null
-  try {
-    dbPost = await prisma.post.findUnique({ where: { slug } })
-  } catch (e) {
-    // ignore
-  }
-
+  // Filter out drafts in production
   const sortedCoreContents = allCoreContent(sortPosts(allBlogs))
-  const postFromStatic = allBlogs.find((p) => p.slug === slug) as
-    | Blog
-    | undefined
-  const post: DBPost | Blog | undefined = dbPost || postFromStatic
-
-  // Determine prev/next from static posts when available. If the post is only in
-  // DB and not present in static `allBlogs`, prev/next will remain undefined.
-  const staticIndex = postFromStatic
-    ? sortedCoreContents.findIndex((p) => p.slug === slug)
-    : -1
-  const prev =
-    staticIndex >= 0 ? sortedCoreContents[staticIndex + 1] : undefined
-  const next =
-    staticIndex >= 0 ? sortedCoreContents[staticIndex - 1] : undefined
-
-  if (!post) {
+  const postIndex = sortedCoreContents.findIndex((p) => p.slug === slug)
+  if (postIndex === -1) {
     return notFound()
   }
+
+  const prev = sortedCoreContents[postIndex + 1]
+  const next = sortedCoreContents[postIndex - 1]
+  const post = allBlogs.find((p) => p.slug === slug) as Blog
   const authorList = post?.authors || ['default']
   const authorDetails = authorList.map((author) => {
     const authorResults = allAuthors.find((p) => p.slug === author)
     return coreContent(authorResults as Author)
   })
-  const mainContent = dbPost
-    ? {
-        title: dbPost.title,
-        slug: dbPost.slug,
-        summary: dbPost.summary || '',
-        images:
-          typeof dbPost.images === 'string'
-            ? [dbPost.images]
-            : dbPost.images || [],
-        date: dbPost.date.toISOString(),
-        lastmod: (dbPost.lastmod ?? dbPost.date).toISOString(),
-        authors: dbPost.authors || [],
-      }
-    : coreContent(post as Blog)
-  let jsonLd: Record<string, unknown> = {}
-  if (dbPost) {
-    jsonLd = {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: dbPost.title,
-      description: dbPost.summary || '',
-      datePublished: dbPost.date.toISOString(),
-      dateModified: (dbPost.lastmod ?? dbPost.date).toISOString(),
+  const mainContent = coreContent(post)
+  const jsonLd = post.structuredData
+  jsonLd.author = authorDetails.map((author) => {
+    return {
+      '@type': 'Person',
+      name: author.name,
     }
-  } else {
-    jsonLd = (post as Blog).structuredData
-  }
-  jsonLd.author = authorDetails.map((author) => ({
-    '@type': 'Person',
-    name: author.name,
-  }))
-  const layoutStr = dbPost ? dbPost.layout : (post as Blog).layout
-  const Layout = LAYOUTS[(layoutStr as string) || DEFAULT_LAYOUT]
+  })
+  const Layout = LAYOUTS[post.layout || DEFAULT_LAYOUT]
 
   return (
     <>
@@ -190,18 +118,11 @@ export default async function Page(props: {
         next={next}
         prev={prev}
       >
-        {dbPost ? (
-          <div
-            className="prose sm:prose-base lg:prose-lg max-w-none project-content break-words"
-            dangerouslySetInnerHTML={{ __html: dbPost.content || '' }}
-          />
-        ) : (
-          <MDXLayoutRenderer
-            code={(post as Blog).body.code}
-            components={MDX_COMPONENTS}
-            toc={(post as Blog).toc}
-          />
-        )}
+        <MDXLayoutRenderer
+          code={post.body.code}
+          components={MDX_COMPONENTS}
+          toc={post.toc}
+        />
       </Layout>
     </>
   )
