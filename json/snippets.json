@@ -110,6 +110,36 @@
     "authorId": "cmgqrczwd0000zzfjqkoasu1o"
   },
   {
+    "id": "cmgqyy61z0011ykfn2k7i2j5r",
+    "title": "Captains Log — Voice Recording & Transcription",
+    "slug": "captains-log-voice-recording",
+    "summary": "An admin UI for capturing voice notes using the Web Speech and MediaRecorder APIs with AI-powered transcription and saving to a Captains Log API.",
+    "content": "# Captains Log — Voice Recording & Transcription\n\nThis snippet documents the Captain's Log admin tool and the exact backend transcription flow. The client captures audio using `MediaRecorder` and sends a `FormData` POST to `/api/transcribe`. The server forwards audio to OpenAI Whisper (model: `whisper-1`), then analyzes the returned transcription with `gpt-4o-mini` to produce a strict JSON analysis used to persist the log entry to `/api/captains-log`.\n\nComponent source: https://github.com/xi-Rick/danadavis.dev/blob/main/app/admin/captains-log/captains-log.tsx\n\nKey details (server flow):\n1) Extract `audio` from formData and forward to `https://api.openai.com/v1/audio/transcriptions` (append `file` and `model=whisper-1`).\n2) Take the transcription text and call `https://api.openai.com/v1/chat/completions` with `gpt-4o-mini` — using a strong system prompt that enforces JSON with fields: contentType, summary, tags[], blogPotential, projectPotential.\n3) Parse analyzer output and return the combined structure: `{ transcription, summary, contentType, tags, blogPotential, projectPotential }` to the client (with a safe fallback when parsing fails).\n\nPrimary endpoints: `/api/transcribe` (POST, FormData `audio` -> returns transcription + analysis), `/api/captains-log` (POST JSON to persist entries), `/api/captains-log` (GET list), and `/api/captains-log/:id` (DELETE).\n\nClient example:\n```ts\nconst f = new FormData()\nf.append('audio', audioBlob, 'recording.webm')\nconst res = await fetch('/api/transcribe', { method: 'POST', body: f })\nconst { transcription, summary, contentType, tags, blogPotential, projectPotential } = await res.json()\n```\n\nThis entry documents the component's UI and the transcription/pipeline used to analyze and persist Captain's Log entries.",
+    "date": "2025-11-18T12:00:00.000Z",
+    "lastmod": "2025-11-18T12:00:00.000Z",
+    "tags": [
+      "react",
+      "nextjs",
+      "speech-recognition",
+      "mediarecording",
+      "transcription",
+      "ui",
+      "typescript"
+    ],
+    "categories": ["frontend", "ux"],
+    "images": [],
+    "authors": ["Dana"],
+    "draft": false,
+    "featured": true,
+    "layout": null,
+    "language": "typescript",
+    "framework": "react",
+    "difficulty": "intermediate",
+    "createdAt": "2025-11-18T12:00:00.000Z",
+    "updatedAt": "2025-11-18T12:00:00.000Z",
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+  },
+  {
     "id": "cmgqyy61z0006ykfn8g2d7a0l",
     "title": "Next.js Custom Build Script with Progress Tracking",
     "slug": "nextjs-custom-build-script",
@@ -267,36 +297,6 @@
     "difficulty": "intermediate",
     "createdAt": "2025-11-18T00:00:00.000Z",
     "updatedAt": "2025-11-18T00:00:00.000Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
-  },
-  {
-    "id": "cmgqyy61z0011ykfn2k7i2j5r",
-    "title": "Captains Log — Voice Recording & Transcription",
-    "slug": "captains-log-voice-recording",
-    "summary": "An admin UI for capturing voice notes using the Web Speech and MediaRecorder APIs with AI-powered transcription and saving to a Captains Log API.",
-    "content": "# Captains Log — Voice Recording & Transcription\n\nThis snippet documents the Captain's Log admin tool and the exact backend transcription flow. The client captures audio using `MediaRecorder` and sends a `FormData` POST to `/api/transcribe`. The server forwards audio to OpenAI Whisper (model: `whisper-1`), then analyzes the returned transcription with `gpt-4o-mini` to produce a strict JSON analysis used to persist the log entry to `/api/captains-log`.\n\nComponent source: https://github.com/xi-Rick/danadavis.dev/blob/main/app/admin/captains-log/captains-log.tsx\n\nKey details (server flow):\n1) Extract `audio` from formData and forward to `https://api.openai.com/v1/audio/transcriptions` (append `file` and `model=whisper-1`).\n2) Take the transcription text and call `https://api.openai.com/v1/chat/completions` with `gpt-4o-mini` — using a strong system prompt that enforces JSON with fields: contentType, summary, tags[], blogPotential, projectPotential.\n3) Parse analyzer output and return the combined structure: `{ transcription, summary, contentType, tags, blogPotential, projectPotential }` to the client (with a safe fallback when parsing fails).\n\nPrimary endpoints: `/api/transcribe` (POST, FormData `audio` -> returns transcription + analysis), `/api/captains-log` (POST JSON to persist entries), `/api/captains-log` (GET list), and `/api/captains-log/:id` (DELETE).\n\nClient example:\n```ts\nconst f = new FormData()\nf.append('audio', audioBlob, 'recording.webm')\nconst res = await fetch('/api/transcribe', { method: 'POST', body: f })\nconst { transcription, summary, contentType, tags, blogPotential, projectPotential } = await res.json()\n```\n\nThis entry documents the component's UI and the transcription/pipeline used to analyze and persist Captain's Log entries.",
-    "date": "2025-11-18T12:00:00.000Z",
-    "lastmod": "2025-11-18T12:00:00.000Z",
-    "tags": [
-      "react",
-      "nextjs",
-      "speech-recognition",
-      "mediarecording",
-      "transcription",
-      "ui",
-      "typescript"
-    ],
-    "categories": ["frontend", "ux"],
-    "images": [],
-    "authors": ["Dana"],
-    "draft": false,
-    "featured": true,
-    "layout": null,
-    "language": "typescript",
-    "framework": "react",
-    "difficulty": "intermediate",
-    "createdAt": "2025-11-18T12:00:00.000Z",
-    "updatedAt": "2025-11-18T12:00:00.000Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o"
   }
 ]
