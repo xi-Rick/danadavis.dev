@@ -168,6 +168,8 @@ export default function ManageProjectsPage() {
                     {/* Project Image */}
                     <div className="w-full md:w-48 h-32 flex-shrink-0">
                       <Image
+                        width={198}
+                        height={128}
                         src={project.imgSrc}
                         alt={project.title}
                         className="w-full h-full object-cover rounded-lg"

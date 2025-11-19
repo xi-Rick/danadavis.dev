@@ -3,6 +3,8 @@ import { ProjectCard } from '~/components/cards/project'
 import { Container } from '~/components/ui/container'
 import { PageHeader } from '~/components/ui/page-header'
 import { PROJECTS } from '~/data/projects'
+import { prisma } from '~/db'
+import type { Project } from '~/types/data'
 
 export const metadata = genPageMetadata({
   title: 'Projects',
@@ -10,9 +12,35 @@ export const metadata = genPageMetadata({
     "Collections of my open-source side projects, along with some cool things I've built with colleagues at work. It's a mix of passion projects and practical tools—some just for fun, others to solve real-world problems.",
 })
 
+export const dynamic = 'force-dynamic'
+
 export default async function Projects() {
-  const workProjects = PROJECTS.filter(({ type }) => type === 'work')
-  const sideProjects = PROJECTS.filter(({ type }) => type === 'self')
+  let projects: Project[] = PROJECTS
+  try {
+    const dbProjects = await prisma.project.findMany({
+      orderBy: { date: 'desc' },
+    })
+    projects = dbProjects.map((p) => ({
+      title: p.title,
+      description: p.description ?? undefined,
+      content: p.content ?? undefined,
+      imgSrc: p.imgSrc,
+      url: p.url ?? undefined,
+      repo: p.repo ?? undefined,
+      builtWith: (p.builtWith as string[]) ?? [],
+      links: (p.links as { title: string; url: string }[]) ?? undefined,
+      type: (p.type as 'work' | 'self') ?? 'self',
+      // color not available in DB by default; keep undefined if not present
+    }))
+  } catch (error) {
+    console.warn(
+      'Failed to load projects from DB, falling back to static list',
+      error,
+    )
+  }
+
+  const workProjects = projects.filter((p: Project) => p.type === 'work')
+  const sideProjects = projects.filter((p: Project) => p.type === 'self')
 
   return (
     <Container className="pt-4 lg:pt-12">

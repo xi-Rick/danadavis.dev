@@ -23,6 +23,7 @@ export async function generateStaticParams() {
       .replace(/\s+/g, '-'),
   }))
 }
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>
