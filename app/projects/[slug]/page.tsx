@@ -14,6 +14,7 @@ import { PROJECTS } from '~/data/projects'
 import { SITE_METADATA } from '~/data/site-metadata'
 import { prisma } from '~/db'
 import { getCommentsBySlug } from '~/db/queries'
+import { jsonToMarkdown } from '~/lib/markdown-to-json'
 
 export async function generateStaticParams() {
   return PROJECTS.map((project) => ({
@@ -130,12 +131,29 @@ export default async function ProjectPage(props: {
   // Use database project if available, otherwise use static
   const project = dbProject || staticProject
 
-  // Convert Markdown content to HTML if it exists
+  // Convert content to markdown if it's JSON, then to HTML
   let htmlContent = ''
+  let markdownContent = ''
+
   if (dbProject?.content) {
+    try {
+      // Try to parse as JSON
+      const parsed = JSON.parse(dbProject.content)
+      if (parsed && parsed.type === 'doc' && Array.isArray(parsed.content)) {
+        // It's JSONContent, convert to markdown
+        markdownContent = jsonToMarkdown(parsed)
+      } else {
+        // Not valid JSON, treat as markdown
+        markdownContent = dbProject.content
+      }
+    } catch {
+      // Not JSON, treat as markdown
+      markdownContent = dbProject.content
+    }
+
     const processedContent = await remark()
       .use(html, { sanitize: false })
-      .process(dbProject.content)
+      .process(markdownContent)
     htmlContent = processedContent.toString()
   } else if (staticProject?.content) {
     htmlContent = staticProject.content

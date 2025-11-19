@@ -4,6 +4,7 @@ import { AdminNavigation } from '@/components/admin/admin-navigation'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Container } from '~/components/ui/container'
@@ -20,6 +21,7 @@ interface Post {
   draft: boolean
   featured: boolean
   date: string
+  images: string[]
 }
 
 export default function ManagePostsPage() {
@@ -170,28 +172,48 @@ export default function ManagePostsPage() {
             {posts.map((post) => (
               <motion.div key={post.slug} variants={FADE_UP_ANIMATION_VARIANTS}>
                 <RadiantCard className="p-6">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex flex-col md:flex-row gap-4">
+                    {/* Post Image */}
+                    <div className="w-full md:w-48 h-32 flex-shrink-0">
+                      <Image
+                        width={198}
+                        height={128}
+                        src={
+                          post.images?.[0] || '/static/images/twitter-card.jpeg'
+                        }
+                        alt={post.title}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </div>
+
+                    {/* Post Details */}
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                          {post.title}
-                        </h3>
-                        {post.draft && (
-                          <span className="px-2 py-1 text-xs bg-orange-100 text-orange-800 dark:bg-green-900 dark:text-green-200 rounded-full">
-                            Draft
-                          </span>
-                        )}
-                        {post.featured && (
-                          <span className="px-2 py-1 text-xs bg-orange-500 text-white dark:bg-green-600 rounded-full">
-                            Featured
-                          </span>
-                        )}
+                      <div className="flex items-start justify-between gap-4 mb-2">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                              {post.title}
+                            </h3>
+                            {post.draft && (
+                              <span className="px-2 py-1 text-xs bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 rounded-full">
+                                Draft
+                              </span>
+                            )}
+                            {post.featured && (
+                              <span className="px-2 py-1 text-xs bg-orange-500 text-white dark:bg-green-600 rounded-full">
+                                Featured
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">
+                            {post.summary}
+                          </p>
+                        </div>
                       </div>
-                      <p className="text-gray-600 dark:text-gray-300 text-sm mb-2 line-clamp-2">
-                        {post.summary}
-                      </p>
-                      <div className="flex flex-wrap gap-2 mb-2">
-                        {post.tags.slice(0, 3).map((tag) => (
+
+                      {/* Tags */}
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {post.tags?.slice(0, 5).map((tag) => (
                           <span
                             key={tag}
                             className="px-2 py-1 text-xs bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded"
@@ -199,49 +221,52 @@ export default function ManagePostsPage() {
                             {tag}
                           </span>
                         ))}
-                        {post.tags.length > 3 && (
+                        {post.tags && post.tags.length > 5 && (
                           <span className="text-xs text-gray-500 dark:text-gray-400">
-                            +{post.tags.length - 3} more
+                            +{post.tags.length - 5} more
                           </span>
                         )}
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">
+
+                      {/* Date */}
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mb-3">
                         {new Date(post.date).toLocaleDateString()}
                       </div>
-                    </div>
 
-                    <div className="flex gap-4 items-center">
-                      <Link
-                        href={`/blog/${post.slug}`}
-                        className="text-sm font-semibold underline-offset-4 transition-colors text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
-                      >
-                        <GrowingUnderline data-umami-event="view-post">
-                          View
-                        </GrowingUnderline>
-                      </Link>
-                      <span className="text-gray-300 dark:text-gray-600">
-                        /
-                      </span>
-                      <Link
-                        href={`/admin/edit-post/${post.slug}`}
-                        className="text-sm font-semibold underline-offset-4 transition-colors hover:text-gray-900 dark:hover:text-gray-200"
-                      >
-                        <GrowingUnderline data-umami-event="edit-post">
-                          Edit
-                        </GrowingUnderline>
-                      </Link>
-                      <span className="text-gray-300 dark:text-gray-600">
-                        /
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(post.slug)}
-                        className="text-sm font-semibold underline-offset-4 transition-colors text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-                      >
-                        <GrowingUnderline data-umami-event="delete-post">
-                          Delete
-                        </GrowingUnderline>
-                      </button>
+                      {/* Actions */}
+                      <div className="flex gap-4 items-center">
+                        <Link
+                          href={`/blog/${post.slug}`}
+                          className="text-sm font-semibold underline-offset-4 transition-colors text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                        >
+                          <GrowingUnderline data-umami-event="view-post">
+                            View
+                          </GrowingUnderline>
+                        </Link>
+                        <span className="text-gray-300 dark:text-gray-600">
+                          /
+                        </span>
+                        <Link
+                          href={`/admin/edit-post/${post.slug}`}
+                          className="text-sm font-semibold underline-offset-4 transition-colors hover:text-gray-900 dark:hover:text-gray-200"
+                        >
+                          <GrowingUnderline data-umami-event="edit-post">
+                            Edit
+                          </GrowingUnderline>
+                        </Link>
+                        <span className="text-gray-300 dark:text-gray-600">
+                          /
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(post.slug)}
+                          className="text-sm font-semibold underline-offset-4 transition-colors text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                        >
+                          <GrowingUnderline data-umami-event="delete-post">
+                            Delete
+                          </GrowingUnderline>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </RadiantCard>
