@@ -29,7 +29,34 @@ export async function generateMetadata(props: {
   params: Promise<{ slug: string }>
 }) {
   const params = await props.params
-  const project = PROJECTS.find(
+
+  // Try to find project in database first so metadata reflects DB header image
+  let dbProject: Awaited<ReturnType<typeof prisma.project.findUnique>> = null
+  try {
+    dbProject = await prisma.project.findUnique({
+      where: { slug: params.slug },
+    })
+    // If not found by slug, try to find by matching the title-based slug
+    if (!dbProject) {
+      const allProjects = await prisma.project.findMany()
+      dbProject =
+        allProjects.find(
+          (p) =>
+            p.title
+              .toLowerCase()
+              .replace(/[^\w\s-]/g, '')
+              .replace(/\s+/g, '-') === params.slug,
+        ) || null
+    }
+  } catch {
+    // Database unavailable during build - fall back to static data
+    console.warn(
+      'Database unavailable during build - using static project data',
+    )
+  }
+
+  // Fallback to static PROJECTS data if not in database
+  const staticProject = PROJECTS.find(
     (p) =>
       p.title
         .toLowerCase()
@@ -37,13 +64,24 @@ export async function generateMetadata(props: {
         .replace(/\s+/g, '-') === params.slug,
   )
 
+  const project = dbProject || staticProject
+
   if (!project) {
     return {}
   }
 
+  // Prefer DB imgSrc if available, otherwise use static project's imgSrc
+  const projectImg = (project as { imgSrc?: string }).imgSrc
+  const image = projectImg
+    ? projectImg.includes('http')
+      ? projectImg
+      : SITE_METADATA.siteUrl + projectImg
+    : undefined
+
   return genPageMetadata({
     title: project.title,
-    description: project.description,
+    description: project.description ?? undefined,
+    image,
   })
 }
 

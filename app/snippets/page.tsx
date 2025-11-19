@@ -2,6 +2,7 @@ import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import { genPageMetadata } from 'app/seo'
 import { SnippetCard } from '~/components/cards/snippet'
+import { resolveBrandKey } from '~/components/ui/brand'
 import { Container } from '~/components/ui/container'
 import { PageHeader } from '~/components/ui/page-header'
 
@@ -103,7 +104,12 @@ async function loadSnippetsFromJson() {
         title: snippet.title,
         heading: snippet.title,
         summary: snippet.summary,
-        icon: getLanguageIcon(snippet.language),
+        // Prefer framework, then language, then first tag
+        icon: resolveBrandKey([
+          snippet.framework,
+          snippet.language,
+          snippet.tags?.[0],
+        ]),
         path: `snippets/${snippet.slug}`,
         slug: snippet.slug,
         date: snippet.date,

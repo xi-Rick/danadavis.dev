@@ -5,6 +5,7 @@ import Comments from '~/components/blog/comments'
 import { PostTitle } from '~/components/blog/post-title'
 import { ScrollButtons } from '~/components/blog/scroll-buttons'
 import { TagsList } from '~/components/blog/tags'
+import { Brand, resolveBrandKey } from '~/components/ui/brand'
 import { Container } from '~/components/ui/container'
 import { GradientDivider } from '~/components/ui/gradient-divider'
 import { SITE_METADATA } from '~/data/site-metadata'
@@ -20,7 +21,18 @@ interface PostSimpleProps {
 }
 
 export async function PostSimple({ content, children }: PostSimpleProps) {
-  const { slug, date, lastmod, title, type, tags, readingTime } = content
+  const {
+    slug,
+    date,
+    lastmod,
+    title,
+    type,
+    tags,
+    readingTime,
+    icon,
+    language,
+    framework,
+  } = content as any
   const postUrl = `${SITE_METADATA.siteUrl}/${type.toLowerCase()}/${slug}`
   const comments = await getCommentsBySlug(slug)
 
@@ -30,7 +42,18 @@ export async function PostSimple({ content, children }: PostSimpleProps) {
       <article className="space-y-6 pt-6 lg:space-y-12">
         <div className="space-y-4">
           <TagsList tags={tags} />
-          <PostTitle>{title}</PostTitle>
+          <div className="flex items-center gap-3">
+            {type.toLowerCase() === 'snippet' && (
+              <Brand
+                name={resolveBrandKey([icon, framework, language, tags?.[0]])}
+                as="icon"
+                className="h-8 w-8 text-gray-900 dark:text-white"
+                iconClassName="h-8 w-8"
+                aria-hidden="true"
+              />
+            )}
+            <PostTitle>{title}</PostTitle>
+          </div>
           <dl>
             <div>
               <dt className="sr-only">Published on</dt>

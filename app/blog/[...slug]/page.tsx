@@ -65,6 +65,10 @@ export async function generateMetadata(props: {
   if (post.images) {
     imageList = typeof post.images === 'string' ? [post.images] : post.images
   }
+  // Ensure image list contains absolute URLs for twitter and other metadata
+  imageList = imageList.map((img) =>
+    img.includes('http') ? img : SITE_METADATA.siteUrl + img,
+  )
   const ogImages = imageList.map((img) => {
     return {
       url: img.includes('http') ? img : SITE_METADATA.siteUrl + img,

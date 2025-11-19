@@ -1,4 +1,4 @@
-import type { Author, Blog } from 'contentlayer/generated'
+import type { Author, Blog, Snippet } from 'contentlayer/generated'
 import type { ReactNode } from 'react'
 import { Banner } from '~/components/blog/banner'
 import { BlogMeta } from '~/components/blog/blog-meta'
@@ -10,6 +10,7 @@ import { ScrollButtons } from '~/components/blog/scroll-buttons'
 import { SocialShare } from '~/components/blog/social-share'
 import { TagsList } from '~/components/blog/tags'
 import { TableOfContents } from '~/components/blog/toc'
+import { Brand, resolveBrandKey } from '~/components/ui/brand'
 import { Container } from '~/components/ui/container'
 import { GradientDivider } from '~/components/ui/gradient-divider'
 import { SITE_METADATA } from '~/data/site-metadata'
@@ -18,7 +19,7 @@ import type { StatsType } from '~/db/schema'
 import type { CoreContent } from '~/types/data'
 
 interface LayoutProps {
-  content: CoreContent<Blog>
+  content: CoreContent<Blog | Snippet>
   authorDetails: CoreContent<Author>[]
   next?: { path: string; title: string }
   prev?: { path: string; title: string }
@@ -42,7 +43,10 @@ export async function PostLayout({
     tags,
     toc,
     type,
-  } = content
+    icon,
+    language,
+    framework,
+  } = content as any
   const postUrl = `${SITE_METADATA.siteUrl}/${type.toLowerCase()}/${slug}`
   const comments = await getCommentsBySlug(slug)
 
@@ -52,7 +56,17 @@ export async function PostLayout({
       <article className="pt-6">
         <div className="space-y-4">
           <TagsList tags={tags} />
-          <PostTitle>{title}</PostTitle>
+          <div className="flex items-center gap-3">
+            {type.toLowerCase() === 'snippet' && (
+              <Brand
+                name={resolveBrandKey([icon, framework, language, tags?.[0]])}
+                as="icon"
+                className="h-10 w-10 text-gray-900 dark:text-white"
+                aria-hidden="true"
+              />
+            )}
+            <PostTitle>{title}</PostTitle>
+          </div>
           <div className="space-y-4 pt-4 md:pt-10">
             <Banner banner={images?.[0] || SITE_METADATA.socialBanner} />
           </div>

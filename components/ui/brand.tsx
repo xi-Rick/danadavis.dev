@@ -296,3 +296,50 @@ export function Brand(props: {
     </Link>
   )
 }
+
+// Resolve a brand key using a list of candidate names (icon, language, framework, tags)
+export function resolveBrandKey(
+  candidates: Array<string | undefined>,
+): keyof typeof BrandsMap {
+  // Normalization synonyms map (lowercase -> BrandsMap key)
+  const synonyms: Record<string, keyof typeof BrandsMap> = {
+    next: 'NextJS',
+    nextjs: 'NextJS',
+    nextjsorg: 'NextJS',
+    javascript: 'Javascript',
+    js: 'Javascript',
+    typescript: 'Typescript',
+    ts: 'Typescript',
+    typescriptlang: 'Typescript',
+    react: 'React',
+    reactjs: 'React',
+    tailwind: 'TailwindCSS',
+    tailwindcss: 'TailwindCSS',
+    prisma: 'Prisma',
+    prismaorm: 'Prisma',
+    node: 'Node',
+    nodejs: 'Node',
+    python: 'Python',
+    css: 'CSS',
+    html: 'Html',
+    npm: 'Npm',
+    vercel: 'Vercel',
+    github: 'GitHub',
+    githubcopilot: 'GithubCopilot',
+  }
+
+  const keys = Object.keys(BrandsMap)
+  // iterate candidates in order
+  for (const c of candidates) {
+    if (!c) continue
+    // Try exact case-insensitive match with keys
+    const exact = keys.find((k) => k.toLowerCase() === c.toLowerCase())
+    if (exact) return exact as keyof typeof BrandsMap
+    // Try synonyms map
+    const syn = synonyms[c.toLowerCase()]
+    if (syn) return syn
+  }
+
+  // Fallback to Javascript
+  return 'Javascript'
+}

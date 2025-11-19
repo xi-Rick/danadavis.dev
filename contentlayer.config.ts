@@ -150,7 +150,8 @@ export let Snippet = defineDocumentType(() => ({
   fields: {
     heading: { type: 'string', required: true },
     title: { type: 'string', required: true },
-    icon: { type: 'string', required: true },
+    // icon is optional in frontmatter; we infer one when missing
+    icon: { type: 'string' },
     date: { type: 'date', required: true },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
     lastmod: { type: 'date' },
@@ -164,6 +165,59 @@ export let Snippet = defineDocumentType(() => ({
   },
   computedFields: {
     ...computedFields,
+    // Ensure snippets always have an icon by computing one from tags, language or framework
+    icon: {
+      type: 'string',
+      resolve: (doc: any) => {
+        // 1) Prefer explicit icon in frontmatter
+        if (doc.icon) return doc.icon
+
+        // 2) Prefer framework over language, e.g. react -> React, next -> NextJS
+        const frameworkOrLang = (
+          doc.framework ||
+          doc.language ||
+          ''
+        ).toLowerCase()
+        if (frameworkOrLang.includes('react')) return 'React'
+        if (frameworkOrLang.includes('next')) return 'NextJS'
+        if (frameworkOrLang.includes('tailwind')) return 'TailwindCSS'
+        if (frameworkOrLang.includes('prisma')) return 'Prisma'
+        if (
+          frameworkOrLang.includes('ts') ||
+          frameworkOrLang.includes('typescript')
+        )
+          return 'Typescript'
+        if (
+          frameworkOrLang.includes('js') ||
+          frameworkOrLang.includes('javascript')
+        )
+          return 'Javascript'
+        if (frameworkOrLang.includes('python')) return 'Python'
+        if (frameworkOrLang.includes('node')) return 'Node'
+
+        // 3) Try common tags (map lowercase tag -> brand name)
+        const tagMap: Record<string, string> = {
+          react: 'React',
+          nextjs: 'NextJS',
+          next: 'NextJS',
+          typescript: 'Typescript',
+          javascript: 'Javascript',
+          tailwind: 'TailwindCSS',
+          prisma: 'Prisma',
+          node: 'Node',
+          python: 'Python',
+        }
+        if (doc.tags?.length) {
+          for (const t of doc.tags) {
+            const mapped = tagMap[t.toLowerCase()]
+            if (mapped) return mapped
+          }
+        }
+
+        // 4) Default fallback
+        return 'Javascript'
+      },
+    },
     structuredData: {
       type: 'json',
       resolve: (doc) => ({
