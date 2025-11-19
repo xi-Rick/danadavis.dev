@@ -1,0 +1,177 @@
+---
+title: "Captains Log — Voice Recording & Transcription"
+slug: "captains-log-voice-recording"
+heading: "Captain's Log — Voice Recording & Transcription"
+icon: "Microphone"
+date: "2025-11-18"
+description: "Admin UI component for a Captain's Log that records voice notes, listens for voice commands, transcribes with a server endpoint, and saves searchable entries."
+tags:
+ - nextjs
+ - react
+ - speech-recognition
+ - mediarecording
+ - transcription
+ - ui
+authors: ["Dana"]
+---
+
+This snippet documents the Captain's Log admin tool found at `app/admin/captains-log/captains-log.tsx`. It covers:
+
+- The UI controls (record button, timer, settings, filters)
+- Voice command listening and permission handling
+- Media recording with `MediaRecorder` and audio upload
+- The transcription API endpoint and the Captains Log API
+
+## Overview
+
+The component provides a central recording UI that's optimized for both desktop and mobile. It supports:
+
+- Start/Stop Recording (button and voice command)
+- Real-time recording timer
+- Microphone permission checks and user-facing status messages
+- Voice command activation using `SpeechRecognition` for phrases like "start transmission" and "end transmission"
+- On stop, the audio blob is posted to `/api/transcribe`, which returns a JSON transcription and metadata used to create a log entry posted to `/api/captains-log`.
+
+## UI & States
+
+Important state variables the component uses:
+
+- `isRecording` — toggles the UI's recording state
+- `isTranscribing` — shows when transcription is in progress
+- `recordingTime` — seconds counter for the current recording
+- `microphonePermission` — `'granted' | 'denied' | 'prompt' | 'checking'`
+- `voiceCommandsEnabled` — user toggle for voice commands
+- `isListeningForCommands` — visual state when SpeechRecognition is active
+
+The UI uses custom components like `RadiantCard` and `Mic` icons from `lucide-react`. There are animated pulses while recording (Framer Motion) and disabled states when permission is denied.
+
+## App Routes & APIs
+
+> Component source: [Captains Log component on GitHub](https://github.com/xi-Rick/danadavis.dev/blob/main/app/admin/captains-log/captains-log.tsx)
+
+The Captain's Log UI uses server-side routes to handle transcription, analysis, and persistence. Below are the primary endpoints and payload shapes used in the app.
+
+- POST `/api/transcribe` — Accepts a `FormData` payload with `audio` (Blob). Example response:
+
+```json
+{
+  "transcription": "The quick brown fox...",
+  "summary": "Quick thought about...",
+  "contentType": "thought",
+  "tags": ["idea","notes"],
+  "blogPotential": false,
+  "projectPotential": false
+}
+```
+
+### Whisper & GPT Analysis
+
+This project uses OpenAI's Whisper transcription (`whisper-1`) and GPT analysis. The server `POST /api/transcribe` implementation follows these steps: it extracts the `audio` File from the incoming `FormData`, then builds a `FormData` payload to post to the OpenAI transcription endpoint using `openaiFormData.append('file', audioFile)` and `openaiFormData.append('model', 'whisper-1')`.
+
+After receiving the transcription text, the server sends the text to the Chat Completions API using `gpt-4o-mini` with a system instruction that strictly enforces a JSON-only response describing the content type, summary, tags, and whether the content has blog or project potential. Here is a simplified example that mirrors `app/api/transcribe/route.ts`:
+
+```ts
+// Server (simplified)
+const openaiFormData = new FormData()
+openaiFormData.append('file', audioFile)
+openaiFormData.append('model', 'whisper-1')
+
+const transcriptionResponse = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+  method: 'POST',
+  headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+  body: openaiFormData,
+})
+const transcriptionText = await transcriptionResponse.json()
+
+const analysisResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+  },
+  body: JSON.stringify({
+    model: 'gpt-4o-mini',
+    messages: [
+      { role: 'system', content: 'You must return valid JSON only with fields: contentType, summary, tags[], blogPotential, projectPotential' },
+      { role: 'user', content: transcriptionText },
+    ],
+    temperature: 0.7,
+  }),
+})
+const analysis = await analysisResponse.json()
+```
+
+If parsing the analyzer response fails, the server provides a safe fallback object so the client can continue (category: `note`, empty `tags`, `blogPotential: false`, `projectPotential: false`). The final payload returned to the client is a combination of the raw transcription text and the analyzer's structured JSON.
+
+**Primary Captains Log routes**
+
+- GET `/api/captains-log?showPrivate=true&limit=100` — Returns an object with `logEntries`. Each entry includes fields like `id`, `timestamp`, `transcription`, `summary`,
+- POST `/api/captains-log` — Create a new entry. The server expects JSON with the fields:
+
+```json
+{
+  "transcription": "...",
+  "summary": "...",
+  "contentType": "blog-draft",
+  "tags": ["..."],
+  "blogPotential": true,
+  "projectPotential": false,
+  "duration": 32,
+  "isPrivate": true
+}
+```
+
+- DELETE `/api/captains-log/:id` — Delete an entry by id.
+
+## How it records & transcripts
+
+Basic flow:
+
+1. User triggers start (button or voice command). `navigator.mediaDevices.getUserMedia` is called.
+2. The app uses a `MediaRecorder` to capture audio chunks. The component collects chunks and builds a Blob when recording stops.
+3. Once `mediaRecorder.onstop` fires, the Blob is appended to `FormData` as `audio`; the form is posted to `/api/transcribe`.
+4. The transcription endpoint returns the transcription and metadata. The component creates a new `TranscriptionEntry` locally and calls `POST /api/captains-log` to persist.
+
+## Voice Commands
+
+The component listens for voice commands when `voiceCommandsEnabled` is true, and the `SpeechRecognition` implementation is available. It normalizes the transcript and compares it to configured phrases (start/end). Commands include phrases like:
+
+- `start transmission`, `start captain's log` — begins recording
+- `end transmission`, `stop recording` — stops recording and triggers transcription
+
+On detection, the component shows toasts and starts/stops the recording programmatically.
+
+## Example: Component usage in an admin layout
+
+```tsx
+// app/admin/layout.tsx
+import CaptainsLog from './captains-log/captains-log'
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="grid gap-8">
+      <CaptainsLog />
+      {children}
+    </div>
+  )
+}
+```
+
+## Tips & Considerations
+
+- Microphone permission handling: `navigator.permissions.query({ name: 'microphone' })` is used to detect permission state and to update the UI.
+- Recording format: The component attempts `audio/webm;codecs=opus`, falls back to `audio/webm`, `audio/mp4`, or `audio/ogg;codecs=opus` depending on runtime support.
+- Mobile differences: For mobile, the component uses `autoGainControl`, `noiseSuppression`, and `echoCancellation` to improve recordings; there is also a restart-backoff system for SpeechRecognition on mobile devices.
+- Keep a limited `restartAttemptsRef` to avoid rapid retries on mobile or when speech recognition becomes unavailable.
+
+## Where to find code
+
+- UI: `app/admin/captains-log/captains-log.tsx` (see the component for more details on voice commands, animation, and UI layout)
+- API: `/api/transcribe` and `/api/captains-log` (server endpoints used to transcribe and persist entries)
+
+
+## Final note
+
+This tool is built for fast capture of ideas and provides a polished admin UX for gathering voice notes, generating AI-assisted summaries, and turning those thoughts into blog drafts or project ideas with minimal friction.
+
+Happy recording!
