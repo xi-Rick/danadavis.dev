@@ -133,6 +133,10 @@ module.exports = () => {
         },
         {
           protocol: 'https',
+          hostname: 'cdn.cloudflare.steamstatic.com', // Steam CDN via Cloudflare for game headers
+        },
+        {
+          protocol: 'https',
           hostname: 'api.microlink.io', // Microlink Image Preview
         },
       ],

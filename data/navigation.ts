@@ -10,6 +10,7 @@ export const HEADER_NAV_LINKS = [
 export const MORE_NAV_LINKS = [
   { href: '/books', title: 'Books', emoji: 'books' },
   { href: '/movies', title: 'Movies', emoji: 'film-frames' },
+  { href: '/games', title: 'Games', emoji: 'video-game' },
   { href: '/tags', title: 'Tags', emoji: 'label' },
 ]
 

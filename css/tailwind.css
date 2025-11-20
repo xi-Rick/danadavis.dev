@@ -359,6 +359,48 @@
   color: rgb(34, 197, 94);
 }
 
+/* Platform badge hover styles - used in the game cards for platform chips */
+.platform-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  white-space: nowrap;
+  line-height: 1;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  min-height: 1.25rem;
+  border-radius: 9999px;
+  background-color: rgba(229, 231, 235, 1); /* tailwind gray-200 */
+  color: rgb(17, 24, 39); /* tailwind gray-900 */
+  border: none;
+  box-shadow: none;
+  transition: all 160ms ease-in-out;
+  cursor: default;
+}
+
+.platform-badge:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  background-color: var(--color-accent-orange);
+  color: white;
+}
+
+.dark .platform-badge {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.dark .platform-badge:hover {
+  background-color: var(--color-accent-green);
+  color: white;
+}
+
+/* Consistent sizing for game card images across breakpoints */
+/* NOTE: `@apply` can cause issues in some linters/builds; using utility classes inline for consistent sizing (
+   the `Image` component uses `h-44 sm:h-48 md:h-56 lg:h-64 w-full rounded-lg shadow-2xl object-cover`). */
+
 /* Novel.sh Editor Styles - Updated */
 .editor-container {
   width: 100%;

@@ -33,6 +33,25 @@ export type Project = {
   color?: 'orange' | 'green'
 }
 
+export type Game = {
+  id: string
+  title: string
+  slug: string
+  summary?: string
+  review?: string
+  content?: string
+  imgSrc?: string
+  images?: string[]
+  platforms?: string[]
+  developers?: string[]
+  releaseDate?: string
+  storeUrl?: string | null
+  demo?: string | null
+  tags?: string[]
+  categories?: string[]
+  rating?: number
+}
+
 export type GoodreadsBook = {
   guid: string
   pubDate: string
