@@ -206,6 +206,11 @@ export default async function RootLayout({
           type="application/rss+xml"
           href={`${basePath}/feed.xml`}
         />
+        <script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "cac5724ee1844614b3b89484bb2dc0f7", "spa": true}'
+        />
       </head>
       <body
         className={clsx([
