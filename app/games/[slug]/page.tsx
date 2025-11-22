@@ -1,12 +1,9 @@
 import { genPageMetadata } from '~/app/seo'
-import { ScrollButtons } from '~/components/blog/scroll-buttons'
 import { Badge } from '~/components/ui/badge'
 import { Container } from '~/components/ui/container'
-import { GradientDivider } from '~/components/ui/gradient-divider'
 import { Image } from '~/components/ui/image'
 import { Link } from '~/components/ui/link'
 import { PageHeader } from '~/components/ui/page-header'
-import { RatingBadge } from '~/components/ui/rating-badge'
 import { loadGameBySlugFromJson } from '../load-games'
 // Keep aside styling in-line and consistent with other pages —
 // avoid using heavyweight visual components like CometCard/GritBackground.
@@ -39,7 +36,6 @@ export default async function GameDetail({
 
   return (
     <Container className="pt-4 lg:pt-12">
-      <ScrollButtons color="orange" />
       <PageHeader
         title={game.title}
         description={game.summary}
