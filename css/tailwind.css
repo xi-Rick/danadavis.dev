@@ -171,6 +171,21 @@
   background-color: var(--color-accent-green);
 }
 
+/* Watch button: orange border in light, green border in dark */
+.watch-button {
+  border-color: var(--color-accent-orange);
+}
+.dark .watch-button {
+  border-color: var(--color-accent-green);
+}
+
+/* Course card accent dot: orange in light, green in dark */
+.course-accent-dot {
+  background-color: var(--color-accent-orange);
+}
+.dark .course-accent-dot {
+  background-color: var(--color-accent-green);
+}
 /* Themed Form Input Styles */
 .themed-input {
   width: 100%;

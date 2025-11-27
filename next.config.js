@@ -139,6 +139,10 @@ module.exports = () => {
           protocol: 'https',
           hostname: 'api.microlink.io', // Microlink Image Preview
         },
+        {
+          protocol: 'https',
+          hostname: 'img.youtube.com', // YouTube thumbnail images
+        },
       ],
       unoptimized,
     },

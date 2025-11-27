@@ -33,6 +33,33 @@ export type Project = {
   color?: 'orange' | 'green'
 }
 
+export type Course = {
+  id: string
+  title: string
+  slug: string
+  summary?: string
+  content?: string
+  imgSrc?: string
+  images?: string[]
+  date?: string
+  lastmod?: string
+  demo?: string
+  playlist?: string // YouTube playlist URL
+  curriculum?: Array<{
+    title: string
+    videoUrl: string
+    videoId?: string
+  }>
+  tags?: string[]
+  categories?: string[]
+  authors?: string[]
+  draft?: boolean
+  featured?: boolean
+  layout?: string | null
+  technologies?: string[]
+  color?: 'orange' | 'green' | 'purple' | 'blue'
+}
+
 export type Game = {
   id: string
   title: string
