@@ -1089,7 +1089,7 @@
     "titleType": "tv",
     "yourRating": 9,
     "imdbRating": "8.1",
-    "imdbUrl": "https://www.imdb.com/title/tt9964290/",
+    "imdbUrl": "https://www.imdb.com/title/tt12327578/",
     "createdAt": "2025-11-27T00:00:00.000Z",
     "updatedAt": "2025-11-27T00:00:00.000Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o",
@@ -1466,7 +1466,7 @@
     "titleType": "movie",
     "yourRating": 7,
     "imdbRating": "7.2",
-    "imdbUrl": "https://www.imdb.com/title/tt1405365/",
+    "imdbUrl": "https://www.imdb.com/title/tt2027128/",
     "createdAt": "2025-11-27T00:00:00.000Z",
     "updatedAt": "2025-11-27T00:00:00.000Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o",
@@ -1498,7 +1498,7 @@
     "titleType": "tv",
     "yourRating": 8,
     "imdbRating": "8.4",
-    "imdbUrl": "https://www.imdb.com/title/tt6077446/",
+    "imdbUrl": "https://www.imdb.com/title/tt6317068/",
     "createdAt": "2025-11-27T00:00:00.000Z",
     "updatedAt": "2025-11-27T00:00:00.000Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o",
@@ -1635,5 +1635,42 @@
     "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/the_flash",
     "numVotes": "190000",
     "totalSeasons": "9"
+  },
+  {
+    "id": "cmgrbh6000001kflbighero6",
+    "title": "Big Hero 6",
+    "slug": "big-hero-6",
+    "summary": "A young robotics prodigy, Hiro Hamada, forms a superhero team to combat a masked villain with the help of Baymax, a lovable inflatable robot.",
+    "content": "<p>After a personal tragedy, Hiro and his inflatable healthcare companion Baymax team up with friends to form an armored superhero team to take down a masked villain.</p>",
+    "date": "2014-11-07T00:00:00.000Z",
+    "lastmod": "2025-11-27T00:00:00.000Z",
+    "tags": ["Animation", "Action", "Family", "Adventure", "Sci-Fi & Fantasy"],
+    "categories": ["film"],
+    "images": [
+      "https://image.tmdb.org/t/p/w600_and_h900_face/2mxS4wUimwlLmI1xp6QW6NSU361.jpg"
+    ],
+    "authors": ["Don Hall", "Chris Williams"],
+    "draft": false,
+    "featured": true,
+    "layout": "MovieLayout",
+    "director": "Don Hall, Chris Williams",
+    "year": 2014,
+    "titleType": "movie",
+    "yourRating": 9,
+    "imdbRating": "7.8",
+    "imdbUrl": "https://www.imdb.com/title/tt2245084/",
+    "createdAt": "2025-11-27T00:00:00.000Z",
+    "updatedAt": "2025-11-27T00:00:00.000Z",
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "runtime": "102",
+    "ratings": [
+      {
+        "value": "89%",
+        "source": "Rotten Tomatoes"
+      }
+    ],
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/m/big_hero_6",
+    "numVotes": "268000",
+    "totalSeasons": ""
   }
 ]
