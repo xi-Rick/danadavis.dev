@@ -992,5 +992,42 @@
     "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/modern_family",
     "numVotes": "528000",
     "totalSeasons": "11"
+  },
+  {
+    "id": "cmgrdrwho000100fk8d14drw",
+    "title": "Doctor Who",
+    "slug": "doctor-who",
+    "summary": "A time-traveling alien known as the Doctor travels through time and space in the TARDIS, often accompanied by human companions, protecting civilizations and righting wrongs.",
+    "content": "<p>The Doctor explores the galaxy, solves mysteries, and saves worlds across time and space — often with the help of companions.</p>",
+    "date": "2005-03-26T00:00:00.000Z",
+    "lastmod": "2025-11-27T00:00:00.000Z",
+    "tags": ["Sci-Fi & Fantasy", "Drama", "Adventure"],
+    "categories": ["tv"],
+    "images": [
+      "https://image.tmdb.org/t/p/w600_and_h900_face/w8enSKCf6Zm0topeQ2XPccDqsqp.jpg"
+    ],
+    "authors": ["Various"],
+    "draft": false,
+    "featured": true,
+    "layout": "MovieLayout",
+    "director": "Various",
+    "year": 2005,
+    "titleType": "tv",
+    "yourRating": 9,
+    "imdbRating": "8.6",
+    "imdbUrl": "https://www.imdb.com/title/tt0436992/",
+    "createdAt": "2025-11-27T00:00:00.000Z",
+    "updatedAt": "2025-11-27T00:00:00.000Z",
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "runtime": "0",
+    "ratings": [
+      {
+        "value": "88%",
+        "source": "Rotten Tomatoes"
+      }
+    ],
+    "rottenTomatoesUrl": "https://www.rottentomatoes.com/tv/doctor_who",
+    "numVotes": "820000",
+    "totalSeasons": "13"
   }
 ]
