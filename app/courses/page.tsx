@@ -6,7 +6,8 @@ import { COURSES } from '~/data/courses'
 
 export const metadata = genPageMetadata({
   title: 'Courses',
-  description: 'Curated courses and video series — all hosted on YouTube.',
+  description:
+    'Curated web development courses and video series — all hosted on YouTube.',
 })
 
 export default async function CoursesPage() {
