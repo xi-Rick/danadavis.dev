@@ -128,7 +128,11 @@ export default async function CourseDetail(props: {
           <div className="mt-8">
             <a
               href={course?.playlist ?? course?.demo}
-              className="inline-flex items-center gap-3 px-4 py-2 border-2 rounded-lg bg-white dark:bg-black text-black dark:text-white watch-button"
+              className={
+                'inline-flex items-center gap-3 px-4 py-2 border-2 rounded-lg font-semibold transition-all duration-200 ' +
+                'border-black bg-white text-black hover:border-orange-500 hover:bg-orange-500 hover:text-white ' +
+                'dark:border-white dark:bg-black dark:text-white dark:hover:border-green-500 dark:hover:bg-green-500 dark:hover:text-white'
+              }
               style={{ boxShadow: '0 6px 18px rgba(0,0,0,0.06)' }}
               target="_blank"
               rel="noreferrer"

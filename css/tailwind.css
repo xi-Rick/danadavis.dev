@@ -171,13 +171,10 @@
   background-color: var(--color-accent-green);
 }
 
-/* Watch button: orange border in light, green border in dark */
-.watch-button {
-  border-color: var(--color-accent-orange);
-}
-.dark .watch-button {
-  border-color: var(--color-accent-green);
-}
+/* NOTE: removed older .watch-button-only rules to avoid conflicts with the
+   tag-like classes applied to the "Watch on YouTube" button. The button
+   now uses the same border/bg/text and hover rules as tag components.
+*/
 
 /* Course card accent dot: orange in light, green in dark */
 .course-accent-dot {
