@@ -30,48 +30,19 @@ export async function POST(req: Request) {
     const slug = body?.slug
 
     // prefer explicit origin from client, then request origin header
-    const providedOriginRaw = body?.origin || req.headers.get('origin') || null
-
-    // validate origin to guard against malformed input
-    let providedOrigin: string | null = null
-    if (providedOriginRaw) {
-      try {
-        const u = new URL(String(providedOriginRaw))
-        if (u.protocol === 'http:' || u.protocol === 'https:') {
-          providedOrigin = u.origin
-        }
-      } catch (e) {
-        // ignore invalid origin
-      }
-    }
-
-    // If an origin was provided, be conservative about trusting it.
-    // Only use a provided origin if it matches an allowlist (SITE_URL or NEXT_PUBLIC_SITE_URL
-    // or an explicit ALLOWED_ORIGINS env variable).
-    const allowedOriginsEnv = process.env.ALLOWED_ORIGINS || ''
-    const allowedOrigins = new Set<string>(
-      [process.env.SITE_URL, process.env.NEXT_PUBLIC_SITE_URL]
-        .filter((s): s is string => Boolean(s))
-        .concat(
-          allowedOriginsEnv
-            .split(',')
-            .map((s) => s.trim())
-            .filter(Boolean),
-        ),
-    )
-
-    const finalSiteUrl =
-      providedOrigin &&
-      allowedOrigins.size > 0 &&
-      allowedOrigins.has(providedOrigin)
-        ? providedOrigin
-        : null
-
-    const siteUrl =
-      finalSiteUrl ||
+    const origin = req.headers.get('origin')
+    let siteUrl =
       process.env.SITE_URL ||
       process.env.NEXT_PUBLIC_SITE_URL ||
       'http://localhost:3434'
+    if (origin) {
+      try {
+        const u = new URL(origin)
+        if (u.protocol === 'https:' || u.protocol === 'http:') {
+          siteUrl = u.origin
+        }
+      } catch {}
+    }
 
     if (!slug) {
       return new Response(JSON.stringify({ error: 'Missing slug' }), {
@@ -102,36 +73,33 @@ export async function POST(req: Request) {
 
     // (siteUrl already computed above using allowlist + env fallbacks)
 
-    const session = await stripe.checkout.sessions.create(
-      {
-        payment_method_types: ['card'],
-        mode: 'payment',
-        line_items: [
-          {
-            price_data: {
-              currency: (item.currency || 'USD').toLowerCase(),
-              unit_amount: unitAmount,
-              product_data: {
-                name: item.title,
-                description: item.summary,
-                images:
-                  item.images && item.images.length > 0
-                    ? [new URL(item.images[0], siteUrl).toString()]
-                    : undefined,
-              },
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'payment',
+      line_items: [
+        {
+          price_data: {
+            currency: (item.currency || 'USD').toLowerCase(),
+            unit_amount: unitAmount,
+            product_data: {
+              name: item.title,
+              description: item.summary,
+              images:
+                item.images && item.images.length > 0
+                  ? [new URL(item.images[0], siteUrl).toString()]
+                  : undefined,
             },
-            quantity: 1,
           },
-        ],
-        success_url: `${siteUrl}/shop?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${siteUrl}/shop/${item.slug}?checkout=cancel`,
-        metadata: {
-          shop_item_id: item.id,
-          shop_item_slug: item.slug,
+          quantity: 1,
         },
+      ],
+      success_url: `${siteUrl}/shop?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${siteUrl}/shop/${item.slug}?checkout=cancel`,
+      metadata: {
+        shop_item_id: item.id,
+        shop_item_slug: item.slug,
       },
-      { apiVersion: '2025-11-17.clover' },
-    )
+    })
 
     return new Response(JSON.stringify({ url: session.url }), { status: 200 })
   } catch (err) {
