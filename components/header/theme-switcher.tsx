@@ -10,54 +10,86 @@ export function ThemeSwitcher() {
   const { setTheme, resolvedTheme } = useTheme()
   const [isAnimating, setIsAnimating] = useState(false)
 
-  // When mounted on client, now we can show the UI
   useEffect(() => setMounted(true), [])
 
   const toggleTheme = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Prevent multiple clicks during animation
     if (isAnimating) return
+
+    const newTheme = resolvedTheme === 'dark' ? 'light' : 'dark'
+
+    // Check for reduced motion preference first
+    const prefersReducedMotion = window.matchMedia?.(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+
+    if (prefersReducedMotion) {
+      setTheme(newTheme)
+      return
+    }
 
     // If View Transitions API not supported — fallback
     if (!document.startViewTransition) {
-      setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+      setTheme(newTheme)
       return
     }
 
     setIsAnimating(true)
 
-    // Get click position; fallback to center of viewport when unavailable
-    const x = e?.clientX ?? window.innerWidth / 2
-    const y = e?.clientY ?? window.innerHeight / 2
+    try {
+      // Get click position; fallback to center of viewport
+      const x = e?.clientX ?? window.innerWidth / 2
+      const y = e?.clientY ?? window.innerHeight / 2
 
-    // radius to cover the entire viewport
-    const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y),
-    )
+      // Cache mobile check
+      const isMobile = window.innerWidth < 640
+      const viewportMax = Math.max(window.innerWidth, window.innerHeight)
 
-    const transition = document.startViewTransition(() => {
-      setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
-    })
+      // Calculate radius to cover viewport
+      const rawEndRadius = Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y),
+      )
 
-    await transition.ready
+      // Mobile optimization: clamp radius
+      const mobileLimit = viewportMax * 0.9
+      const endRadius = Math.min(
+        rawEndRadius,
+        isMobile ? mobileLimit : rawEndRadius,
+      )
 
-    // Animate the root element with a circular clip-path expanding from click
-    document.documentElement.animate(
-      {
-        clipPath: [
-          `circle(0px at ${x}px ${y}px)`,
-          `circle(${endRadius}px at ${x}px ${y}px)`,
-        ],
-      },
-      {
-        duration: 500,
-        easing: 'ease-in-out',
-        // Apply to the incoming view so it masks the new theme
-        pseudoElement: '::view-transition-new(root)',
-      } as KeyframeAnimationOptions,
-    )
+      // Start the transition
+      const transition = document.startViewTransition(() => {
+        setTheme(newTheme)
+      })
 
-    transition.finished.then(() => setIsAnimating(false))
+      await transition.ready
+
+      // Animate with circular clip-path
+      const duration = isMobile ? 350 : 500
+
+      const animation = document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`,
+          ],
+        },
+        {
+          duration,
+          easing: 'ease-in-out',
+          pseudoElement: '::view-transition-new(root)',
+        } as KeyframeAnimationOptions,
+      )
+
+      // Wait for transition to complete
+      await transition.finished
+    } catch (err) {
+      // Graceful fallback if animation fails
+      console.warn('Theme transition animation failed:', err)
+    } finally {
+      // Always reset animating state
+      setIsAnimating(false)
+    }
   }
 
   return (
@@ -65,8 +97,10 @@ export function ThemeSwitcher() {
       <button
         onClick={toggleTheme}
         disabled={isAnimating}
-        className={`flex items-center justify-center rounded-sm p-1.5 hover:bg-orange-100 hover:text-orange-600 dark:hover:bg-green-900/20 dark:hover:text-green-400 transition-colors ${isAnimating ? 'cursor-wait' : 'cursor-pointer'}`}
-        aria-label="Theme switcher"
+        className={`flex items-center justify-center rounded-sm p-1.5 hover:bg-orange-100 hover:text-orange-600 dark:hover:bg-green-900/20 dark:hover:text-green-400 transition-colors ${
+          isAnimating ? 'cursor-wait' : 'cursor-pointer'
+        }`}
+        aria-label="Toggle theme"
         data-umami-event="nav-theme-switcher"
       >
         {mounted ? (
