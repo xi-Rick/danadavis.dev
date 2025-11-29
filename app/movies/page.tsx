@@ -10,7 +10,7 @@ import { MoviesList } from './movies-list'
 export const metadata = genPageMetadata({
   title: 'My movies list',
   description:
-    "This is where I log all the movies and TV series I've watched. I'm a huge fan of Tom Hanks and Christopher Nolan, so expect to see a lot of them in the top spots! Anything I've rated 10 stars is something I absolutely love and have probably rewatched many times (highly recommended). Take a look and maybe find your next favorite film!",
+    'A personal record of the TV shows and animated series I love — heavy on anime, animation, and long-running series. My 10-star picks are the ones I’ve rewatched and recommend without hesitation.',
 })
 
 async function loadMoviesFromJson(): Promise<SelectMovie[]> {
@@ -88,13 +88,15 @@ export default async function MoviesPage() {
       <PageHeader
         title="Movies"
         description=<p>
-          This is where I log all the movies and TV series I’ve watched. I’m a
-          huge fan of <span className="font-medium">Tom Hanks</span> and{' '}
-          <span className="font-medium">Christopher Nolan</span>, so expect to
-          see a lot of them in the top spots! Anything I’ve rated 10 stars is
-          something I absolutely love and have probably rewatched many times
-          (highly recommended). Take a look and maybe find your next favorite
-          film!
+          This is my watchlist — a curated log of animated series, anime, and
+          long-running TV that I keep coming back to. I’m drawn to bold
+          worldbuilding, memorable characters, and shows that reward repeat
+          viewings — from quiet slice-of-life anime to sprawling serialized
+          epics. When I mark something a
+          <span className="font-medium"> 10 </span>, it means I rewatched it,
+          still catch new details, and recommend it without hesitation. Browse
+          through — you might find a series to binge or an old favorite to
+          revisit.
         </p>
         className="border-b border-gray-200 dark:border-gray-700"
       />

@@ -10,7 +10,7 @@ import { BooksList } from './books-list'
 export const metadata = genPageMetadata({
   title: 'My bookshelf',
   description:
-    "Reading has been my hobby since childhood, starting with comics, magazines, and textbooks. Today, I strive to keep reading daily, exploring topics such as science, technology, nonfiction, business, education, productivity, and history. This is where I keep track of what I've read and what's on my reading list.",
+    'My personal bookshelf — I read widely, from comics and fiction to science, technology, productivity, and history. I try to read a little every day and keep notes on the things I loved, what I’m currently reading, and what’s next on my list.',
 })
 
 async function loadBooksFromJson(): Promise<SelectBook[]> {
@@ -85,13 +85,13 @@ export default async function BooksPage() {
       <PageHeader
         title="Books"
         description=<p>
-          Reading has been my hobby since childhood, starting with comics,
-          magazines, and textbooks. Today, I strive to keep reading daily,
-          exploring topics such as science, technology, nonfiction, business,
-          education, productivity, and history.
-          <br />
-          This is where I keep track of what I’ve read and what’s on my reading
-          list.
+          Reading has been my hobby since childhood — starting with comics,
+          magazines, and textbooks — and it’s still how I unwind and learn.
+          These days I read widely: well-crafted fiction, thoughtful nonfiction
+          on science and technology, and practical books about productivity and
+          design. I keep a short log here of what I’ve read, what I loved, and
+          what’s waiting on my shelf. If I mark a book a 5, it’s one I’d hand to
+          a friend.
         </p>
         className="border-b border-gray-200 dark:border-gray-700"
       />
