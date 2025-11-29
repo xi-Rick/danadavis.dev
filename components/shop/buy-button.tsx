@@ -24,7 +24,9 @@ export default function BuyButton({
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug }),
+        // include the current origin so the server can construct correct
+        // success/cancel urls in environments where SITE_URL may not be set
+        body: JSON.stringify({ slug, origin: window.location.origin }),
       })
 
       const data = await res.json()
