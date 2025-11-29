@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 import { Link } from '~/components/ui/link'
 
@@ -50,11 +51,12 @@ export default function CoursePlayer({
               }
             >
               <div className="flex items-center gap-3">
-                <div className="w-12 h-8 overflow-hidden rounded-sm bg-black/10">
-                  <img
+                <div className="w-12 h-8 overflow-hidden rounded-sm bg-black/10 relative">
+                  <Image
                     src={`https://img.youtube.com/vi/${item.videoId || extractId(item.videoUrl)}/hqdefault.jpg`}
                     alt={item.title}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 </div>
                 <div className="text-sm">

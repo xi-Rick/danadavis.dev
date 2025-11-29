@@ -48,7 +48,7 @@ export default function AutoPlayAudio() {
   }, [hasPlayed])
 
   return (
-    <audio ref={audioRef} preload="auto" style={{ display: 'none' }}>
+    <audio ref={audioRef} preload="none" style={{ display: 'none' }}>
       <source src="/audio/opening.mp3" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>

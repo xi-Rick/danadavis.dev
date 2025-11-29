@@ -1,5 +1,6 @@
 import { genPageMetadata } from 'app/seo'
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import CoursePlayer from '~/components/courses/player'
 import { Container } from '~/components/ui/container'
@@ -109,15 +110,19 @@ export default async function CourseDetail(props: {
                 />
               </div>
             ) : (
-              <img
-                src={
-                  course?.imgSrc ||
-                  course?.images?.[0] ||
-                  '/static/images/twitter-card.jpeg'
-                }
-                alt={course?.title}
-                className="w-full h-full object-cover"
-              />
+              <div className="w-full aspect-video overflow-hidden rounded-lg border-2 border-black dark:border-white relative">
+                <Image
+                  src={
+                    course?.imgSrc ||
+                    course?.images?.[0] ||
+                    '/static/images/twitter-card.jpeg'
+                  }
+                  alt={course?.title}
+                  fill
+                  priority
+                  className="object-cover"
+                />
+              </div>
             )}
           </div>
 

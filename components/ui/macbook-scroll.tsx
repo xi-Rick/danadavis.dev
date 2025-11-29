@@ -182,7 +182,7 @@ export const Lid = ({
           src={src as string}
           alt="project preview"
           fill
-          loading="lazy"
+          priority
           className="absolute rounded-lg inset-0 h-full w-full object-cover object-center"
         />
       </motion.div>
