@@ -16,7 +16,7 @@ import { Twemoji } from '~/components/ui/twemoji'
 export const metadata = genPageMetadata({
   title: 'Shop',
   description:
-    "Small shop — Dana's daily brew is the one product I can't live without.",
+    'Welcome to Dana’s personal shop — with a twist: everything here is for me. It’s a curated list of things I love, use, or need, shared so you can treat me to something that fuels my creativity and daily life.',
 })
 
 type ShopItem = {
