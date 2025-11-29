@@ -1,0 +1,15 @@
+[
+  {
+    "id": "shop-coffee-001",
+    "title": "My Morning Coffee",
+    "slug": "my-morning-coffee",
+    "price": 3.0,
+    "currency": "USD",
+    "summary": "A small-batch, medium-roast coffee blend that keeps me going — bright, balanced, and comforting every morning.",
+    "description": "This is my everyday coffee. A carefully curated small-batch Arabian blend that strikes a warm balance of deep, earthy notes, toasted nuts, and a gentle citrus brightness. Perfect as a daily cup — bold enough to kick-start your focus, gentle enough for a slow sip.",
+    "images": ["/static/images/coffee.png"],
+    "createdAt": "2025-11-29T00:00:00.000Z",
+    "updatedAt": "2025-11-29T00:00:00.000Z",
+    "featured": true
+  }
+]

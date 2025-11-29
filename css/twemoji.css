@@ -214,6 +214,13 @@
 .twa-beer-mug {
   background-image: url("https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f37a.svg");
 }
+.twa-coffee {
+  background-image: url("https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/2615.svg");
+}
+/* Shop icon - shopping bags */
+.twa-shopping-bags {
+  background-image: url("https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f6cd.svg");
+}
 .twa-partying-face {
   background-image: url("https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f973.svg");
 }

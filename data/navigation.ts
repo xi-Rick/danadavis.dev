@@ -8,6 +8,7 @@ export const HEADER_NAV_LINKS = [
 ]
 
 export const MORE_NAV_LINKS = [
+  { href: '/shop', title: 'Shop', emoji: 'shopping-bags' },
   { href: '/books', title: 'Books', emoji: 'books' },
   { href: '/courses', title: 'Courses', emoji: 'graduation-cap' },
   { href: '/movies', title: 'Movies', emoji: 'film-frames' },
