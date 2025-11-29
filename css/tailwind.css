@@ -399,6 +399,22 @@
   color: white;
 }
 
+/* View Transitions API: ensure the special ::view-transition pseudo elements
+   sit on top of the page, inherit the root background, and are animatable
+   (we animate clip-path on ::view-transition-new(root) in the theme switcher). */
+/* biome-ignore lint/correctness/noUnknownProperty: "view-transition" is a valid feature query for the View Transitions API */
+@supports (view-transition: 1) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: inherit;
+    pointer-events: none;
+    will-change: clip-path, opacity;
+  }
+}
+
 .dark .platform-badge {
   background-color: rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.9);
