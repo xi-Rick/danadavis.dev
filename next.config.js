@@ -163,6 +163,11 @@ module.exports = () => {
           destination: '/tags/:path*',
           permanent: true,
         },
+        {
+          source: '/author/user',
+          destination: '/about',
+          permanent: true,
+        },
       ]
     },
     async headers() {
