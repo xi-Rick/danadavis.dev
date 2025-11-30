@@ -153,6 +153,16 @@ module.exports = () => {
           destination: '/blog/crawling-goodreads-books-data',
           permanent: true,
         },
+        {
+          source: '/work',
+          destination: '/projects',
+          permanent: true,
+        },
+        {
+          source: '/tag/:path*',
+          destination: '/tags/:path*',
+          permanent: true,
+        },
       ]
     },
     async headers() {
