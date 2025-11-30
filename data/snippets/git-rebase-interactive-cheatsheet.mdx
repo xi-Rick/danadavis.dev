@@ -1,0 +1,26 @@
+---
+title: "Git — rebase into tidy commits (interactive cheat sheet)"
+heading: "Git — rebase into tidy commits (interactive cheat sheet)"
+icon: "Git"
+date: "2025-11-30"
+summary: "Interactive rebase quick guide for cleaning up commits before merging a PR."
+tags: ["git","workflow","vcs"]
+---
+
+Interactive rebase is your friend when you want to clean up history before opening or merging a PR.
+
+```bash
+# edit last 5 commits
+git rebase -i HEAD~5
+
+# editor commands inside rebase
+# pick -> keep as-is
+# reword -> change commit message
+# edit -> pause and amend
+# squash/fixup -> combine commits
+
+# after amend
+git add -A && git rebase --continue
+```
+
+Keep rebasing small and make a backup branch if you're unsure — interactive rebase rewrites history.

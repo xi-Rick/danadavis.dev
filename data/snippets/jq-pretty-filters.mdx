@@ -1,0 +1,26 @@
+---
+title: "jq — pretty filter examples"
+heading: "jq — pretty filter examples"
+icon: "JSON"
+date: "2025-11-30"
+summary: "Common `jq` filters I use to inspect and manipulate JSON quickly on the command line."
+tags: ["jq","cli","json"]
+---
+
+Handy `jq` commands for everyday JSON inspection and transformation.
+
+```bash
+# pretty print
+cat data.json | jq .
+
+# extract array field
+cat data.json | jq '.items | map(.name)'
+
+# filter where active is true
+cat data.json | jq '.items[] | select(.active == true)'
+
+# compact log-friendly output
+cat data.json | jq -c '.items[] | {id, name}'
+```
+
+`jq` is indispensable for quick ad-hoc parsing when building or debugging CLI-based data flows.

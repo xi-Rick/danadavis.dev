@@ -1,0 +1,26 @@
+---
+title: "SSH config — multiple identities per host"
+heading: "SSH config — multiple identities per host"
+icon: "Key"
+date: "2025-11-30"
+summary: "Example `~/.ssh/config` entries for using multiple keys and identities per host (work + personal)."
+tags: ["ssh","dotfiles","git"]
+---
+
+Use named entries in `~/.ssh/config` to keep work and personal identities separate.
+
+```text
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_rsa_personal
+  IdentitiesOnly yes
+
+Host github-work
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_rsa_work
+  IdentitiesOnly yes
+```
+
+Use `git@github-work:owner/repo.git` for your work remote and `git@github.com:owner/repo.git` for personal.

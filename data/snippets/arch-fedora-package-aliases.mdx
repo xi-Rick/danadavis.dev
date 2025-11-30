@@ -1,0 +1,26 @@
+---
+title: "Arch/Fedora — quick pacman/dnf helper aliases"
+heading: "Arch/Fedora — quick pacman/dnf helper aliases"
+icon: "Terminal"
+date: "2025-11-30"
+summary: "Small shell aliases to speed up package management on Arch (pacman) and Fedora (dnf)."
+tags: ["linux","arch","fedora","bash"]
+---
+
+Drop these tiny aliases into `~/.bashrc` or `~/.zshrc` to speed up common package tasks.
+
+```bash
+# Arch (pacman)
+alias update-system='sudo pacman -Syu --noconfirm'
+alias searchpkg='pacman -Ss'
+
+# Fedora (dnf)
+alias update-fc='sudo dnf upgrade --refresh -y'
+alias search-fc='dnf search'
+
+# Common: clean caches
+alias pacman-clean='sudo pacman -Sc --noconfirm'
+alias dnf-clean='sudo dnf autoremove -y && sudo dnf clean all'
+```
+
+Keep these aliases short and reversible — they're designed for quick daily use and can be removed safely.

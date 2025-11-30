@@ -1,0 +1,26 @@
+---
+title: "Neovim minimal Lua config for JS/TS"
+heading: "Neovim minimal Lua config for JS/TS"
+icon: "Neovim"
+date: "2025-11-30"
+summary: "A small `init.lua` starter with LSP and a few core plugins for JavaScript and TypeScript development."
+tags: ["neovim","editor","lua"]
+---
+
+Keep your Neovim config minimal and fast. Suggested plugins: `nvim-lspconfig`, `nvim-treesitter`, `telescope.nvim` and a fast plugin manager like `lazy.nvim`.
+
+Example note:
+
+```lua
+-- plugins.lua (example)
+require('lazy').setup({
+  'neovim/nvim-lspconfig',
+  'nvim-treesitter/nvim-treesitter',
+  'nvim-telescope/telescope.nvim'
+})
+
+-- basic lsp attach for typescript
+-- require('lspconfig').tsserver.setup({})
+```
+
+Start small and add features as you need them; keep startup fast by lazy-loading heavy plugins.

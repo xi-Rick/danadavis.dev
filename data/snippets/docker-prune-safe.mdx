@@ -1,0 +1,23 @@
+---
+title: "Docker — cleanup & prune safely"
+heading: "Docker — cleanup & prune safely"
+icon: "Docker"
+date: "2025-11-30"
+summary: "Safely clean unused Docker resources — inspect first and prune selectively to avoid surprises."
+tags: ["docker","cli","cleanup"]
+---
+
+Before running a global prune, inspect what's unused and remove only what you expect.
+
+```bash
+# inspect usage
+docker system df
+docker image ls -f dangling=true
+
+# prune safely
+docker container prune -f
+docker image prune -f
+docker volume prune -f
+```
+
+Use `docker system prune` only when you know removing networks/volumes/images is safe for your environment.

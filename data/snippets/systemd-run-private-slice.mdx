@@ -1,0 +1,16 @@
+---
+title: "systemd — run a one-off command in a private slice"
+heading: "systemd — run a one-off command in a private slice"
+icon: "Server"
+date: "2025-11-30"
+summary: "Use `systemd-run` to create transient services with resource limits — handy for reproducible ad-hoc tests."
+tags: ["systemd","linux","cli"]
+---
+
+`systemd-run` is great for running a process in an isolated transient unit with runtime limits. Example:
+
+```bash
+sudo systemd-run --unit=temp-bench --slice=bench.slice --property=MemoryMax=512M --property=CPUQuota=50% --scope /usr/bin/time -v ./run-my-benchmark.sh
+```
+
+This runs `run-my-benchmark.sh` in `bench.slice` with memory and CPU caps so it's easy to repeat tests without creating persistent units.

@@ -1,0 +1,16 @@
+---
+title: "Kill process on port (Linux) — quick one-liner"
+heading: "Kill process on port (Linux) — quick one-liner"
+icon: "Bug"
+date: "2025-11-30"
+summary: "One-liners to find and kill the process listening on a given TCP port on Linux."
+tags: ["linux","cli","debug"]
+---
+
+Quickly find and terminate the process listening on a port (replace 3000):
+
+```bash
+sudo fuser -k 3000/tcp || (lsof -i :3000 -t | xargs -r sudo kill -9)
+```
+
+This attempts `fuser` first and falls back to `lsof` where `fuser` isn't available. Use with care.

@@ -1,0 +1,17 @@
+---
+title: "ripgrep + fd — fast file search combo"
+heading: "ripgrep + fd — fast file search combo"
+icon: "Search"
+date: "2025-11-30"
+summary: "Use `fd` and `rg` together for lightning-fast, colorized search across a codebase."
+tags: ["cli","search","ripgrep","fd"]
+---
+
+`fd` (a fast, user-friendly find) paired with `rg` (ripgrep) makes fast project searching. Example alias:
+
+```bash
+alias srch='fd --type f --hidden --exclude .git . | xargs -r rg --line-number --hidden --no-ignore-vcs --colors "match:fg:yellow"'
+# usage: srch TODO
+```
+
+This includes hidden files while excluding `.git` and adds colored hit highlighting — great for large repos.
