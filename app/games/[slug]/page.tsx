@@ -130,7 +130,7 @@ export default async function GameDetail({
                                 <Badge
                                   key={tag}
                                   variant="outline"
-                                  className="capitalize border-orange-200 text-orange-600 dark:border-green-700 dark:text-green-500 bg-white dark:bg-black"
+                                  className="capitalize inline-block rounded-lg border-2 font-semibold transition-all duration-200 border-black bg-white text-black hover:border-orange-500 hover:bg-orange-500 hover:text-white dark:border-white dark:bg-black dark:text-white dark:hover:border-green-500 dark:hover:bg-green-500 dark:hover:text-white"
                                 >
                                   {tag}
                                 </Badge>

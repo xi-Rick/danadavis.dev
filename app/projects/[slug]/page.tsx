@@ -260,7 +260,7 @@ export default async function ProjectPage(props: {
                           <Badge
                             key={tech}
                             variant="outline"
-                            className="capitalize border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white hover:bg-orange-100 dark:hover:bg-green-900/20"
+                            className="capitalize inline-block rounded-lg border-2 font-semibold transition-all duration-200 border-black bg-white text-black hover:border-orange-500 hover:bg-orange-500 hover:text-white dark:border-white dark:bg-black dark:text-white dark:hover:border-green-500 dark:hover:bg-green-500 dark:hover:text-white"
                           >
                             {tech}
                           </Badge>
