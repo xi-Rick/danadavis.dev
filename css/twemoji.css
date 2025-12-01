@@ -217,9 +217,17 @@
 .twa-coffee {
   background-image: url("https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/2615.svg");
 }
-/* Shop icon - shopping bags */
+/* Shop icon: use a wrapped gift instead of shopping bags for a friendlier CTA */
 .twa-shopping-bags {
-  background-image: url("https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f6cd.svg");
+  /* Using the wrapped gift emoji (🎁) instead of shopping bags — friendlier visual */
+  background-image: url("https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f381.svg");
+}
+
+/* Add alias classes for common gift / present emojis so components can use short names */
+.twa-wrapped-gift,
+.twa-gift,
+.twa-present {
+  background-image: url("https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f381.svg");
 }
 .twa-partying-face {
   background-image: url("https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f973.svg");

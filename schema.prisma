@@ -374,3 +374,35 @@ enum StatsType {
   blog
   snippet
 }
+
+model ShopItem {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  target      Float?
+  contributed Float         @default(0)
+  currency    String        @default("USD")
+  summary     String
+  description String
+  images      String[]
+  featured    Boolean       @default(false)
+  active      Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  contributions Contribution[]
+
+  @@map("shop_items")
+}
+
+model Contribution {
+  id             String   @id @default(cuid())
+  shopItemId     String
+  amount         Float
+  currency       String   @default("USD")
+  stripeSessionId String? @unique
+  email          String?
+  createdAt      DateTime @default(now())
+  shopItem       ShopItem @relation(fields: [shopItemId], references: [id], onDelete: Cascade)
+
+  @@map("contributions")
+}

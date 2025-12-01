@@ -11,5 +11,61 @@
     "createdAt": "2025-11-29T00:00:00.000Z",
     "updatedAt": "2025-11-29T00:00:00.000Z",
     "featured": true
+  },
+  {
+    "id": "shop-keyboard-001",
+    "title": "Mechanical Keyboard",
+    "slug": "mechanical-keyboard",
+    "target": 150.0,
+    "contributed": 0.0,
+    "currency": "USD",
+    "summary": "A premium mechanical keyboard for better typing experience.",
+    "description": "I'm looking to upgrade my keyboard to a high-quality mechanical one with tactile switches for better feedback and comfort during long coding sessions.",
+    "images": ["/static/images/keyboard.png"],
+    "createdAt": "2025-12-01T00:00:00.000Z",
+    "updatedAt": "2025-12-01T00:00:00.000Z",
+    "featured": false
+  },
+  {
+    "id": "shop-monitor-001",
+    "title": "4K Monitor",
+    "slug": "4k-monitor",
+    "target": 400.0,
+    "contributed": 0.0,
+    "currency": "USD",
+    "summary": "A high-resolution 4K monitor for better productivity.",
+    "description": "I need a larger, higher resolution monitor to improve my workflow and make coding and design work more efficient.",
+    "images": ["/static/images/monitor.png"],
+    "createdAt": "2025-12-01T00:00:00.000Z",
+    "updatedAt": "2025-12-01T00:00:00.000Z",
+    "featured": false
+  },
+  {
+    "id": "shop-mouse-001",
+    "title": "Ergonomic Mouse",
+    "slug": "ergonomic-mouse",
+    "target": 80.0,
+    "contributed": 0.0,
+    "currency": "USD",
+    "summary": "An ergonomic wireless mouse for comfortable computing.",
+    "description": "A comfortable, wireless ergonomic mouse to reduce strain during long hours of work.",
+    "images": ["/static/images/mouse.png"],
+    "createdAt": "2025-12-01T00:00:00.000Z",
+    "updatedAt": "2025-12-01T00:00:00.000Z",
+    "featured": false
+  },
+  {
+    "id": "shop-chair-001",
+    "title": "Office Chair",
+    "slug": "office-chair",
+    "target": 300.0,
+    "contributed": 0.0,
+    "currency": "USD",
+    "summary": "A comfortable office chair for better posture and health.",
+    "description": "An ergonomic office chair to support proper posture during long coding sessions and improve overall comfort.",
+    "images": ["/static/images/chair.png"],
+    "createdAt": "2025-12-01T00:00:00.000Z",
+    "updatedAt": "2025-12-01T00:00:00.000Z",
+    "featured": false
   }
 ]

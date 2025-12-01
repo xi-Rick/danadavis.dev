@@ -298,9 +298,57 @@ export async function seedSiteSettings() {
   }
 }
 
-export async function seed() {
+export async function seedShopItems() {
+  try {
+    console.log('Seeding shop items...')
+
+    const shopDataPath = path.join(process.cwd(), 'json', 'shop.json')
+    const shopData = JSON.parse(fs.readFileSync(shopDataPath, 'utf8'))
+
+    for (const item of shopData) {
+      await prisma.shopItem.upsert({
+        where: { slug: item.slug },
+        update: {
+          title: item.title,
+          target: item.target,
+          contributed: item.target
+            ? item.contributed || 0
+            : item.price || item.contributed || 0,
+          currency: item.currency,
+          summary: item.summary,
+          description: item.description,
+          images: item.images || [],
+          featured: item.featured || false,
+          active: true,
+          updatedAt: new Date(),
+        },
+        create: {
+          title: item.title,
+          slug: item.slug,
+          target: item.target,
+          contributed: item.target
+            ? item.contributed || 0
+            : item.price || item.contributed || 0,
+          currency: item.currency,
+          summary: item.summary,
+          description: item.description,
+          images: item.images || [],
+          featured: item.featured || false,
+          active: true,
+        },
+      })
+    }
+
+    console.log('✅ Shop items seeded successfully')
+  } catch (error) {
+    console.error('Error seeding shop items:', error)
+  }
+}
+
+async function seed() {
   await seedSiteSettings()
   await seedBooksUsingRssFeed()
+  await seedShopItems()
   // await seedBooksByParsingCSV()
 }
 

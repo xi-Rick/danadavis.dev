@@ -363,3 +363,77 @@ export async function reactToComment(
     throw err
   }
 }
+
+export async function getShopItems() {
+  try {
+    const items = await prisma.shopItem.findMany({
+      where: { active: true },
+      orderBy: { createdAt: 'desc' },
+    })
+    return items
+  } catch (error) {
+    console.error('Error loading shop items from database:', error)
+    return []
+  }
+}
+
+export async function getShopItemBySlug(slug: string) {
+  try {
+    const item = await prisma.shopItem.findUnique({
+      where: { slug },
+    })
+    return item
+  } catch (error) {
+    console.error('Error loading shop item by slug:', error)
+    return null
+  }
+}
+
+export async function updateShopItemContributed(
+  slug: string,
+  additionalAmount: number,
+) {
+  try {
+    const item = await prisma.shopItem.findUnique({
+      where: { slug },
+    })
+    if (!item) {
+      throw new Error('Shop item not found')
+    }
+
+    const newContributed = item.contributed + additionalAmount
+    const updatedItem = await prisma.shopItem.update({
+      where: { slug },
+      data: {
+        contributed: newContributed,
+        updatedAt: new Date(),
+      },
+    })
+    return updatedItem
+  } catch (error) {
+    console.error('Error updating shop item contributed amount:', error)
+    throw error
+  }
+}
+
+export async function createContribution(
+  shopItemId: string,
+  amount: number,
+  stripeSessionId?: string,
+  email?: string,
+) {
+  try {
+    const contribution = await prisma.contribution.create({
+      data: {
+        shopItemId,
+        amount,
+        stripeSessionId,
+        email,
+      },
+    })
+    return contribution
+  } catch (error) {
+    console.error('Error creating contribution:', error)
+    throw error
+  }
+}

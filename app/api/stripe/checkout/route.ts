@@ -1,12 +1,13 @@
-import { promises as fs } from 'node:fs'
-import path from 'node:path'
 import Stripe from 'stripe'
+import { getShopItemBySlug } from '~/db/queries'
 
 type ShopItem = {
   id: string
   title: string
   slug: string
-  price: number
+  price?: number
+  target?: number
+  contributed?: number
   currency: string
   summary: string
   description: string
@@ -15,11 +16,24 @@ type ShopItem = {
 
 async function loadShopBySlug(slug: string): Promise<ShopItem | null> {
   try {
-    const filePath = path.join(process.cwd(), 'json', 'shop.json')
-    const data = JSON.parse(await fs.readFile(filePath, 'utf8')) as ShopItem[]
-    return data.find((p) => p.slug === slug) ?? null
-  } catch (err) {
-    console.error('error loading shop json for stripe route', err)
+    const item = await getShopItemBySlug(slug)
+    if (!item) return null
+
+    return {
+      id: item.id,
+      title: item.title,
+      slug: item.slug,
+      // prefer explicit price (legacy fallback to contributed)
+      price: item.target ? undefined : item.contributed,
+      target: item.target || undefined,
+      contributed: item.contributed,
+      currency: item.currency,
+      summary: item.summary,
+      description: item.description,
+      images: item.images,
+    }
+  } catch (error) {
+    console.error('Error loading shop item by slug:', error)
     return null
   }
 }
@@ -28,6 +42,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json()
     const slug = body?.slug
+    const amount = body?.amount
 
     // prefer explicit origin from client, then request origin header
     const origin = req.headers.get('origin')
@@ -68,8 +83,17 @@ export async function POST(req: Request) {
 
     const stripe = new Stripe(secret, { apiVersion: '2022-11-15' })
 
-    // price in cents
-    const unitAmount = Math.round((item.price || 0) * 100)
+    // price in cents - use provided amount or item price
+    const unitAmount = Math.round((amount || item.price || 0) * 100)
+
+    if (unitAmount < 50) {
+      return new Response(
+        JSON.stringify({ error: 'Amount must be at least $0.50' }),
+        {
+          status: 400,
+        },
+      )
+    }
 
     // (siteUrl already computed above using allowlist + env fallbacks)
 
@@ -82,8 +106,10 @@ export async function POST(req: Request) {
             currency: (item.currency || 'USD').toLowerCase(),
             unit_amount: unitAmount,
             product_data: {
-              name: item.title,
-              description: item.summary,
+              name: amount ? `${item.title} - Contribution` : item.title,
+              description: amount
+                ? `Contribution of $${amount} towards ${item.title}`
+                : item.summary,
               images:
                 item.images && item.images.length > 0
                   ? [new URL(item.images[0], siteUrl).toString()]
@@ -98,6 +124,7 @@ export async function POST(req: Request) {
       metadata: {
         shop_item_id: item.id,
         shop_item_slug: item.slug,
+        is_contribution: amount ? 'true' : 'false',
       },
     })
 
