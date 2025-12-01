@@ -42,53 +42,64 @@ async function loadShopFromJson(): Promise<ShopItem[]> {
     return []
   }
 }
-
 function ProductCard({ item }: { item: ShopItem }) {
   const image = item.images?.[0] || '/static/images/shop-96.png'
 
   return (
     <GradientBorder
       offset={28}
-      className="flex min-h-[400px] flex-col rounded-[40px] p-6 [box-shadow:0_8px_32px_rgba(194,194,218,.3)] md:p-8 dark:bg-white/5 dark:shadow-none"
+      className="flex min-h-[420px] flex-col rounded-[40px] p-6 md:p-8 [box-shadow:0_12px_48px_rgba(194,194,218,.4)] hover:[box-shadow:0_16px_64px_rgba(194,194,218,.5)] transition-all duration-300 dark:bg-white/5 dark:shadow-none"
     >
       <TiltedGridBackground className="inset-0 z-[-1] rounded-[40px]" />
-      <div className="mb-6 flex items-center gap-4">
-        <div className="h-15 w-15 shrink-0">
+
+      {/* Image Section - Now Larger */}
+      <div className="mb-6 flex items-center justify-center">
+        <div className="h-24 w-24 md:h-28 md:w-28 shrink-0">
           {item.images && item.images.length > 0 ? (
             <Image
               src={image}
               alt={item.title}
-              width={100}
-              height={100}
-              className="h-full w-full object-contain rounded-lg"
+              width={112}
+              height={112}
+              className="h-full w-full object-contain rounded-2xl"
             />
           ) : (
-            <div className="h-full w-full flex items-center justify-center">
-              <Twemoji emoji="coffee" size="3x" />
+            <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-orange-50 dark:from-green-900/20 dark:to-green-800/20 rounded-2xl">
+              <Twemoji emoji="coffee" size="4x" />
             </div>
           )}
         </div>
-        <div className="flex flex-col items-start gap-1 pt-1">
-          <h2 className="text-[22px] leading-[30px] font-bold">
-            <Link href={`/shop/${item.slug}`}>
-              <GrowingUnderline>{item.title}</GrowingUnderline>
-            </Link>
-          </h2>
-        </div>
       </div>
-      <p className="mb-16 line-clamp-3 grow text-lg">{item.summary}</p>
-      <div className="mt-auto flex items-center justify-between">
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">
+
+      {/* Title Section */}
+      <div className="mb-6 text-center">
+        <h2 className="text-[28px] md:text-[32px] leading-[36px] md:leading-[42px] font-bold mb-2">
+          <Link href={`/shop/${item.slug}`}>
+            <GrowingUnderline>{item.title}</GrowingUnderline>
+          </Link>
+        </h2>
+      </div>
+
+      {/* Description */}
+      <p className="mb-6 line-clamp-3 grow text-base md:text-lg text-center text-gray-700 dark:text-gray-300 leading-relaxed">
+        {item.summary}
+      </p>
+
+      {/* Price and CTA Section */}
+      <div className="mt-auto space-y-4">
+        <div className="flex items-center justify-center gap-2 pb-4 border-b border-gray-200 dark:border-gray-700">
+          <span className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
             ${item.price}
           </span>
-          <span className="text-sm text-gray-500">{item.currency}</span>
+          <span className="text-base text-gray-500 dark:text-gray-400">
+            {item.currency}
+          </span>
         </div>
         <Link
           href={`/shop/${item.slug}`}
-          className="text-sm text-orange-600 dark:text-green-400 hover:underline"
+          className="block w-full text-center py-4 px-6 bg-gradient-to-r from-orange-500 to-orange-600 dark:from-green-500 dark:to-green-600 text-white font-semibold rounded-2xl hover:from-orange-600 hover:to-orange-700 dark:hover:from-green-600 dark:hover:to-green-700 transition-all duration-200 shadow-lg hover:shadow-xl"
         >
-          <GrowingUnderline>View details →</GrowingUnderline>
+          View Details →
         </Link>
       </div>
     </GradientBorder>

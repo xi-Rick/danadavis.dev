@@ -4,7 +4,7 @@
     "title": "React Custom Hook for Local Storage",
     "slug": "react-local-storage-hook",
     "summary": "A reusable React hook for managing localStorage with automatic JSON serialization and error handling.",
-    "content": "# React Custom Hook for Local Storage\n\nThis custom hook provides a clean interface for working with localStorage in React applications.\n\n## Usage\n\n```javascript\nimport { useLocalStorage } from './useLocalStorage'\n\nfunction MyComponent() {\n  const [value, setValue] = useLocalStorage('myKey', 'defaultValue')\n  \n  return (\n    <div>\n      <input \n        value={value} \n        onChange={(e) => setValue(e.target.value)} \n      />\n    </div>\n  )\n}\n```\n\n## Implementation\n\n```javascript\nimport { useState, useEffect } from 'react'\n\nexport function useLocalStorage(key, initialValue) {\n  // Get from local storage then parse stored json or return initialValue\n  const [storedValue, setStoredValue] = useState(() => {\n    try {\n      const item = window.localStorage.getItem(key)\n      return item ? JSON.parse(item) : initialValue\n    } catch (error) {\n      console.error('Error reading localStorage key:', key, error)\n      return initialValue\n    }\n  })\n\n  // Return a wrapped version of useState's setter function that persists the new value to localStorage\n  const setValue = (value) => {\n    try {\n      // Allow value to be a function so we have the same API as useState\n      const valueToStore = value instanceof Function ? value(storedValue) : value\n      setStoredValue(valueToStore)\n      window.localStorage.setItem(key, JSON.stringify(valueToStore))\n    } catch (error) {\n      console.error('Error setting localStorage key:', key, error)\n    }\n  }\n\n  return [storedValue, setValue]\n}\n```\n\n## Features\n\n- Automatic JSON serialization/deserialization\n- Error handling for localStorage access\n- Same API as useState\n- TypeScript support\n- SSR safe (with Next.js)",
+    "content": "# React Custom Hook for Local Storage\n\nThis custom hook provides a clean interface for working with localStorage in React applications.\n\n## Usage\n\n```javascript\nimport { useLocalStorage } from './useLocalStorage'\n\nfunction MyComponent() {\n  const [value, setValue] = useLocalStorage('myKey', 'defaultValue')\n  \n  return (\n    <div>\n      <input \n        value={value} \n        onChange={(e) => setValue(e.target.value)} \n      />\n    </div>\n  )\n}\n```\n\n## Implementation\n\n```javascript\nimport { useState, useEffect } from 'react'\n\nfunction _readLocalStorage(key, initialValue) {\n  if (typeof window === 'undefined') return initialValue\n  try {\n    const item = window.localStorage.getItem(key)\n    return item ? JSON.parse(item) : initialValue\n  } catch (err) {\n    console.warn('useLocalStorage: failed to read', key, err)\n    return initialValue\n  }\n}\n\nexport function useLocalStorage(key, initialValue) {\n  // Use a safe reader so this hook won't throw during SSR\n  const [storedValue, setStoredValue] = useState(() => _readLocalStorage(key, initialValue))\n\n  // Keep state up-to-date if value exists in localStorage and component mounts in browser\n  useEffect(() => {\n    if (typeof window === 'undefined') return\n    try {\n      const item = window.localStorage.getItem(key)\n      if (item) setStoredValue(JSON.parse(item))\n    } catch {}\n  }, [key])\n\n  const setValue = (value) => {\n    try {\n      const valueToStore = value instanceof Function ? value(storedValue) : value\n      setStoredValue(valueToStore)\n      if (typeof window !== 'undefined') {\n        window.localStorage.setItem(key, JSON.stringify(valueToStore))\n      }\n    } catch (err) {\n      console.warn('useLocalStorage: failed to set', key, err)\n    }\n  }\n\n  return [storedValue, setValue]\n}\n```\n\n## Features\n\n- Automatic JSON serialization/deserialization\n- Error handling for localStorage access\n- Same API as useState\n- TypeScript support\n- SSR safe (with Next.js)\n",
     "date": "2025-10-14T19:42:28.758Z",
     "lastmod": "2025-10-14T19:42:28.758Z",
     "tags": ["react", "hooks", "localStorage", "javascript"],
@@ -19,7 +19,8 @@
     "difficulty": "intermediate",
     "createdAt": "2025-10-14T19:42:28.830Z",
     "updatedAt": "2025-10-14T19:42:28.830Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "icon": "React"
   },
   {
     "id": "cmgqyy5ya0003ykfnsoli9sg6",
@@ -41,7 +42,8 @@
     "difficulty": "beginner",
     "createdAt": "2025-10-14T19:42:29.026Z",
     "updatedAt": "2025-10-14T19:42:29.026Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "icon": "Javascript"
   },
   {
     "id": "cmgqyy61z0005ykfn7f1c6z9k",
@@ -63,16 +65,17 @@
     "difficulty": "intermediate",
     "createdAt": "2025-10-14T19:42:29.159Z",
     "updatedAt": "2025-10-14T19:42:29.159Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "icon": "React"
   },
   {
     "id": "cmx-snippet-arch-001",
     "title": "Arch/Fedora — quick pacman/dnf helper aliases",
     "slug": "arch-fedora-package-aliases",
     "summary": "Small shell aliases to speed up package management on Arch (pacman) and Fedora (dnf).",
-    "content": "---\ntitle: \"Arch/Fedora — quick pacman/dnf helper aliases\"\nheading: \"Arch/Fedora — quick pacman/dnf helper aliases\"\nicon: \"Terminal\"\ndate: \"2025-11-30\"\nsummary: \"Small shell aliases to speed up package management on Arch (pacman) and Fedora (dnf).\"\ntags: [\"linux\",\"arch\",\"fedora\",\"bash\"]\n---\n\nDrop these tiny aliases into `~/.bashrc` or `~/.zshrc` to speed up common package tasks.\n\n```bash\n# Arch (pacman)\nalias update-system='sudo pacman -Syu --noconfirm'\nalias searchpkg='pacman -Ss'\n\n# Fedora (dnf)\nalias update-fc='sudo dnf upgrade --refresh -y'\nalias search-fc='dnf search'\n\n# Common: clean caches\nalias pacman-clean='sudo pacman -Sc --noconfirm'\nalias dnf-clean='sudo dnf autoremove -y && sudo dnf clean all'\n```\n\nKeep these aliases short and reversible — they're designed for quick daily use and can be removed safely.\n",
-    "date": "2025-11-30T16:07:07.387465Z",
-    "lastmod": "2025-11-30T16:07:07.387465Z",
+    "content": "\nDrop these tiny aliases into `~/.bashrc` or `~/.zshrc` to speed up common package tasks.\n\n```bash\n# Arch (pacman)\nalias update-system='sudo pacman -Syu --noconfirm'\nalias searchpkg='pacman -Ss'\n\n# Fedora (dnf)\nalias update-fc='sudo dnf upgrade --refresh -y'\nalias search-fc='dnf search'\n\n# Common: clean caches\nalias pacman-clean='sudo pacman -Sc --noconfirm'\nalias dnf-clean='sudo dnf autoremove -y && sudo dnf clean all'\n```\n\nKeep these aliases short and reversible — they're designed for quick daily use and can be removed safely.\n",
+    "date": "2025-11-30",
+    "lastmod": "2025-11-30",
     "tags": ["linux", "arch", "fedora", "bash"],
     "categories": ["cli", "linux"],
     "images": [],
@@ -85,16 +88,18 @@
     "difficulty": "beginner",
     "createdAt": "2025-11-30T16:07:07.387465Z",
     "updatedAt": "2025-11-30T16:07:07.387465Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "icon": "Bash",
+    "heading": "Arch/Fedora — quick pacman/dnf helper aliases"
   },
   {
     "id": "cmx-snippet-sysd-002",
     "title": "systemd — run a one-off command in a private slice",
     "slug": "systemd-run-private-slice",
-    "summary": "Use systemd-run to start a transient service in its own slice with resource limits — great for ad-hoc tasks and benchmarking.",
-    "content": "---\ntitle: \"systemd — run a one-off command in a private slice\"\nheading: \"systemd — run a one-off command in a private slice\"\nicon: \"Server\"\ndate: \"2025-11-30\"\nsummary: \"Use `systemd-run` to create transient services with resource limits — handy for reproducible ad-hoc tests.\"\ntags: [\"systemd\",\"linux\",\"cli\"]\n---\n\n`systemd-run` is great for running a process in an isolated transient unit with runtime limits. Example:\n\n```bash\nsudo systemd-run --unit=temp-bench --slice=bench.slice --property=MemoryMax=512M --property=CPUQuota=50% --scope /usr/bin/time -v ./run-my-benchmark.sh\n```\n\nThis runs `run-my-benchmark.sh` in `bench.slice` with memory and CPU caps so it's easy to repeat tests without creating persistent units.\n",
-    "date": "2025-11-30T16:07:07.387465Z",
-    "lastmod": "2025-11-30T16:07:07.387465Z",
+    "summary": "Use `systemd-run` to create transient services with resource limits — handy for reproducible ad-hoc tests.",
+    "content": "\n`systemd-run` is great for running a process in an isolated transient unit with runtime limits. Below are two safe, runnable examples that don't require an external script in the repo.\n\n```bash\n# Example 1 — use `dd` to create a short CPU/IO workload and measure it with `/usr/bin/time`:\nsudo systemd-run --unit=temp-bench --slice=bench.slice   --property=MemoryMax=512M --property=CPUQuota=50% --scope   /usr/bin/time -v bash -c \"dd if=/dev/zero of=/dev/null bs=1M count=1024\"\n\n# Example 2 — lightweight python sleep loop as a placeholder workload:\nsudo systemd-run --unit=temp-bench --slice=bench.slice   --property=MemoryMax=256M --property=CPUQuota=30% --scope   /usr/bin/time -v python3 -c \"import time; [time.sleep(0.1) for _ in range(20)]\"\n```\n\nBoth commands will run inline, demonstrating resource-limited transient units without requiring any additional script files in the repository. Adjust `MemoryMax`/`CPUQuota` and the workload command to match your testing needs.\n",
+    "date": "2025-11-30",
+    "lastmod": "2025-11-30",
     "tags": ["systemd", "linux", "cli"],
     "categories": ["linux", "ops"],
     "images": [],
@@ -107,16 +112,18 @@
     "difficulty": "beginner",
     "createdAt": "2025-11-30T16:07:07.387465Z",
     "updatedAt": "2025-11-30T16:07:07.387465Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "icon": "Bash",
+    "heading": "systemd — run a one-off command in a private slice"
   },
   {
     "id": "cmx-snippet-vscode-003",
     "title": "VSCode — handy settings.json snippet",
     "slug": "vscode-settings-snippet",
-    "summary": "A compact settings.json you can use across machines — format on save, trims, and editor defaults.",
-    "content": "---\ntitle: \"VSCode — handy settings.json snippet\"\nheading: \"VSCode — handy settings.json snippet\"\nicon: \"VSCode\"\ndate: \"2025-11-30\"\nsummary: \"A compact `settings.json` you can use across machines — format on save, trims, and editor defaults.\"\ntags: [\"vscode\",\"editor\",\"dotfiles\"]\n---\n\nDrop this into your `settings.json` for a clean, consistent editor setup across devices:\n\n```json\n{\n  \"editor.formatOnSave\": true,\n  \"files.trimTrailingWhitespace\": true,\n  \"editor.tabSize\": 2,\n  \"editor.detectIndentation\": false,\n  \"editor.minimap.enabled\": false,\n  \"workbench.colorTheme\": \"Default Dark+\",\n  \"git.enableSmartCommit\": true\n}\n```\n\nPair with extensions like `esbenp.prettier-vscode`, `ms-vscode.vscode-typescript-next`, and `ms-azuretools.vscode-docker`.\n",
-    "date": "2025-11-30T16:07:07.387465Z",
-    "lastmod": "2025-11-30T16:07:07.387465Z",
+    "summary": "A compact `settings.json` you can use across machines — format on save, trims, and editor defaults.",
+    "content": "\nDrop this into your `settings.json` for a clean, consistent editor setup across devices.\n\nIf you'd prefer this entry to reflect your *actual* local VS Code settings, open the Command Palette in VS Code and choose \"Preferences: Open Settings (JSON)\", copy the JSON, and replace the example below with your exported settings.\n\n```json\n{\n  \"github.copilot.nextEditSuggestions.enabled\": true,\n  \"gitlens.ai.model\": \"vscode\",\n  \"gitlens.ai.vscode.model\": \"copilot:gpt-4.1\",\n  \"workbench.colorTheme\": \"Andromeda\",\n  \"workbench.iconTheme\": \"material-icon-theme\",\n  \"chat.editing.confirmEditRequestRemoval\": false,\n  \"security.workspace.trust.untrustedFiles\": \"open\",\n  \"editor.minimap.enabled\": false,\n  \"explorer.confirmDelete\": false,\n  \"git.enableSmartCommit\": true\n}\n```\n\nPair with extensions like `esbenp.prettier-vscode`, `ms-vscode.vscode-typescript-next`, and `ms-azuretools.vscode-docker`.\n",
+    "date": "2025-11-30",
+    "lastmod": "2025-11-30",
     "tags": ["vscode", "editor", "dotfiles"],
     "categories": ["tools", "editor"],
     "images": [],
@@ -129,16 +136,18 @@
     "difficulty": "beginner",
     "createdAt": "2025-11-30T16:07:07.387465Z",
     "updatedAt": "2025-11-30T16:07:07.387465Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "icon": "VSCode",
+    "heading": "VSCode — handy settings.json snippet"
   },
   {
     "id": "cmx-snippet-killport-004",
     "title": "Kill process on port (Linux) — quick one-liner",
     "slug": "kill-process-on-port-linux",
-    "summary": "A simple command to find and kill the process listening on a TCP port — works on Arch/Fedora and other Linux systems.",
-    "content": "---\ntitle: \"Kill process on port (Linux) — quick one-liner\"\nheading: \"Kill process on port (Linux) — quick one-liner\"\nicon: \"Bug\"\ndate: \"2025-11-30\"\nsummary: \"One-liners to find and kill the process listening on a given TCP port on Linux.\"\ntags: [\"linux\",\"cli\",\"debug\"]\n---\n\nQuickly find and terminate the process listening on a port (replace 3000):\n\n```bash\nsudo fuser -k 3000/tcp || (lsof -i :3000 -t | xargs -r sudo kill -9)\n```\n\nThis attempts `fuser` first and falls back to `lsof` where `fuser` isn't available. Use with care.\n",
-    "date": "2025-11-30T16:07:07.387465Z",
-    "lastmod": "2025-11-30T16:07:07.387465Z",
+    "summary": "One-liners to find and kill the process listening on a given TCP port on Linux.",
+    "content": "\nQuickly find and terminate the process listening on a port (replace 3000):\n\n```bash\nsudo fuser -k 3000/tcp || (lsof -i :3000 -t | xargs -r sudo kill -9)\n```\n\nThis attempts `fuser` first and falls back to `lsof` where `fuser` isn't available. Use with care.\n",
+    "date": "2025-11-30",
+    "lastmod": "2025-11-30",
     "tags": ["linux", "cli", "debug"],
     "categories": ["utilities", "troubleshooting"],
     "images": [],
@@ -151,16 +160,18 @@
     "difficulty": "beginner",
     "createdAt": "2025-11-30T16:07:07.387465Z",
     "updatedAt": "2025-11-30T16:07:07.387465Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "icon": "Bash",
+    "heading": "Kill process on port (Linux) — quick one-liner"
   },
   {
     "id": "cmx-snippet-rgfd-005",
     "title": "ripgrep + fd — fast file search combo",
     "slug": "rg-fd-file-search",
     "summary": "Use `fd` and `rg` together for lightning-fast, colorized search across a codebase.",
-    "content": "---\ntitle: \"ripgrep + fd — fast file search combo\"\nheading: \"ripgrep + fd — fast file search combo\"\nicon: \"Search\"\ndate: \"2025-11-30\"\nsummary: \"Use `fd` and `rg` together for lightning-fast, colorized search across a codebase.\"\ntags: [\"cli\",\"search\",\"ripgrep\",\"fd\"]\n---\n\n`fd` (a fast, user-friendly find) paired with `rg` (ripgrep) makes fast project searching. Example alias:\n\n```bash\nalias srch='fd --type f --hidden --exclude .git . | xargs -r rg --line-number --hidden --no-ignore-vcs --colors \"match:fg:yellow\"'\n# usage: srch TODO\n```\n\nThis includes hidden files while excluding `.git` and adds colored hit highlighting — great for large repos.\n",
-    "date": "2025-11-30T16:07:07.387465Z",
-    "lastmod": "2025-11-30T16:07:07.387465Z",
+    "content": "\n`fd` (a fast, user-friendly find) paired with `rg` (ripgrep) makes fast project searching. Example alias:\n\n```bash\nalias srch='fd --type f --hidden --exclude .git . | xargs -r rg --line-number --hidden --no-ignore-vcs --colors \"match:fg:yellow\"'\n# usage: srch TODO\n```\n\nThis includes hidden files while excluding `.git` and adds colored hit highlighting — great for large repos.\n",
+    "date": "2025-11-30",
+    "lastmod": "2025-11-30",
     "tags": ["cli", "search", "ripgrep", "fd"],
     "categories": ["developer tools"],
     "images": [],
@@ -173,16 +184,18 @@
     "difficulty": "beginner",
     "createdAt": "2025-11-30T16:07:07.387465Z",
     "updatedAt": "2025-11-30T16:07:07.387465Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "icon": "Bash",
+    "heading": "ripgrep + fd — fast file search combo"
   },
   {
     "id": "cmx-snippet-neovim-006",
     "title": "Neovim minimal Lua config for JS/TS",
     "slug": "neovim-minimal-lua-js-ts",
-    "summary": "A small init.lua starter with LSP and a few core plugins for JavaScript/TypeScript development.",
-    "content": "---\ntitle: \"Neovim minimal Lua config for JS/TS\"\nheading: \"Neovim minimal Lua config for JS/TS\"\nicon: \"Neovim\"\ndate: \"2025-11-30\"\nsummary: \"A small `init.lua` starter with LSP and a few core plugins for JavaScript and TypeScript development.\"\ntags: [\"neovim\",\"editor\",\"lua\"]\n---\n\nKeep your Neovim config minimal and fast. Suggested plugins: `nvim-lspconfig`, `nvim-treesitter`, `telescope.nvim` and a fast plugin manager like `lazy.nvim`.\n\nExample note:\n\n```lua\n-- plugins.lua (example)\nrequire('lazy').setup({\n  'neovim/nvim-lspconfig',\n  'nvim-treesitter/nvim-treesitter',\n  'nvim-telescope/telescope.nvim'\n})\n\n-- basic lsp attach for typescript\n-- require('lspconfig').tsserver.setup({})\n```\n\nStart small and add features as you need them; keep startup fast by lazy-loading heavy plugins.\n",
-    "date": "2025-11-30T16:07:07.387465Z",
-    "lastmod": "2025-11-30T16:07:07.387465Z",
+    "summary": "A small `init.lua` starter with LSP and a few core plugins for JavaScript and TypeScript development.",
+    "content": "\nKeep your Neovim config minimal and fast. Suggested plugins: `nvim-lspconfig`, `nvim-treesitter`, `telescope.nvim` and a fast plugin manager like `lazy.nvim`.\n\nExample note:\n\n```lua\n-- plugins.lua (example)\nrequire('lazy').setup({\n  'neovim/nvim-lspconfig',\n  'nvim-treesitter/nvim-treesitter',\n  'nvim-telescope/telescope.nvim'\n})\n\n-- basic lsp attach for typescript\n-- require('lspconfig').tsserver.setup({})\n```\n\nStart small and add features as you need them; keep startup fast by lazy-loading heavy plugins.\n",
+    "date": "2025-11-30",
+    "lastmod": "2025-11-30",
     "tags": ["neovim", "editor", "lua"],
     "categories": ["editor", "dotfiles"],
     "images": [],
@@ -195,16 +208,18 @@
     "difficulty": "beginner",
     "createdAt": "2025-11-30T16:07:07.387465Z",
     "updatedAt": "2025-11-30T16:07:07.387465Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "icon": "Iterm2",
+    "heading": "Neovim minimal Lua config for JS/TS"
   },
   {
     "id": "cmx-snippet-ssh-007",
     "title": "SSH config — multiple identities per host",
     "slug": "ssh-config-multi-identity",
     "summary": "Example `~/.ssh/config` entries for using multiple keys and identities per host (work + personal).",
-    "content": "---\ntitle: \"SSH config — multiple identities per host\"\nheading: \"SSH config — multiple identities per host\"\nicon: \"Key\"\ndate: \"2025-11-30\"\nsummary: \"Example `~/.ssh/config` entries for using multiple keys and identities per host (work + personal).\"\ntags: [\"ssh\",\"dotfiles\",\"git\"]\n---\n\nUse named entries in `~/.ssh/config` to keep work and personal identities separate.\n\n```text\nHost github.com\n  HostName github.com\n  User git\n  IdentityFile ~/.ssh/id_rsa_personal\n  IdentitiesOnly yes\n\nHost github-work\n  HostName github.com\n  User git\n  IdentityFile ~/.ssh/id_rsa_work\n  IdentitiesOnly yes\n```\n\nUse `git@github-work:owner/repo.git` for your work remote and `git@github.com:owner/repo.git` for personal.\n",
-    "date": "2025-11-30T16:07:07.387465Z",
-    "lastmod": "2025-11-30T16:07:07.387465Z",
+    "content": "\nUse named entries in `~/.ssh/config` to keep work and personal identities separate.\n\n```text\nHost github.com\n  HostName github.com\n  User git\n  IdentityFile ~/.ssh/id_rsa_personal\n  IdentitiesOnly yes\n\nHost github-work\n  HostName github.com\n  User git\n  IdentityFile ~/.ssh/id_rsa_work\n  IdentitiesOnly yes\n```\n\nUse `git@github-work:owner/repo.git` for your work remote and `git@github.com:owner/repo.git` for personal.\n",
+    "date": "2025-11-30",
+    "lastmod": "2025-11-30",
     "tags": ["ssh", "dotfiles", "git"],
     "categories": ["security", "devops"],
     "images": [],
@@ -217,16 +232,18 @@
     "difficulty": "beginner",
     "createdAt": "2025-11-30T16:07:07.387465Z",
     "updatedAt": "2025-11-30T16:07:07.387465Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "icon": "Git",
+    "heading": "SSH config — multiple identities per host"
   },
   {
     "id": "cmx-snippet-git-008",
     "title": "Git — rebase into tidy commits (interactive cheat sheet)",
     "slug": "git-rebase-interactive-cheatsheet",
-    "summary": "A short interactive rebase cheat sheet for cleaning commit history before merge.",
-    "content": "---\ntitle: \"Git — rebase into tidy commits (interactive cheat sheet)\"\nheading: \"Git — rebase into tidy commits (interactive cheat sheet)\"\nicon: \"Git\"\ndate: \"2025-11-30\"\nsummary: \"Interactive rebase quick guide for cleaning up commits before merging a PR.\"\ntags: [\"git\",\"workflow\",\"vcs\"]\n---\n\nInteractive rebase is your friend when you want to clean up history before opening or merging a PR.\n\n```bash\n# edit last 5 commits\ngit rebase -i HEAD~5\n\n# editor commands inside rebase\n# pick -> keep as-is\n# reword -> change commit message\n# edit -> pause and amend\n# squash/fixup -> combine commits\n\n# after amend\ngit add -A && git rebase --continue\n```\n\nKeep rebasing small and make a backup branch if you're unsure — interactive rebase rewrites history.\n",
-    "date": "2025-11-30T16:07:07.387465Z",
-    "lastmod": "2025-11-30T16:07:07.387465Z",
+    "summary": "Interactive rebase quick guide for cleaning up commits before merging a PR.",
+    "content": "\nInteractive rebase is your friend when you want to clean up history before opening or merging a PR.\n\n```bash\n# edit last 5 commits\ngit rebase -i HEAD~5\n\n# editor commands inside rebase\n# pick -> keep as-is\n# reword -> change commit message\n# edit -> pause and amend\n# squash/fixup -> combine commits\n\n# after amend\ngit add -A && git rebase --continue\n```\n\nKeep rebasing small and make a backup branch if you're unsure — interactive rebase rewrites history.\n",
+    "date": "2025-11-30",
+    "lastmod": "2025-11-30",
     "tags": ["git", "workflow", "vcs"],
     "categories": ["git", "workflow"],
     "images": [],
@@ -239,16 +256,18 @@
     "difficulty": "beginner",
     "createdAt": "2025-11-30T16:07:07.387465Z",
     "updatedAt": "2025-11-30T16:07:07.387465Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "icon": "Git",
+    "heading": "Git — rebase into tidy commits (interactive cheat sheet)"
   },
   {
     "id": "cmx-snippet-jq-009",
     "title": "jq — pretty filter examples",
     "slug": "jq-pretty-filters",
-    "summary": "Common `jq` filters to inspect and transform JSON on the command line.",
-    "content": "---\ntitle: \"jq — pretty filter examples\"\nheading: \"jq — pretty filter examples\"\nicon: \"JSON\"\ndate: \"2025-11-30\"\nsummary: \"Common `jq` filters I use to inspect and manipulate JSON quickly on the command line.\"\ntags: [\"jq\",\"cli\",\"json\"]\n---\n\nHandy `jq` commands for everyday JSON inspection and transformation.\n\n```bash\n# pretty print\ncat data.json | jq .\n\n# extract array field\ncat data.json | jq '.items | map(.name)'\n\n# filter where active is true\ncat data.json | jq '.items[] | select(.active == true)'\n\n# compact log-friendly output\ncat data.json | jq -c '.items[] | {id, name}'\n```\n\n`jq` is indispensable for quick ad-hoc parsing when building or debugging CLI-based data flows.\n",
-    "date": "2025-11-30T16:07:07.387465Z",
-    "lastmod": "2025-11-30T16:07:07.387465Z",
+    "summary": "Common `jq` filters I use to inspect and manipulate JSON quickly on the command line.",
+    "content": "\nHandy `jq` commands for everyday JSON inspection and transformation.\n\n```bash\n# pretty print\ncat data.json | jq .\n\n# extract array field\ncat data.json | jq '.items | map(.name)'\n\n# filter where active is true\ncat data.json | jq '.items[] | select(.active == true)'\n\n# compact log-friendly output\ncat data.json | jq -c '.items[] | {id, name}'\n```\n\n`jq` is indispensable for quick ad-hoc parsing when building or debugging CLI-based data flows.\n",
+    "date": "2025-11-30",
+    "lastmod": "2025-11-30",
     "tags": ["jq", "cli", "json"],
     "categories": ["utilities"],
     "images": [],
@@ -261,16 +280,18 @@
     "difficulty": "beginner",
     "createdAt": "2025-11-30T16:07:07.387465Z",
     "updatedAt": "2025-11-30T16:07:07.387465Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "icon": "Bash",
+    "heading": "jq — pretty filter examples"
   },
   {
     "id": "cmx-snippet-docker-010",
     "title": "Docker — cleanup & prune safely",
     "slug": "docker-prune-safe",
     "summary": "Safely clean unused Docker resources — inspect first and prune selectively to avoid surprises.",
-    "content": "---\ntitle: \"Docker — cleanup & prune safely\"\nheading: \"Docker — cleanup & prune safely\"\nicon: \"Docker\"\ndate: \"2025-11-30\"\nsummary: \"Safely clean unused Docker resources — inspect first and prune selectively to avoid surprises.\"\ntags: [\"docker\",\"cli\",\"cleanup\"]\n---\n\nBefore running a global prune, inspect what's unused and remove only what you expect.\n\n```bash\n# inspect usage\ndocker system df\ndocker image ls -f dangling=true\n\n# prune safely\ndocker container prune -f\ndocker image prune -f\ndocker volume prune -f\n```\n\nUse `docker system prune` only when you know removing networks/volumes/images is safe for your environment.\n",
-    "date": "2025-11-30T16:07:07.387465Z",
-    "lastmod": "2025-11-30T16:07:07.387465Z",
+    "content": "\nBefore running a global prune, inspect what's unused and remove only what you expect.\n\n```bash\n# inspect usage\ndocker system df\ndocker image ls -f dangling=true\n\n# prune safely\ndocker container prune -f\ndocker image prune -f\ndocker volume prune -f\n```\n\nUse `docker system prune` only when you know removing networks/volumes/images is safe for your environment.\n",
+    "date": "2025-11-30",
+    "lastmod": "2025-11-30",
     "tags": ["docker", "cli", "cleanup"],
     "categories": ["devops", "container"],
     "images": [],
@@ -283,6 +304,8 @@
     "difficulty": "beginner",
     "createdAt": "2025-11-30T16:07:07.387465Z",
     "updatedAt": "2025-11-30T16:07:07.387465Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o",
+    "icon": "Node",
+    "heading": "Docker — cleanup & prune safely"
   }
 ]

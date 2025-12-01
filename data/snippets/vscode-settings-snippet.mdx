@@ -7,16 +7,21 @@ summary: "A compact `settings.json` you can use across machines — format on sa
 tags: ["vscode","editor","dotfiles"]
 ---
 
-Drop this into your `settings.json` for a clean, consistent editor setup across devices:
+Drop this into your `settings.json` for a clean, consistent editor setup across devices.
+
+If you'd prefer this entry to reflect your *actual* local VS Code settings, open the Command Palette in VS Code and choose "Preferences: Open Settings (JSON)", copy the JSON, and replace the example below with your exported settings.
 
 ```json
 {
-  "editor.formatOnSave": true,
-  "files.trimTrailingWhitespace": true,
-  "editor.tabSize": 2,
-  "editor.detectIndentation": false,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+  "workbench.colorTheme": "Andromeda",
+  "workbench.iconTheme": "material-icon-theme",
+  "chat.editing.confirmEditRequestRemoval": false,
+  "security.workspace.trust.untrustedFiles": "open",
   "editor.minimap.enabled": false,
-  "workbench.colorTheme": "Default Dark+",
+  "explorer.confirmDelete": false,
   "git.enableSmartCommit": true
 }
 ```

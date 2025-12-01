@@ -1,7 +1,7 @@
 ---
 title: "React Custom Hook for Local Storage"
 heading: "React Custom Hook for Local Storage"
-icon: "Javascript"
+icon: "React"
 date: "2025-10-14"
 summary: "A reusable React hook for managing localStorage with automatic JSON serialization and error handling."
 tags: ["react", "hooks", "localStorage", "javascript"]
@@ -33,27 +33,39 @@ function MyComponent() {
 ```javascript
 import { useState, useEffect } from 'react'
 
+function _readLocalStorage(key, initialValue) {
+  if (typeof window === 'undefined') return initialValue
+  try {
+    const item = window.localStorage.getItem(key)
+    return item ? JSON.parse(item) : initialValue
+  } catch (err) {
+    console.warn('useLocalStorage: failed to read', key, err)
+    return initialValue
+  }
+}
+
 export function useLocalStorage(key, initialValue) {
-  // Get from local storage then parse stored json or return initialValue
-  const [storedValue, setStoredValue] = useState(() => {
+  // Use a safe reader so this hook won't throw during SSR
+  const [storedValue, setStoredValue] = useState(() => _readLocalStorage(key, initialValue))
+
+  // Keep state up-to-date if value exists in localStorage and component mounts in browser
+  useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const item = window.localStorage.getItem(key)
-      return item ? JSON.parse(item) : initialValue
-    } catch (error) {
-      console.error('Error reading localStorage key:', key, error)
-      return initialValue
-    }
-  })
+      if (item) setStoredValue(JSON.parse(item))
+    } catch {}
+  }, [key])
 
-  // Return a wrapped version of useState's setter function that persists the new value to localStorage
   const setValue = (value) => {
     try {
-      // Allow value to be a function so we have the same API as useState
       const valueToStore = value instanceof Function ? value(storedValue) : value
       setStoredValue(valueToStore)
-      window.localStorage.setItem(key, JSON.stringify(valueToStore))
-    } catch (error) {
-      console.error('Error setting localStorage key:', key, error)
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(key, JSON.stringify(valueToStore))
+      }
+    } catch (err) {
+      console.warn('useLocalStorage: failed to set', key, err)
     }
   }
 

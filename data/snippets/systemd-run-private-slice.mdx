@@ -1,16 +1,24 @@
 ---
 title: "systemd — run a one-off command in a private slice"
 heading: "systemd — run a one-off command in a private slice"
-icon: "Server"
+icon: "Bash"
 date: "2025-11-30"
 summary: "Use `systemd-run` to create transient services with resource limits — handy for reproducible ad-hoc tests."
 tags: ["systemd","linux","cli"]
 ---
 
-`systemd-run` is great for running a process in an isolated transient unit with runtime limits. Example:
+`systemd-run` is great for running a process in an isolated transient unit with runtime limits. Below are two safe, runnable examples that don't require an external script in the repo.
 
 ```bash
-sudo systemd-run --unit=temp-bench --slice=bench.slice --property=MemoryMax=512M --property=CPUQuota=50% --scope /usr/bin/time -v ./run-my-benchmark.sh
+# Example 1 — use `dd` to create a short CPU/IO workload and measure it with `/usr/bin/time`:
+sudo systemd-run --unit=temp-bench --slice=bench.slice \
+	--property=MemoryMax=512M --property=CPUQuota=50% --scope \
+	/usr/bin/time -v bash -c "dd if=/dev/zero of=/dev/null bs=1M count=1024"
+
+# Example 2 — lightweight python sleep loop as a placeholder workload:
+sudo systemd-run --unit=temp-bench --slice=bench.slice \
+	--property=MemoryMax=256M --property=CPUQuota=30% --scope \
+	/usr/bin/time -v python3 -c "import time; [time.sleep(0.1) for _ in range(20)]"
 ```
 
-This runs `run-my-benchmark.sh` in `bench.slice` with memory and CPU caps so it's easy to repeat tests without creating persistent units.
+Both commands will run inline, demonstrating resource-limited transient units without requiring any additional script files in the repository. Adjust `MemoryMax`/`CPUQuota` and the workload command to match your testing needs.

@@ -96,6 +96,7 @@ async function loadSnippetsFromJson() {
       createdAt: string
       updatedAt: string
       authorId: string
+      icon?: string
     }>
 
     const processedSnippets = snippetsData
@@ -104,8 +105,11 @@ async function loadSnippetsFromJson() {
         title: snippet.title,
         heading: snippet.title,
         summary: snippet.summary,
-        // Prefer framework, then language, then first tag
+        // Prefer explicit icon from JSON/index, then framework, then language, then first tag
         icon: resolveBrandKey([
+          // snippet.icon can be present in json/snippets.json (and should match the canonical BrandsMap)
+          // prefer it so listing and the snippet slug page show the same brand/icon
+          snippet.icon,
           snippet.framework,
           snippet.language,
           snippet.tags?.[0],
