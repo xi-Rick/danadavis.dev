@@ -26,6 +26,10 @@ function generateRssItem(item: Blog | Snippet) {
 
 function generateRss(items: (Blog | Snippet)[], page = RSS_PAGE) {
   const { title, siteUrl, description, language, email, author } = SITE_METADATA
+  const lastBuildDate =
+    items.length > 0
+      ? new Date(items[0].date).toUTCString()
+      : new Date().toUTCString()
   return `
 		<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 			<channel>
@@ -35,7 +39,7 @@ function generateRss(items: (Blog | Snippet)[], page = RSS_PAGE) {
 				<language>${language}</language>
 				<managingEditor>${email} (${author})</managingEditor>
 				<webMaster>${email} (${author})</webMaster>
-				<lastBuildDate>${new Date(items[0].date).toUTCString()}</lastBuildDate>
+				<lastBuildDate>${lastBuildDate}</lastBuildDate>
 				<atom:link href="${siteUrl}/${page}" rel="self" type="application/rss+xml"/>
 				${items.map((item) => generateRssItem(item)).join('')}
 			</channel>
@@ -54,8 +58,9 @@ export async function generateRssFeed() {
   const publishPosts = blogs.filter((post) => post.draft !== true)
   const publishSnippets = snippets.filter((post) => post.draft !== true)
   // RSS for blog post & snippet
-  if (publishPosts.length > 0 || publishSnippets.length > 0) {
-    const rss = generateRss(sortPosts([...publishPosts, ...publishSnippets]))
+  const allItems = sortPosts([...publishPosts, ...publishSnippets])
+  if (allItems.length > 0) {
+    const rss = generateRss(allItems)
     writeFileSync(`./public/${RSS_PAGE}`, rss)
   }
 
@@ -68,13 +73,13 @@ export async function generateRssFeed() {
       const filteredSnippets = snippets.filter((s) =>
         s.tags.map((t) => slug(t)).includes(tag),
       )
-      const rss = generateRss(
-        [...filteredPosts, ...filteredSnippets],
-        `tags/${tag}/feed.xml`,
-      )
-      const rssPath = path.join('public', 'tags', tag)
-      mkdirSync(rssPath, { recursive: true })
-      writeFileSync(path.join(rssPath, RSS_PAGE), rss)
+      const filteredItems = sortPosts([...filteredPosts, ...filteredSnippets])
+      if (filteredItems.length > 0) {
+        const rss = generateRss(filteredItems, `tags/${tag}/feed.xml`)
+        const rssPath = path.join('public', 'tags', tag)
+        mkdirSync(rssPath, { recursive: true })
+        writeFileSync(path.join(rssPath, RSS_PAGE), rss)
+      }
     }
   }
   console.log('🗒️. RSS feed generated.')
