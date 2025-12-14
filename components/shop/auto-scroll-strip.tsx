@@ -70,186 +70,256 @@ export const AutoScrollStrip: React.FC<{ slides?: AutoSlide[] }> = ({
 
   return (
     <section aria-labelledby="promo-strip" className="mb-10 md:mb-14">
-      <GradientBorder offset={28} className="rounded-2xl p-0">
-        <article className="bg-white/60 dark:bg-black/55 rounded-2xl text-black dark:text-white p-6 md:p-8 shadow-lg overflow-hidden">
-          <div className="flex gap-6 items-center min-h-[220px] md:min-h-[220px]">
-            {/* Left content */}
-            <div className="flex-1 max-w-[54%] pr-6">
+      <GradientBorder offset={28} className="rounded-3xl p-0">
+        <article className="relative bg-gradient-to-br from-white/70 to-white/50 dark:from-black/60 dark:to-black/40 rounded-3xl text-black dark:text-white p-6 md:p-10 shadow-xl overflow-hidden">
+          {/* Animated background gradient accent */}
+          <div className="absolute -right-20 -top-20 w-40 h-40 bg-orange-200/20 dark:bg-green-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -left-20 bottom-0 w-32 h-32 bg-orange-100/10 dark:bg-green-400/5 rounded-full blur-3xl pointer-events-none" />
+
+          {/* Desktop layout: side by side */}
+          <div className="hidden md:flex gap-8 items-center relative z-10">
+            {/* Left content section */}
+            <div className="flex-1 min-w-0">
               <h3
                 id="promo-strip"
-                className="text-3xl md:text-4xl font-extrabold leading-tight mb-3"
+                className="text-4xl lg:text-5xl font-extrabold leading-tight mb-4 text-gray-900 dark:text-white"
               >
                 {slides[index].title}
               </h3>
               {slides[index].subtitle && (
-                <p className="text-sm md:text-base dark:text-white text-black mb-5">
+                <p className="text-base lg:text-lg text-gray-700 dark:text-gray-200 mb-6 leading-relaxed max-w-lg">
                   {slides[index].subtitle}
                 </p>
               )}
 
-              <div className="flex gap-3 items-center">
-                <button className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 dark:from-green-500 dark:to-green-600 text-white font-semibold shadow-md hover:opacity-95 transition-all duration-150">
-                  {slides[index].cta ?? 'Learn more'}
-                </button>
-              </div>
+              <button className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 dark:from-green-500 dark:to-green-600 text-white font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 active:scale-95">
+                {slides[index].cta ?? 'Learn more'} →
+              </button>
             </div>
 
-            {/* Right visual area */}
-            <div className="w-[46%] flex items-center justify-end relative">
-              <div className="w-[52%] h-[140px] md:h-[160px] rounded-lg flex items-center justify-center overflow-hidden border border-white/5 shadow-inner md:mr-4 bg-transparent">
+            {/* Right visual section */}
+            <div className="flex-1 flex items-center justify-end gap-4">
+              {/* Main image display */}
+              <div className="relative">
+                <div className="w-56 h-56 rounded-2xl flex items-center justify-center overflow-hidden bg-gradient-to-br from-orange-100 to-orange-50 dark:from-green-900/30 dark:to-green-800/20 border border-orange-200/50 dark:border-green-700/30 shadow-lg">
+                  {slides[index].image ? (
+                    slides[index].image.startsWith('/') ||
+                    slides[index].image.startsWith('http') ||
+                    slides[index].image.includes('.') ? (
+                      <Image
+                        src={slides[index].image}
+                        alt={slides[index].title}
+                        width={224}
+                        height={224}
+                        className="object-contain"
+                      />
+                    ) : (
+                      <Twemoji emoji={slides[index].image} size="5x" />
+                    )
+                  ) : (
+                    <Twemoji emoji="sparkles" size="4x" />
+                  )}
+                </div>
+              </div>
+
+              {/* Thumbnail stack */}
+              {slides[index].thumbnails &&
+                slides[index].thumbnails.length > 0 && (
+                  <div className="flex flex-col gap-2">
+                    {slides[index].thumbnails?.slice(0, 3).map((t, i) => (
+                      <div
+                        key={i}
+                        className="h-20 w-20 rounded-xl flex items-center justify-center overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100/50 dark:from-green-900/20 dark:to-green-800/10 border border-orange-200/50 dark:border-green-700/30 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
+                      >
+                        {t ? (
+                          t.startsWith('/') ||
+                          t.startsWith('http') ||
+                          t.includes('.') ? (
+                            <Image
+                              src={t}
+                              alt={`thumb-${i}`}
+                              width={80}
+                              height={80}
+                              className="object-contain"
+                            />
+                          ) : (
+                            <Twemoji emoji={t} size="2x" />
+                          )
+                        ) : null}
+                      </div>
+                    ))}
+                  </div>
+                )}
+            </div>
+          </div>
+
+          {/* Mobile layout: stacked */}
+          <div className="md:hidden flex flex-col gap-6 relative z-10">
+            {/* Image section - top */}
+            <div className="flex justify-center pt-4">
+              <div className="w-40 h-40 rounded-2xl flex items-center justify-center overflow-hidden bg-gradient-to-br from-orange-100 to-orange-50 dark:from-green-900/30 dark:to-green-800/20 border border-orange-200/50 dark:border-green-700/30 shadow-md">
                 {slides[index].image ? (
-                  // If image looks like a URL/path, render Image. Otherwise treat as twemoji name and render the emoji bigger.
                   slides[index].image.startsWith('/') ||
                   slides[index].image.startsWith('http') ||
                   slides[index].image.includes('.') ? (
                     <Image
                       src={slides[index].image}
                       alt={slides[index].title}
-                      width={280}
+                      width={160}
                       height={160}
                       className="object-contain"
                     />
                   ) : (
-                    <div className="flex items-center justify-center h-full w-full">
-                      <Twemoji emoji={slides[index].image} size="4x" />
-                    </div>
+                    <Twemoji emoji={slides[index].image} size="4x" />
                   )
                 ) : (
-                  <div className="flex items-center gap-2 text-gray-300">
-                    <Twemoji emoji="sparkles" />
-                    <span className="text-sm">Featured</span>
-                  </div>
+                  <Twemoji emoji="sparkles" size="3x" />
                 )}
               </div>
-
-              {/* thumbnails stacked to the right */}
-              <div className="flex flex-col gap-3">
-                {slides[index].thumbnails?.slice(0, 3).map((t, i) => (
-                  <div
-                    key={i}
-                    className="h-[56px] w-[56px] rounded-lg flex items-center justify-center overflow-hidden border border-white/5 shadow-sm bg-transparent"
-                  >
-                    {t ? (
-                      // If thumbnail looks like a path/URL (contains "." or starts with "/"), render an image, otherwise treat as a twemoji name
-                      t.startsWith('/') ||
-                      t.startsWith('http') ||
-                      t.includes('.') ? (
-                        <Image
-                          src={t}
-                          alt={`thumb-${i}`}
-                          width={56}
-                          height={56}
-                          className="object-contain"
-                        />
-                      ) : (
-                        <div className="h-full w-full flex items-center justify-center text-gray-300 text-xs">
-                          <Twemoji emoji={t} size="2x" />
-                        </div>
-                      )
-                    ) : (
-                      <div className="h-full w-full flex items-center justify-center text-gray-300 text-xs">
-                        No image
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
             </div>
 
-            {/* Controls overlay: arrows and small dots */}
-          </div>
-          <div className="mt-6 flex items-center justify-between">
-            <div className="flex gap-3 items-center">
-              <div className="flex gap-2 items-center">
-                <button
-                  onClick={goPrev}
-                  aria-label="Previous"
-                  className="h-9 w-9 inline-flex items-center justify-center rounded-full bg-white/8 hover:bg-white/10 text-orange-400 dark:text-green-400 focus:ring-2 focus:ring-orange-300 dark:focus:ring-green-300"
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-current"
-                  >
-                    <polyline points="15 18 9 12 15 6" />
-                  </svg>
-                </button>
-                <button
-                  onClick={goNext}
-                  aria-label="Next"
-                  className="h-9 w-9 inline-flex items-center justify-center rounded-full bg-white/8 hover:bg-white/10 text-orange-400 dark:text-green-400 focus:ring-2 focus:ring-orange-300 dark:focus:ring-green-300"
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-current"
-                  >
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+            {/* Thumbnails - centered below image */}
+            {slides[index].thumbnails &&
+              slides[index].thumbnails.length > 0 && (
+                <div className="flex justify-center gap-2">
+                  {slides[index].thumbnails?.slice(0, 3).map((t, i) => (
+                    <div
+                      key={i}
+                      className="h-14 w-14 rounded-lg flex items-center justify-center overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100/50 dark:from-green-900/20 dark:to-green-800/10 border border-orange-200/50 dark:border-green-700/30 shadow-sm"
+                    >
+                      {t ? (
+                        t.startsWith('/') ||
+                        t.startsWith('http') ||
+                        t.includes('.') ? (
+                          <Image
+                            src={t}
+                            alt={`thumb-${i}`}
+                            width={56}
+                            height={56}
+                            className="object-contain"
+                          />
+                        ) : (
+                          <Twemoji emoji={t} size="lg" />
+                        )
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
+              )}
 
-            <div className="flex items-center gap-4">
-              <div className="flex gap-2 items-center">
-                {slides.map((_, i) => (
-                  <button
-                    key={i}
-                    aria-label={`Go to slide ${i + 1}`}
-                    onClick={() => setIndex(i)}
-                    className={`h-2.5 w-2.5 rounded-full ${i === index ? 'bg-orange-500 dark:bg-green-500' : 'bg-orange-400/30 dark:bg-green-400/30'}`}
-                  />
-                ))}
-              </div>
-
-              <button
-                onClick={() => setPlaying((p) => !p)}
-                aria-label={playing ? 'Pause' : 'Play'}
-                className="h-9 w-9 inline-flex items-center justify-center rounded-full bg-white/6 hover:bg-white/10 text-orange-400 dark:text-green-400 focus:ring-2 focus:ring-orange-300 dark:focus:ring-green-300"
+            {/* Content section - bottom */}
+            <div className="text-center">
+              <h3
+                id="promo-strip"
+                className="text-2xl font-extrabold leading-tight mb-3 text-gray-900 dark:text-white"
               >
-                {playing ? (
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-current"
-                  >
-                    <path d="M6 19h4V5H6v14zM14 5v14h4V5h-4z" />
-                  </svg>
-                ) : (
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-current"
-                  >
-                    <polygon points="5 3 19 12 5 21 5 3" />
-                  </svg>
-                )}
+                {slides[index].title}
+              </h3>
+              {slides[index].subtitle && (
+                <p className="text-sm text-gray-700 dark:text-gray-200 mb-4 leading-relaxed">
+                  {slides[index].subtitle}
+                </p>
+              )}
+
+              <button className="w-full inline-flex items-center justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 dark:from-green-500 dark:to-green-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 active:scale-95">
+                {slides[index].cta ?? 'Learn more'} →
               </button>
             </div>
+          </div>
+
+          {/* Controls - bottom */}
+          <div className="mt-8 flex items-center justify-between gap-4 pt-6 border-t border-gray-200/50 dark:border-gray-700/50 relative z-10">
+            {/* Left: Navigation arrows */}
+            <div className="flex gap-2 items-center">
+              <button
+                onClick={goPrev}
+                aria-label="Previous slide"
+                className="h-10 w-10 inline-flex items-center justify-center rounded-full bg-orange-100/60 dark:bg-green-900/40 hover:bg-orange-200/80 dark:hover:bg-green-800/60 text-orange-600 dark:text-green-400 focus:ring-2 focus:ring-orange-400 dark:focus:ring-green-500 transition-all duration-150"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-current"
+                >
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
+              <button
+                onClick={goNext}
+                aria-label="Next slide"
+                className="h-10 w-10 inline-flex items-center justify-center rounded-full bg-orange-100/60 dark:bg-green-900/40 hover:bg-orange-200/80 dark:hover:bg-green-800/60 text-orange-600 dark:text-green-400 focus:ring-2 focus:ring-orange-400 dark:focus:ring-green-500 transition-all duration-150"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-current"
+                >
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Center: Dot indicators */}
+            <div className="flex gap-2 items-center">
+              {slides.map((_, i) => (
+                <button
+                  key={i}
+                  aria-label={`Go to slide ${i + 1}`}
+                  onClick={() => setIndex(i)}
+                  className={`rounded-full transition-all duration-200 ${
+                    i === index
+                      ? 'h-3 w-8 bg-orange-500 dark:bg-green-500'
+                      : 'h-2.5 w-2.5 bg-orange-300/50 dark:bg-green-500/40 hover:bg-orange-400/70 dark:hover:bg-green-500/60'
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Right: Play/Pause button */}
+            <button
+              onClick={() => setPlaying((p) => !p)}
+              aria-label={playing ? 'Pause autoplay' : 'Play autoplay'}
+              className="h-10 w-10 inline-flex items-center justify-center rounded-full bg-orange-100/60 dark:bg-green-900/40 hover:bg-orange-200/80 dark:hover:bg-green-800/60 text-orange-600 dark:text-green-400 focus:ring-2 focus:ring-orange-400 dark:focus:ring-green-500 transition-all duration-150"
+            >
+              {playing ? (
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-current"
+                >
+                  <rect x="6" y="4" width="4" height="16" />
+                  <rect x="14" y="4" width="4" height="16" />
+                </svg>
+              ) : (
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-current"
+                >
+                  <polygon points="5 3 19 12 5 21 5 3" />
+                </svg>
+              )}
+            </button>
           </div>
         </article>
       </GradientBorder>

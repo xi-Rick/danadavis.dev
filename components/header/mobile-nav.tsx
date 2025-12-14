@@ -16,6 +16,7 @@ import { clsx } from 'clsx'
 import { Menu, X } from 'lucide-react'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
+import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { Link } from '~/components/ui/link'
 import { Twemoji } from '~/components/ui/twemoji'
 import {
@@ -103,27 +104,31 @@ export function MobileNav() {
                   <Link
                     key={link.title}
                     href={link.href}
-                    className="hover:text-orange-500 dark:hover:text-green-500 py-1 text-xl font-bold tracking-widest text-gray-900 outline-0 outline-solid dark:text-gray-100"
+                    className="py-1 text-xl font-bold tracking-widest text-gray-900 outline-0 outline-solid dark:text-gray-100"
                     onClick={onToggleNav}
                   >
                     <Twemoji emoji={link.emoji} />
-                    <span className="ml-2">{link.title}</span>
+                    <GrowingUnderline className="ml-2">
+                      {link.title}
+                    </GrowingUnderline>
                   </Link>
                 ))}
                 {isAuthenticated && adminInfo?.isAdmin && (
                   <Link
                     href={ADMIN_NAV_LINK.href}
-                    className="hover:text-orange-500 dark:hover:text-green-500 py-1 text-xl font-bold tracking-widest text-gray-900 outline-0 outline-solid dark:text-gray-100"
+                    className="py-1 text-xl font-bold tracking-widest text-gray-900 outline-0 outline-solid dark:text-gray-100"
                     onClick={onToggleNav}
                   >
                     <Twemoji emoji={ADMIN_NAV_LINK.emoji} />
-                    <span className="ml-2">{ADMIN_NAV_LINK.title}</span>
+                    <GrowingUnderline className="ml-2">
+                      {ADMIN_NAV_LINK.title}
+                    </GrowingUnderline>
                   </Link>
                 )}
               </nav>
               <button
                 type="button"
-                className="hover:text-primary-500 dark:hover:text-green-500 fixed top-5 right-4 z-80 h-16 w-16 p-4 text-gray-900 dark:text-gray-100"
+                className="fixed top-5 right-4 z-80 h-16 w-16 p-4 text-gray-900 dark:text-gray-100 hover:bg-orange-100 hover:text-orange-600 dark:hover:bg-green-900/20 dark:hover:text-green-400 rounded-sm transition-colors"
                 aria-label="Toggle Menu"
                 onClick={onToggleNav}
               >
