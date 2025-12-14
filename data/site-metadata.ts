@@ -7,7 +7,7 @@ export const SITE_METADATA = {
   language: 'en-us',
   locale: 'en-US',
   stickyNav: true,
-  theme: 'system', // system, dark or light
+  theme: 'dark', // system, dark or light
   siteUrl: 'https://danadavis.dev',
   siteRepo: 'https://github.com/xi-Rick/danadavis.dev',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
