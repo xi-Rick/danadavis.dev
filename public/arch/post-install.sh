@@ -83,7 +83,7 @@ fi
 step "2/5  Installing DMS Linux"
 
 info "Running DMS install script from install.danklinux.com..."
-if curl -fsSL https://install.danklinux.com | sudo -u "$SUDO_USER" bash;
+if curl -fsSL https://install.danklinux.com | sh;
   success "DMS Linux installed successfully"
   mark_ok "DMS Linux"
 else
