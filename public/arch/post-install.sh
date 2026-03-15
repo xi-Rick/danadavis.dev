@@ -173,7 +173,8 @@ if curl -fsSL "${BASE_URL}/startrek-blue.zip" -o "${TEMP_GRUB_DIR}/startrek-blue
     # Check if files are in a subdirectory and move them if needed
     if [[ -d "${GRUB_THEME_DIR}/startrek-blue" ]]; then
       info "Moving theme files from subdirectory..."
-      sudo mv "${GRUB_THEME_DIR}/startrek-blue"/* "$GRUB_THEME_DIR/"
+      sudo cp -r "${GRUB_THEME_DIR}/startrek-blue"/. "$GRUB_THEME_DIR/"
+      sudo rm -rf "${GRUB_THEME_DIR}/startrek-blue"
       sudo rmdir "${GRUB_THEME_DIR}/startrek-blue" 2>/dev/null || true
     fi
     
