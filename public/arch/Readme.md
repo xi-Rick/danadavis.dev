@@ -55,6 +55,8 @@ Source:  AUR
 Source: https://install.danklinux.com
 ```
 
+![DankLinux DankMaterialShell Desktop](https://danklinux.com/img/desktop.png)
+
 ---
 
 ### 3. Plymouth Boot Animation
@@ -69,6 +71,8 @@ Sets up a smooth animated splash screen shown during boot. Installs the custom *
 | Rebuild | Runs `mkinitcpio -P` to apply the new initramfs |
 
 The theme is automatically detected and set as default via `plymouth-set-default-theme -R`.
+
+![arch-glow Plymouth Boot Animation](https://raw.githubusercontent.com/Skrepysh/arch-glow-plymouth/main/preview.gif)
 
 ---
 
@@ -96,6 +100,8 @@ You will be prompted to name the menu entry (defaults to `Arch Linux`).
 
 > Existing `/etc/default/grub` and `/etc/grub.d/40_custom` are backed up to `.bak` before any changes are made.
 
+![Star Trek GRUB Theme Preview](https://images.pling.com/img/00/00/83/71/16/2318849/preview.png)
+
 ---
 
 ### 5. SDDM Display Manager
@@ -108,6 +114,8 @@ Installs and enables [SDDM](https://github.com/sddm/sddm) as the system display 
 | Enable | `systemctl enable sddm` |
 | Theme | Cloned from `uiriansan/SilentSDDM` |
 | Fallback | If theme install fails, SDDM is still enabled with the default theme |
+
+![SilentSDDM Lockscreen Theme Preview](https://github.com/uiriansan/SilentSDDM/blob/main/backgrounds/default.jpg?raw=true)
 
 ---
 
