@@ -159,7 +159,7 @@ export default function ArchPage() {
       >
         <div className="flex gap-3 pt-2">
           <a
-            href="https://github.com/danadavis/dotfiles"
+            href="https://github.com/xi-Rick/danadavis.dev/tree/main/public/arch"
             target="_blank"
             rel="noopener noreferrer"
             className="group relative px-5 py-2.5 font-mono text-sm font-semibold text-black dark:text-white overflow-hidden rounded-md"

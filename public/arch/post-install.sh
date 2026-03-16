@@ -275,7 +275,7 @@ install_quickshell() {
 
     if pacman -Q quickshell-git &>/dev/null 2>&1; then
         log_success "quickshell-git already installed"
-        INSTALLED+=("quickshell-git")
+        SKIPPED+=("quickshell-git")
         return 0
     fi
 
@@ -612,12 +612,19 @@ install_extra_packages() {
         return 0
     fi
 
+    # Let user confirm/deselect from the entered list
+    if ! select_packages packages; then
+        log_info "No packages selected"
+        return 0
+    fi
+
     # Categorize packages
     local pacman_pkgs=()
     local aur_pkgs=()
 
     for pkg in "${packages[@]}"; do
-        pkg=$(echo "$pkg" | xargs)  # Trim whitespace
+        pkg="${pkg#"${pkg%%[![:space:]]*}"}"
+        pkg="${pkg%"${pkg##*[![:space:]]}"}"  # Trim leading/trailing whitespace
         [[ -z "$pkg" ]] && continue
 
         if [[ "$pkg" == aur:* ]]; then
@@ -733,15 +740,18 @@ main() {
 
     # Show summary
     echo
-    show_border_message "
-${GREEN}${BOLD}Installation Complete${RESET}
-
-${BLUE}${BOLD}✓ Installed:${RESET} ${#INSTALLED[@]} items
-${YELLOW}${BOLD}⚠ Failed:${RESET} ${#FAILED[@]} items
-
-${CYAN}Log file:${RESET} $LOG_FILE
-${CYAN}To reboot:${RESET} sudo reboot
-"
+    echo -e "${DIM}  ════════════════════════════════════════════════════════════════════${RESET}"
+    echo -e "${GREEN}${BOLD}  Installation Complete${RESET}"
+    echo -e "${DIM}  ════════════════════════════════════════════════════════════════════${RESET}"
+    echo
+    echo -e "  ${BLUE}${BOLD}✓ Installed:${RESET} ${#INSTALLED[@]} items"
+    echo -e "  ${DIM}${BOLD}⊘ Skipped:${RESET}   ${#SKIPPED[@]} items"
+    echo -e "  ${YELLOW}${BOLD}⚠ Failed:${RESET}    ${#FAILED[@]} items"
+    echo
+    echo -e "  ${CYAN}Log file:${RESET}  $LOG_FILE"
+    echo -e "  ${CYAN}To reboot:${RESET} sudo reboot"
+    echo
+    echo -e "${DIM}  ════════════════════════════════════════════════════════════════════${RESET}"
 
     # Show details if any failures
     if [[ ${#FAILED[@]} -gt 0 ]]; then
@@ -749,6 +759,13 @@ ${CYAN}To reboot:${RESET} sudo reboot
         printf '  • %s\n' "${FAILED[@]}"
         echo
         echo -e "Check the log for details: ${CYAN}$LOG_FILE${RESET}"
+    fi
+
+    # Show details if any skipped
+    if [[ ${#SKIPPED[@]} -gt 0 ]]; then
+        echo -e "${DIM}${BOLD}Skipped (already installed):${RESET}"
+        printf '  • %s\n' "${SKIPPED[@]}"
+        echo
     fi
 
     # Ask for reboot
