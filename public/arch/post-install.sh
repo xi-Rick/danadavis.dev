@@ -14,551 +14,752 @@
 
 set -euo pipefail
 
-# ── Colors ───────────────────────────────────────────────────────────────────
-CYAN='\033[0;36m'
-BLUE='\033[0;34m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-MAGENTA='\033[0;35m'
-BOLD='\033[1m'
-DIM='\033[2m'
-RESET='\033[0m'
-
-# ── Helpers ───────────────────────────────────────────────────────────────────
-info()    { echo -e "${CYAN}${BOLD}[=>]${RESET} $*"; }
-success() { echo -e "${GREEN}${BOLD}[OK]${RESET} $*"; }
-warn()    { echo -e "${YELLOW}${BOLD}[!!]${RESET} $*"; }
-error()   { echo -e "${RED}${BOLD}[XX]${RESET} $*"; }
-step()    { echo -e "\n${BLUE}${BOLD}━━━ $* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}\n"; }
-
-# ── Assets base URL ───────────────────────────────────────────────────────────
+# ── Configuration ────────────────────────────────────────────────────────────
 BASE_URL="https://danadavis.dev/arch"
+SCRIPT_NAME="$(basename "$0")"
+LOG_FILE="/tmp/arch-post-install-$(date +%Y%m%d-%H%M%S).log"
 
-# ── Installation summary log (associative array) ──────────────────────────────
-declare -A INSTALL_STATUS=()
-SUMMARY_ORDER=()
+# ── Colors (minimal, just for accents) ──────────────────────────────────────
+readonly RESET='\033[0m'
+readonly BOLD='\033[1m'
+readonly DIM='\033[2m'
+readonly CYAN='\033[0;36m'
+readonly GREEN='\033[0;32m'
+readonly YELLOW='\033[1;33m'
+readonly RED='\033[0;31m'
+readonly BLUE='\033[0;34m'
+readonly MAGENTA='\033[0;35m'
 
-mark_ok()   { INSTALL_STATUS["$1"]="${GREEN}✓  OK${RESET}";     SUMMARY_ORDER+=("$1"); }
-mark_warn() { INSTALL_STATUS["$1"]="${YELLOW}⚠  WARN${RESET}";  SUMMARY_ORDER+=("$1"); }
-mark_fail() { INSTALL_STATUS["$1"]="${RED}✗  FAILED${RESET}";   SUMMARY_ORDER+=("$1"); }
+# ── Global state ────────────────────────────────────────────────────────────
+INSTALLED=()
+FAILED=()
+SKIPPED=()
+
+# ── Optional config override ─────────────────────────────────────────────────
+# You can create ~/.config/arch-post-install.conf to override any defaults.
+# Example: BASE_URL="https://mirror.example.com/arch"
+CONFIG_FILE="${HOME}/.config/arch-post-install.conf"
+if [[ -f "$CONFIG_FILE" ]]; then
+    # shellcheck source=/dev/null
+    source "$CONFIG_FILE"
+fi
 
 # =============================================================================
-# 1 ── QUICKSHELL  (must be first — DMS depends on it)
+# UTILITY FUNCTIONS
 # =============================================================================
-step "1/5  Installing Quickshell"
 
-if pacman -Q quickshell &>/dev/null; then
-  success "quickshell already installed — skipping"
-  mark_ok "Quickshell"
-else
-  info "Installing quickshell via pacman..."
-  if sudo pacman -S --noconfirm quickshell; then
-    success "quickshell installed"
-    mark_ok "Quickshell"
-  else
-    error "pacman failed to install quickshell."
-    warn  "Attempting AUR fallback with yay..."
+# Log to file (always) and optionally to console with formatting
+log() {
+    local level="$1"
+    local message="$2"
+    local color="$3"
+    local timestamp=$(date '+%H:%M:%S')
+
+    # Always write to log file
+    echo "[$timestamp] [$level] $message" >> "$LOG_FILE"
+
+    # Console output with color
+    if [[ -t 1 ]]; then  # Only if stdout is a terminal
+        echo -e "${color}${BOLD}[${level}]${RESET} ${message}"
+    fi
+}
+
+log_info()    { log "INFO"    "$1" "$CYAN"; }
+log_success() { log "OK"      "$1" "$GREEN"; }
+log_warn()    { log "WARN"    "$1" "$YELLOW"; }
+log_error()   { log "ERROR"   "$1" "$RED"; }
+
+# Check if running with sudo
+check_sudo() {
+    if [[ $EUID -eq 0 ]]; then
+        echo -e "${RED}${BOLD}[ERROR]${RESET} This script should NOT be run as root directly."
+        echo -e "${RED}${BOLD}[ERROR]${RESET} It will ask for sudo when needed. Please run as normal user."
+        exit 1
+    fi
+}
+
+# Cleanup function
+cleanup() {
+    local exit_code=$?
+    if [[ $exit_code -ne 0 ]]; then
+        echo
+        log_error "Script interrupted or failed (exit code: $exit_code)"
+        log_info "Check the log file for details: $LOG_FILE"
+    fi
+    # Remove any temporary files (but keep the log)
+    find /tmp -maxdepth 1 -name 'arch-post-*' ! -name "$(basename "$LOG_FILE")" -exec rm -rf {} + 2>/dev/null || true
+}
+
+trap cleanup EXIT
+
+# =============================================================================
+# PRE-FLIGHT CHECKS
+# =============================================================================
+
+preflight_check() {
+    log_info "Running pre-flight checks..."
+
+        # Install required system commands if missing
+        local required_cmds=("curl" "unzip" "git" "findmnt" "util-linux")
+        local missing_pkgs=()
+        for cmd in curl unzip git findmnt blkid; do
+            if ! command -v "$cmd" &>/dev/null; then
+                case "$cmd" in
+                    blkid|findmnt) missing_pkgs+=("util-linux") ;;
+                    *) missing_pkgs+=("$cmd") ;;
+                esac
+            fi
+        done
+        # Deduplicate and install only if there are missing packages
+        if [[ ${#missing_pkgs[@]} -gt 0 ]]; then
+            local unique_pkgs
+            mapfile -t unique_pkgs < <(printf '%s\n' "${missing_pkgs[@]}" | sort -u)
+            if [[ ${#unique_pkgs[@]} -gt 0 ]]; then
+                log_info "Installing missing system tools: ${unique_pkgs[*]}"
+                sudo pacman -S --noconfirm --needed "${unique_pkgs[@]}" >> "$LOG_FILE" 2>&1 || {
+                    log_error "Failed to install required tools: ${unique_pkgs[*]}"
+                    exit 1
+                }
+            fi
+        fi
+    log_success "Required commands present"
+
+    # Check internet connectivity (curl is more reliable than ping across firewalls)
+    if ! curl -fsSL --max-time 5 --head https://archlinux.org &>/dev/null; then
+        log_error "No internet connection detected. Please connect and try again."
+        exit 1
+    fi
+    log_success "Internet connectivity confirmed"
+
+    # Check available disk space (require at least 5GB free)
+    local required_kb=5242880
+    local available_kb
+    available_kb=$(df / --output=avail | tail -1 | tr -d ' ')
+    if (( available_kb < required_kb )); then
+        log_error "Insufficient disk space. Need 5GB free, have $(( available_kb / 1024 / 1024 ))GB"
+        exit 1
+    fi
+    log_success "Disk space OK ($(( available_kb / 1024 / 1024 ))GB free)"
+
+    # Verify Arch-based system
+    if [[ -f /etc/arch-release ]]; then
+        log_success "Arch Linux detected"
+    elif grep -qi "arch\|manjaro\|endeavouros\|garuda\|cachyos\|artix" /etc/os-release 2>/dev/null; then
+        log_success "Arch-based system detected"
+    else
+        log_warn "Could not confirm Arch-based system — proceeding anyway"
+    fi
+
+    # Install required TUI deps (gum and fzf) if not already present
+    local tui_pkgs=()
+    command -v gum &>/dev/null || tui_pkgs+=("gum")
+    command -v fzf &>/dev/null || tui_pkgs+=("fzf")
+    if [[ ${#tui_pkgs[@]} -gt 0 ]]; then
+        log_info "Installing required TUI tools: ${tui_pkgs[*]}"
+        sudo pacman -S --noconfirm "${tui_pkgs[@]}" >> "$LOG_FILE" 2>&1 || {
+            log_error "Failed to install required TUI tools: ${tui_pkgs[*]}"
+            exit 1
+        }
+        log_success "TUI tools installed: ${tui_pkgs[*]}"
+    fi
+
+    # Install yay (AUR helper) if not already present
     if ! command -v yay &>/dev/null; then
-      info "yay not found — installing yay first..."
-      sudo pacman -S --noconfirm git base-devel
-      git clone https://aur.archlinux.org/yay.git /tmp/yay-install
-      (cd /tmp/yay-install && makepkg -si --noconfirm)
-      rm -rf /tmp/yay-install
+        log_info "Installing yay (AUR helper)..."
+        sudo pacman -S --noconfirm --needed git base-devel >> "$LOG_FILE" 2>&1 || {
+            log_error "Failed to install git/base-devel for yay"
+            exit 1
+        }
+        git clone https://aur.archlinux.org/yay.git /tmp/arch-post-yay >> "$LOG_FILE" 2>&1 || {
+            log_error "Failed to clone yay repository"
+            exit 1
+        }
+        (cd /tmp/arch-post-yay && makepkg -si --noconfirm) >> "$LOG_FILE" 2>&1 || {
+            log_error "Failed to build/install yay"
+            rm -rf /tmp/arch-post-yay
+            exit 1
+        }
+        rm -rf /tmp/arch-post-yay
+        log_success "yay installed"
     fi
-    if yay -S --noconfirm quickshell; then
-      success "quickshell installed via AUR"
-      mark_ok "Quickshell"
-    else
-      error "Could not install quickshell via AUR either."
-      warn  "Continuing — DMS may complain about a missing quickshell."
-      mark_fail "Quickshell"
-    fi
-  fi
-fi
-
-# =============================================================================
-# 2 ── DMS LINUX
-# =============================================================================
-step "2/5  Installing DMS Linux"
-
-info "Running DMS install script from install.danklinux.com..."
-if curl -fsSL https://install.danklinux.com | sh;
-  success "DMS Linux installed successfully"
-  mark_ok "DMS Linux"
-else
-  error "DMS install script returned a non-zero exit code."
-  warn  "This sometimes happens when quickshell wasn't found in PATH yet."
-  warn  "Retry manually:  curl -fsSL https://install.danklinux.com | sh"
-  mark_warn "DMS Linux"
-fi
-
-# =============================================================================
-# 3 ── PLYMOUTH  (glow boot animation)
-# =============================================================================
-step "3/5  Setting up Plymouth boot animation"
-
-info "Installing plymouth..."
-sudo pacman -S --noconfirm plymouth
-
-info "Downloading and extracting glow plymouth theme from ${BASE_URL}/arch-glow.zip..."
-PLYMOUTH_THEME_DIR="/usr/share/plymouth/themes/glow"
-TEMP_DIR=$(mktemp -d)
-
-# Download the zip file
-if curl -fsSL "${BASE_URL}/arch-glow.zip" -o "${TEMP_DIR}/arch-glow.zip"; then
-  sudo mkdir -p "$PLYMOUTH_THEME_DIR"
-  
-  # Extract the zip
-  if sudo unzip -o "${TEMP_DIR}/arch-glow.zip" -d "$PLYMOUTH_THEME_DIR"; then
-    success "Glow theme extracted successfully"
-    
-    # Verify required files exist
-    if [[ ! -f "${PLYMOUTH_THEME_DIR}/glow.plymouth" ]]; then
-      warn "glow.plymouth not found in extracted files — checking for common paths"
-      # Try to find and move files if they're in a subdirectory
-      find "$PLYMOUTH_THEME_DIR" -name "*.plymouth" -exec sudo mv {} "$PLYMOUTH_THEME_DIR/" \;
-      find "$PLYMOUTH_THEME_DIR" -name "*.script" -exec sudo mv {} "$PLYMOUTH_THEME_DIR/" \;
-    fi
-  else
-    error "Failed to extract glow theme zip"
-    mark_warn "Plymouth (glow)"
-    rm -rf "$TEMP_DIR"
-    # Skip to next section
-    goto_grub=1
-  fi
-  rm -rf "$TEMP_DIR"
-else
-  error "Failed to download glow theme zip from ${BASE_URL}/arch-glow.zip"
-  mark_warn "Plymouth (glow)"
-fi
-
-if [[ -z "${goto_grub:-}" ]]; then
-  info "Setting glow as the default plymouth theme..."
-  sudo plymouth-set-default-theme -R glow
-
-  info "Adding plymouth to mkinitcpio HOOKS..."
-  if ! grep -q 'plymouth' /etc/mkinitcpio.conf; then
-    sudo sed -i 's/\(HOOKS=.*\)udev/\1udev plymouth/' /etc/mkinitcpio.conf
-  fi
-  sudo mkinitcpio -P
-
-  info "Ensuring quiet splash is set in GRUB cmdline..."
-  if ! grep -q 'splash' /etc/default/grub 2>/dev/null; then
-    sudo sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)"/\1 quiet splash"/' /etc/default/grub
-  fi
-
-  success "Plymouth glow theme configured"
-  mark_ok "Plymouth (glow)"
-fi
-
-# =============================================================================
-# 4 ── GRUB STAR TREK THEME  +  menu entry hardening
-# =============================================================================
-step "4/5  Installing Star Trek GRUB theme"
-
-GRUB_THEME_DIR="/boot/grub/themes/startrek-blue"
-TEMP_GRUB_DIR=$(mktemp -d)
-
-# ── 4a. Download and extract theme zip ─────────────────────────────────────
-info "Downloading and extracting Star Trek GRUB theme from ${BASE_URL}/startrek-blue.zip..."
-
-if curl -fsSL "${BASE_URL}/startrek-blue.zip" -o "${TEMP_GRUB_DIR}/startrek-blue.zip"; then
-  sudo mkdir -p "$GRUB_THEME_DIR"
-  
-  # Extract the zip
-  if sudo unzip -o "${TEMP_GRUB_DIR}/startrek-blue.zip" -d "$GRUB_THEME_DIR"; then
-    success "Star Trek theme extracted successfully"
-    
-    # Check if files are in a subdirectory and move them if needed
-    if [[ -d "${GRUB_THEME_DIR}/startrek-blue" ]]; then
-      info "Moving theme files from subdirectory..."
-      sudo cp -r "${GRUB_THEME_DIR}/startrek-blue"/. "$GRUB_THEME_DIR/"
-      sudo rm -rf "${GRUB_THEME_DIR}/startrek-blue"
-      sudo rmdir "${GRUB_THEME_DIR}/startrek-blue" 2>/dev/null || true
-    fi
-    
-    # Verify theme.txt exists
-    if [[ ! -f "${GRUB_THEME_DIR}/theme.txt" ]]; then
-      warn "theme.txt not found in extracted files"
-      _grub_ok=false
-    else
-      _grub_ok=true
-    fi
-  else
-    error "Failed to extract Star Trek theme zip"
-    _grub_ok=false
-  fi
-else
-  error "Failed to download Star Trek theme zip from ${BASE_URL}/startrek-blue.zip"
-  _grub_ok=false
-fi
-
-rm -rf "$TEMP_GRUB_DIR"
-
-# ── 4b. Patch /etc/default/grub (targeted edits only) ────────────────────
-info "Patching /etc/default/grub..."
-
-# Set theme
-if grep -q '^GRUB_THEME=' /etc/default/grub; then
-  sudo sed -i "s|^GRUB_THEME=.*|GRUB_THEME=\"/boot/grub/themes/startrek-blue/theme.txt\"|" /etc/default/grub
-else
-  echo 'GRUB_THEME="/boot/grub/themes/startrek-blue/theme.txt"' | sudo tee -a /etc/default/grub
-fi
-
-# Ensure quiet splash in cmdline
-if ! grep -q 'splash' /etc/default/grub; then
-  sudo sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)"/\1 quiet splash"/' /etc/default/grub
-fi
-
-# Disable submenu (keeps boot menu flat)
-if ! grep -q '^GRUB_DISABLE_SUBMENU' /etc/default/grub; then
-  echo 'GRUB_DISABLE_SUBMENU=y' | sudo tee -a /etc/default/grub
-else
-  sudo sed -i 's/^#\?GRUB_DISABLE_SUBMENU=.*/GRUB_DISABLE_SUBMENU=y/' /etc/default/grub
-fi
-
-# ── 4c. Extract the real menuentry and create custom entry ─────────────────
-info "Generating custom menu entry for 40_custom..."
-
-# Temporarily enable 10_linux to generate entries, capture output.
-# Keep stderr so we can diagnose failures, but don't let it pollute RAW_GRUB.
-sudo chmod +x /etc/grub.d/10_linux
-GRUB_MKCONFIG_STDERR=$(mktemp)
-RAW_GRUB=$(sudo grub-mkconfig 2>"$GRUB_MKCONFIG_STDERR")
-if [[ -s "$GRUB_MKCONFIG_STDERR" ]]; then
-  warn "grub-mkconfig produced stderr output:"
-  while IFS= read -r line; do warn "  $line"; done < "$GRUB_MKCONFIG_STDERR"
-fi
-rm -f "$GRUB_MKCONFIG_STDERR"
-
-# Disable 10_linux and 30_uefi-firmware now that we have what we need.
-sudo chmod -x /etc/grub.d/10_linux
-sudo chmod -x /etc/grub.d/30_uefi-firmware 2>/dev/null || warn "30_uefi-firmware not found — skipping"
-
-# ------------------------------------------------------------------
-# Robust menuentry extractor
-#
-# Strategy:
-#   1. Split RAW_GRUB into self-contained menuentry blocks using a
-#      line-by-line brace counter that ignores braces inside single-
-#      quoted strings (the most common source of miscounts).
-#   2. Score each candidate block and pick the best one:
-#        - penalise blocks whose title or --class flags contain
-#          'recovery', 'fallback', 'memtest', 'uefi', 'firmware',
-#          'windows', 'efi' (case-insensitive)
-#        - prefer blocks that reference the running kernel via
-#          /boot/vmlinuz* or contain 'linux' in their title
-#        - among equal-score blocks, take the first one
-#   3. Verify the winner actually looks like a bootable Arch entry
-#      before writing it; bail out with a clear error if not.
-# ------------------------------------------------------------------
-
-extract_menuentry_blocks() {
-  # Emit each menuentry block as a NUL-delimited record so multi-line
-  # blocks survive the pipeline intact.
-  local line block="" depth=0 in_entry=0
-
-  while IFS= read -r line; do
-    if [[ $in_entry -eq 0 ]]; then
-      # Wait for a menuentry line (must start at column 0)
-      [[ "$line" =~ ^menuentry[[:space:]] ]] || continue
-      in_entry=1
-      depth=0
-      block="$line"$'\n'
-    else
-      block+="$line"$'\n'
-    fi
-
-    # Count unquoted braces only.
-    # Strip single-quoted segments (e.g. 'quiet splash') before counting.
-    local stripped="$line"
-    # Remove single-quoted strings (handles the common grub quoting style)
-    stripped="${stripped//\'[^\']*\'/}"
-    # Now tally
-    local opens="${stripped//[^{]/}"
-    local closes="${stripped//[^}]/}"
-    (( depth += ${#opens} - ${#closes} )) || true
-
-    if [[ $in_entry -eq 1 && $depth -le 0 && ${#block} -gt 0 ]]; then
-      # Emit the completed block NUL-terminated
-      printf '%s\0' "$block"
-      block=""
-      depth=0
-      in_entry=0
-    fi
-  done <<< "$1"
 }
 
-score_block() {
-  # Returns an integer score — higher is better (more likely to be the
-  # primary Arch boot entry we want).
-  local block="$1"
-  local score=0
 
-  # Extract the menuentry title line
-  local title_line
-  title_line=$(head -n1 <<< "$block")
 
-  # Penalise clearly-unwanted entries
-  local lc_title="${title_line,,}"  # lowercase
-  for bad in recovery fallback memtest uefi firmware windows 'efi shell'; do
-    if [[ "$lc_title" == *"$bad"* ]]; then
-      (( score -= 10 )) || true
-    fi
-  done
+# =============================================================================
+# TUI COMPONENTS (with fallback)
+# =============================================================================
 
-  # Bonus: title mentions 'arch linux' (or just 'arch')
-  [[ "$lc_title" == *"arch linux"* ]] && (( score += 5 )) || true
-  [[ "$lc_title" == *"arch"* ]]       && (( score += 2 )) || true
-
-  # Bonus: block contains a linux line pointing at /boot/vmlinuz
-  if grep -qE '^\s+linux\s+/boot/vmlinuz' <<< "$block"; then
-    (( score += 3 )) || true
-  fi
-
-  # Bonus: block contains an initrd line (rules out stubs / chainloaders)
-  if grep -qE '^\s+initrd\s' <<< "$block"; then
-    (( score += 2 )) || true
-  fi
-
-  echo "$score"
+show_header() {
+    clear
+    echo -e "${BLUE}${BOLD}"
+    cat << 'EOF'
+    █████╗ ██████╗  ██████╗██╗  ██╗    ██╗     ██╗███╗   ██╗██╗   ██╗██╗  ██╗
+   ██╔══██╗██╔══██╗██╔════╝██║  ██║    ██║     ██║████╗  ██║██║   ██║╚██╗██╔╝
+   ███████║██████╔╝██║     ███████║    ██║     ██║██╔██╗ ██║██║   ██║ ╚███╔╝
+   ██╔══██║██╔══██╗██║     ██╔══██║    ██║     ██║██║╚████║██║   ██║ ██╔██╗
+   ██║  ██║██║  ██║╚██████╗██║  ██║    ███████╗██║██║ ╚███║╚██████╔╝██╔╝╚██╗
+   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝    ╚══════╝╚═╝╚═╝  ╚══╝ ╚═════╝ ╚═╝  ╚═╝
+EOF
+    echo -e "${RESET}"
+    echo -e "${DIM}  ════════════════════════════════════════════════════════════════════${RESET}"
+    echo -e "${CYAN}  ⚡ Post-install configurator | ${BOLD}danadavis.dev/arch${RESET}${CYAN} | $(date '+%Y-%m-%d')${RESET}"
+    echo -e "${DIM}  ════════════════════════════════════════════════════════════════════${RESET}\n"
 }
 
-# Collect all blocks into an array
-mapfile -d '' BLOCKS < <(extract_menuentry_blocks "$RAW_GRUB")
+show_progress() {
+    local current="$1"
+    local total="$2"
+    local message="$3"
+    local percent=$((current * 100 / total))
+    local width=50
+    local filled=$((percent * width / 100))
+    local empty=$((width - filled))
 
-if [[ ${#BLOCKS[@]} -eq 0 ]]; then
-  error "grub-mkconfig produced no menuentry blocks at all."
-  warn  "40_custom will be left as-is. Edit it manually if needed."
-  _grub_ok=false
-else
-  info "Found ${#BLOCKS[@]} menuentry block(s) — scoring candidates..."
+    printf "\r${CYAN}${BOLD}[%3d%%${RESET}${CYAN}]${RESET} " "$percent"
+    printf "${BLUE}${BOLD}"
+    printf "%${filled}s" | tr ' ' '━'
+    printf "${RESET}${DIM}"
+    printf "%${empty}s" | tr ' ' '━'
+    printf "${RESET} ${message}"
+}
 
-  best_score=-999
-  best_idx=0
-  for i in "${!BLOCKS[@]}"; do
-    s=$(score_block "${BLOCKS[$i]}")
-    title=$(head -n1 <<< "${BLOCKS[$i]}")
-    info "  [${i}] score=${s}  ${title:0:72}"
-    if (( s > best_score )); then
-      best_score=$s
-      best_idx=$i
-    fi
-  done
-
-  MENUENTRY="${BLOCKS[$best_idx]}"
-  info "Selected block [$best_idx] (score=${best_score})"
-
-  # Sanity-check: must have at least a linux + initrd line
-  if ! grep -qE '^\s+linux\s' <<< "$MENUENTRY" || \
-     ! grep -qE '^\s+initrd\s' <<< "$MENUENTRY"; then
-    error "Selected menuentry does not contain 'linux' and 'initrd' lines."
-    error "It may be a chainloader or stub — refusing to write it."
-    warn  "Raw block:"
-    while IFS= read -r line; do warn "  $line"; done <<< "$MENUENTRY"
-    warn  "Edit /etc/grub.d/40_custom manually if needed."
-    _grub_ok=false
-    MENUENTRY=""
-  fi
-fi
-
-if [[ -n "${MENUENTRY:-}" ]]; then
-  # Rename the entry title and silence the progress echo lines
-  MENUENTRY=$(
-    sed "s/^menuentry '[^']*'/menuentry 'just one...Arch Linux'/" <<< "$MENUENTRY" \
-    | sed "s/^menuentry \"[^\"]*\"/menuentry 'just one...Arch Linux'/" \
-    | sed 's/^\([[:space:]]*\)echo[[:space:]]/\1#echo /'
-  )
-
-  info "Writing /etc/grub.d/40_custom..."
-  {
-    printf '#!/bin/sh\n'
-    printf 'exec tail -n +3 $0\n'
-    printf '# This file provides an easy way to add custom menu entries.  Simply type the\n'
-    printf '# menu entries you want to add after this comment.  Be careful not to change\n'
-    printf "# the 'exec tail' line above.\n"
-    printf '%s\n' "$MENUENTRY"
-  } | sudo tee /etc/grub.d/40_custom > /dev/null
-  sudo chmod +x /etc/grub.d/40_custom
-  success "40_custom written with live-extracted menuentry (score=${best_score})"
-fi
-
-# ── 4d. Final grub-mkconfig with 10_linux disabled ──────────────────
-info "Regenerating /boot/grub/grub.cfg..."
-sudo grub-mkconfig -o /boot/grub/grub.cfg
-
-if $_grub_ok; then
-  success "Star Trek GRUB theme applied — single 'just one...Arch Linux' entry set"
-  mark_ok "GRUB (Star Trek)"
-else
-  warn "GRUB config written but some theme assets were missing — check ${GRUB_THEME_DIR}"
-  mark_warn "GRUB (Star Trek)"
-fi
-
-# =============================================================================
-# 5 ── SDDM  +  SilentSDDM theme
-# =============================================================================
-step "5/5  Installing SDDM + SilentSDDM theme"
-
-info "Installing sddm and dependencies..."
-sudo pacman -S --noconfirm sddm qt6-declarative
-
-info "Enabling sddm service..."
-sudo systemctl enable sddm
-
-info "Cloning SilentSDDM theme..."
-SILENT_TMP=$(mktemp -d)
-git clone -b main --depth=1 https://github.com/uiriansan/SilentSDDM "$SILENT_TMP/SilentSDDM"
-(cd "$SILENT_TMP/SilentSDDM" && sudo ./install.sh)
-rm -rf "$SILENT_TMP"
-
-success "SilentSDDM installed"
-mark_ok "SilentSDDM"
-
-# =============================================================================
-# EXTRA PACKAGES  ── interactive prompt  (pacman + yay)
-# =============================================================================
-step "Extra Package Installer"
-
-# Ensure yay is available before we start taking input
-if ! command -v yay &>/dev/null; then
-  info "yay not found — installing it now so AUR packages work..."
-  sudo pacman -S --noconfirm git base-devel
-  git clone https://aur.archlinux.org/yay.git /tmp/yay-install
-  (cd /tmp/yay-install && makepkg -si --noconfirm)
-  rm -rf /tmp/yay-install
-  success "yay installed"
-fi
-
-# Queues: packages confirmed in pacman repos, packages to try via yay (AUR + repos), failures
-PACMAN_PKGS=()
-YAY_PKGS=()
-EXTRA_FAILED=()
-
-echo -e "${MAGENTA}${BOLD}"
-cat <<'BANNER'
-  ╔──────────────────────────────────────────────────────────────────────╗
-  │                                                                      │
-  │   Install anything else? Both pacman (official) and yay (AUR)       │
-  │   are supported.                                                     │
-  │                                                                      │
-  │   Syntax:                                                            │
-  │     packagename          → auto-detect (pacman first, yay fallback) │
-  │     aur:packagename      → force yay / AUR                          │
-  │                                                                      │
-  │   • Space-separate multiple packages per line                        │
-  │   • Press Enter on a blank line when you're done                     │
-  │                                                                      │
-  │   Examples:                                                          │
-  │     firefox neovim btop mpv discord                                  │
-  │     aur:spotify aur:visual-studio-code-bin zen-browser               │
-  │                                                                      │
-  ╚──────────────────────────────────────────────────────────────────────╝
-BANNER
-echo -e "${RESET}"
-
-while true; do
-  echo -ne "${MAGENTA}${BOLD}  packages> ${RESET}"
-  read -r -e pkg_input
-
-  [[ -z "$pkg_input" ]] && break
-
-  read -ra pkg_words <<< "$pkg_input"
-
-  for token in "${pkg_words[@]}"; do
-    # aur: prefix → force yay
-    if [[ "$token" == aur:* ]]; then
-      pkg="${token#aur:}"
-      YAY_PKGS+=("$pkg")
-      echo -e "    ${CYAN}A${RESET} ${BOLD}${pkg}${RESET}  ${DIM}queued via yay (AUR)${RESET}"
-
-    # check pacman official repos first
-    elif pacman -Si "$token" &>/dev/null; then
-      PACMAN_PKGS+=("$token")
-      echo -e "    ${GREEN}P${RESET} ${BOLD}${token}${RESET}  ${DIM}queued via pacman${RESET}"
-
-    # not in official repos — try yay (covers AUR + official)
-    elif yay -Si "$token" &>/dev/null 2>&1; then
-      YAY_PKGS+=("$token")
-      echo -e "    ${CYAN}A${RESET} ${BOLD}${token}${RESET}  ${DIM}not in official repos — queued via yay${RESET}"
-
+ask_yes_no() {
+    if [[ "${2:-n}" == "y" ]]; then
+        gum confirm --default=true --affirmative="Yes" --negative="No" "$1" && return 0 || return 1
     else
-      echo -e "    ${RED}✗${RESET} ${BOLD}${token}${RESET}  ${DIM}not found in pacman or AUR — skipping${RESET}"
+        gum confirm --default=false --affirmative="Yes" --negative="No" "$1" && return 0 || return 1
     fi
-  done
+}
 
-  echo ""
-  [[ ${#PACMAN_PKGS[@]} -gt 0 ]] && echo -e "  ${DIM}pacman queue : ${PACMAN_PKGS[*]}${RESET}"
-  [[ ${#YAY_PKGS[@]}   -gt 0 ]] && echo -e "  ${DIM}yay queue    : ${YAY_PKGS[*]}${RESET}"
-  echo -e "  ${DIM}Add more, or press Enter to install now.${RESET}"
-  echo ""
-done
+select_packages() {
+    local -n packages_ref=$1
 
-_total=$(( ${#PACMAN_PKGS[@]} + ${#YAY_PKGS[@]} ))
+    if [[ ${#packages_ref[@]} -eq 0 ]]; then
+        return 1
+    fi
 
-if [[ $_total -eq 0 ]]; then
-  info "No extra packages queued — skipping."
-  mark_ok "Extra packages  (none)"
-else
-  # ── pacman installs ──────────────────────────────────────────────────────
-  if [[ ${#PACMAN_PKGS[@]} -gt 0 ]]; then
-    echo ""
-    echo -e "${BLUE}${BOLD}  [pacman] Installing ${#PACMAN_PKGS[@]} package(s): ${PACMAN_PKGS[*]}${RESET}"
-    echo ""
-    for pkg in "${PACMAN_PKGS[@]}"; do
-      if sudo pacman -S --noconfirm "$pkg"; then
-        success "pacman: $pkg"
-      else
-        error   "pacman failed: $pkg"
-        EXTRA_FAILED+=("$pkg")
-      fi
-    done
-  fi
+    local tmp_file=$(mktemp)
+    printf '%s\n' "${packages_ref[@]}" > "$tmp_file"
 
-  # ── yay installs ─────────────────────────────────────────────────────────
-  if [[ ${#YAY_PKGS[@]} -gt 0 ]]; then
-    echo ""
-    echo -e "${BLUE}${BOLD}  [yay]    Installing ${#YAY_PKGS[@]} package(s): ${YAY_PKGS[*]}${RESET}"
-    echo ""
-    for pkg in "${YAY_PKGS[@]}"; do
-      if yay -S --noconfirm "$pkg"; then
-        success "yay: $pkg"
-      else
-        error   "yay failed: $pkg"
-        EXTRA_FAILED+=("$pkg")
-      fi
-    done
-  fi
+    local selected
+    selected=$(gum choose --no-limit --height=15 --header="📦 Select packages to install (space to select, enter to confirm):" < "$tmp_file")
+    rm -f "$tmp_file"
 
-  # ── result ────────────────────────────────────────────────────────────────
-  if [[ ${#EXTRA_FAILED[@]} -eq 0 ]]; then
-    success "All $_total extra package(s) installed successfully."
-    mark_ok "Extra packages  ($_total installed)"
-  else
-    warn "Failed packages: ${EXTRA_FAILED[*]}"
-    warn "Retry pacman:  sudo pacman -S <pkg>"
-    warn "Retry yay:     yay -S <pkg>"
-    mark_warn "Extra packages  (${#EXTRA_FAILED[@]} failed)"
-  fi
-fi
+    if [[ -n "$selected" ]]; then
+        mapfile -t packages_ref <<< "$selected"
+        return 0
+    else
+        packages_ref=()
+        return 1
+    fi
+}
+
+show_border_message() {
+    gum style --border double --padding "1 2" --border-foreground 36 "$1"
+}
 
 # =============================================================================
-# FINAL SUMMARY
+# INSTALLATION FUNCTIONS
 # =============================================================================
-echo ""
-echo -e "${BLUE}${BOLD}"
-echo "  ╔══════════════════════════════════════════════════════════════════╗"
-echo "  ║                    INSTALLATION SUMMARY                         ║"
-echo "  ╠══════════════════════════════════════════════════════════════════╣"
-for component in "${SUMMARY_ORDER[@]}"; do
-  status="${INSTALL_STATUS[$component]}"
-  label=$(printf "%-36s" "$component")
-  echo -e "  ║  ${RESET}${BOLD}${label}${RESET}  $(echo -e "$status")${BLUE}${BOLD}"
-done
-echo "  ╠══════════════════════════════════════════════════════════════════╣"
-echo "  ║                                                                  ║"
-echo -e "  ║   ${GREEN}${BOLD}All done.  sudo reboot  and enjoy your setup.${BLUE}${BOLD}              ║"
-echo "  ║                                                                  ║"
-echo "  ╚══════════════════════════════════════════════════════════════════╝"
-echo -e "${RESET}"
+
+ensure_yay() {
+    if ! command -v yay &>/dev/null; then
+        log_error "yay is not installed. This should have been caught in pre-flight. Aborting."
+        exit 1
+    fi
+}
+
+install_quickshell() {
+    log_info "Installing quickshell-git (AUR)..."
+
+    if pacman -Q quickshell-git &>/dev/null 2>&1; then
+        log_success "quickshell-git already installed"
+        INSTALLED+=("quickshell-git")
+        return 0
+    fi
+
+    ensure_yay
+
+    if yay -S --noconfirm quickshell-git >> "$LOG_FILE" 2>&1; then
+        log_success "quickshell-git installed"
+        INSTALLED+=("quickshell-git")
+        return 0
+    else
+        log_error "Failed to install quickshell-git"
+        FAILED+=("quickshell-git")
+        return 1
+    fi
+}
+
+install_dms() {
+    log_info "Installing DMS Linux..."
+
+    local dms_script
+    if ! dms_script=$(curl -fsSL https://install.danklinux.com 2>> "$LOG_FILE"); then
+        log_error "Failed to download DMS Linux installer"
+        FAILED+=("DMS Linux")
+        return 1
+    fi
+
+    if echo "$dms_script" | sh >> "$LOG_FILE" 2>&1; then
+        log_success "DMS Linux installed"
+        INSTALLED+=("DMS Linux")
+        return 0
+    else
+        log_error "DMS Linux installation failed"
+        FAILED+=("DMS Linux")
+        return 1
+    fi
+}
+
+install_plymouth() {
+    log_info "Setting up Plymouth with glow theme..."
+
+    # Install plymouth
+    if ! pacman -Q plymouth &>/dev/null; then
+        sudo pacman -S --noconfirm plymouth >> "$LOG_FILE" 2>&1 || {
+            log_error "Failed to install plymouth"
+            FAILED+=("Plymouth")
+            return 1
+        }
+    fi
+
+    # Download and setup theme
+    local theme_dir="/usr/share/plymouth/themes/arch-glow"
+    local temp_dir=$(mktemp -d)
+
+    # Download theme
+    if ! curl -fsSL "${BASE_URL}/arch-glow.zip" -o "${temp_dir}/arch-glow.zip"; then
+        log_error "Failed to download glow theme"
+        FAILED+=("Plymouth Theme")
+        rm -rf "$temp_dir"
+        return 1
+    fi
+
+    # Clean existing theme
+    sudo rm -rf "$theme_dir"
+    sudo mkdir -p "$theme_dir"
+
+    # Extract
+    if ! sudo unzip -o "${temp_dir}/arch-glow.zip" -d "$theme_dir" >> "$LOG_FILE" 2>&1; then
+        log_error "Failed to extract glow theme"
+        FAILED+=("Plymouth Theme")
+        rm -rf "$temp_dir"
+        return 1
+    fi
+
+    # Handle subdirectory if present
+    if [[ -d "${theme_dir}/arch-glow" ]]; then
+        sudo cp -r "${theme_dir}/arch-glow"/. "$theme_dir/"
+        sudo rm -rf "${theme_dir}/arch-glow"
+    fi
+
+    # Check for theme file
+    local theme_file=""
+    if [[ -f "${theme_dir}/arch-glow.plymouth" ]]; then
+        theme_file="arch-glow"
+    elif [[ -f "${theme_dir}/glow.plymouth" ]]; then
+        theme_file="glow"
+    else
+        log_error "No valid theme file found in extracted files"
+        FAILED+=("Plymouth Theme")
+        rm -rf "$temp_dir"
+        return 1
+    fi
+
+    # Set theme
+    sudo plymouth-set-default-theme -R "$theme_file" >> "$LOG_FILE" 2>&1
+
+    # Add to mkinitcpio if not present
+    if ! grep -q 'plymouth' /etc/mkinitcpio.conf; then
+        sudo sed -i 's/\(HOOKS=.*\)udev/\1udev plymouth/' /etc/mkinitcpio.conf
+        sudo mkinitcpio -P >> "$LOG_FILE" 2>&1
+    fi
+
+    rm -rf "$temp_dir"
+    log_success "Plymouth glow theme configured"
+    INSTALLED+=("Plymouth")
+    return 0
+}
+
+install_grub_theme() {
+    log_info "Installing Star Trek GRUB theme..."
+
+    local theme_dir="/boot/grub/themes/startrek-blue"
+    local temp_dir=$(mktemp -d)
+
+    # Ask the user what to call the single GRUB menu entry
+    local entry_name
+    entry_name=$(gum input \
+        --header "GRUB menu entry name (leave blank for default):" \
+        --placeholder "Arch Linux" \
+        --value "Arch Linux") || entry_name="Arch Linux"
+    [[ -z "$entry_name" ]] && entry_name="Arch Linux"
+    log_info "GRUB entry will be named: '${entry_name}'"
+
+    # Backup original configs
+    for f in /etc/default/grub /etc/grub.d/40_custom; do
+        if [[ -f "$f" && ! -f "${f}.bak" ]]; then
+            sudo cp "$f" "${f}.bak"
+        fi
+    done
+
+    # Download theme
+    if ! curl -fsSL "${BASE_URL}/startrek-blue.zip" -o "${temp_dir}/startrek-blue.zip"; then
+        log_error "Failed to download GRUB theme"
+        FAILED+=("GRUB Theme")
+        rm -rf "$temp_dir"
+        return 1
+    fi
+
+    # Clean and extract
+    sudo rm -rf "$theme_dir"
+    sudo mkdir -p "$theme_dir"
+
+    if ! sudo unzip -o "${temp_dir}/startrek-blue.zip" -d "$theme_dir" >> "$LOG_FILE" 2>&1; then
+        log_error "Failed to extract GRUB theme"
+        FAILED+=("GRUB Theme")
+        rm -rf "$temp_dir"
+        return 1
+    fi
+
+    # Handle subdirectory
+    if [[ -d "${theme_dir}/startrek-blue" ]]; then
+        sudo cp -r "${theme_dir}/startrek-blue"/. "$theme_dir/"
+        sudo rm -rf "${theme_dir}/startrek-blue"
+    fi
+
+    # Verify theme file
+    if [[ ! -f "${theme_dir}/theme.txt" ]]; then
+        log_error "theme.txt not found in extracted files"
+        FAILED+=("GRUB Theme")
+        rm -rf "$temp_dir"
+        return 1
+    fi
+
+    # ── /etc/default/grub settings ───────────────────────────────────────────
+
+    # Set theme path
+    if grep -q '^GRUB_THEME=' /etc/default/grub; then
+        sudo sed -i "s|^GRUB_THEME=.*|GRUB_THEME=\"${theme_dir}/theme.txt\"|" /etc/default/grub
+    else
+        echo "GRUB_THEME=\"${theme_dir}/theme.txt\"" | sudo tee -a /etc/default/grub > /dev/null
+    fi
+
+    # Ensure quiet splash in kernel cmdline
+    if ! grep -q 'splash' /etc/default/grub; then
+        sudo sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)"/\1 quiet splash"/' /etc/default/grub
+    fi
+
+    # Disable submenus (keeps the single entry at the top level)
+    if grep -q '^#\?GRUB_DISABLE_SUBMENU' /etc/default/grub; then
+        sudo sed -i 's/^#\?GRUB_DISABLE_SUBMENU=.*/GRUB_DISABLE_SUBMENU=y/' /etc/default/grub
+    else
+        echo 'GRUB_DISABLE_SUBMENU=y' | sudo tee -a /etc/default/grub > /dev/null
+    fi
+
+    # Suppress os-prober so other OSes don't sneak in extra entries
+    if grep -q '^#\?GRUB_DISABLE_OS_PROBER' /etc/default/grub; then
+        sudo sed -i 's/^#\?GRUB_DISABLE_OS_PROBER=.*/GRUB_DISABLE_OS_PROBER=true/' /etc/default/grub
+    else
+        echo 'GRUB_DISABLE_OS_PROBER=true' | sudo tee -a /etc/default/grub > /dev/null
+    fi
+
+    # ── Disable auto-generated entry scripts ─────────────────────────────────
+    # 10_linux produces "Arch Linux, with Linux linux" entries; we replace it
+    # entirely with our own 40_custom entry, so disable both auto-generators.
+    sudo chmod -x /etc/grub.d/10_linux      2>/dev/null || true
+    sudo chmod -x /etc/grub.d/30_os-prober  2>/dev/null || true
+
+    # ── Detect partition layout ───────────────────────────────────────────────
+    local boot_src boot_uuid root_dev root_subvol root_dev_raw microcode_img initrd_line rootflags
+
+    # findmnt may append a btrfs subvolume in brackets, e.g. /dev/sda1[/@]
+    # Strip that suffix for blkid/kernel root= and preserve it for rootflags.
+    root_dev_raw=$(findmnt -n -o SOURCE / 2>/dev/null || echo "")
+    if [[ "$root_dev_raw" =~ \[([^]]+)\]$ ]]; then
+        root_subvol="${BASH_REMATCH[1]}"
+        root_dev="${root_dev_raw%\[*}"
+    else
+        root_subvol=""
+        root_dev="$root_dev_raw"
+    fi
+
+    # If /boot is a separate partition, its UUID is what GRUB searches for;
+    # otherwise fall back to the root partition's UUID.
+    boot_src=$(findmnt -n -o SOURCE /boot 2>/dev/null || echo "")
+    # Strip any subvolume suffix from boot_src as well
+    boot_src="${boot_src%\[*}"
+    if [[ -n "$boot_src" ]]; then
+        boot_uuid=$(sudo blkid -s UUID -o value "$boot_src" 2>/dev/null || echo "")
+    else
+        boot_uuid=$(sudo blkid -s UUID -o value "$root_dev" 2>/dev/null || echo "")
+    fi
+
+    if [[ -z "$boot_uuid" || -z "$root_dev" ]]; then
+        log_error "Could not detect required partition info (root: '${root_dev}', boot UUID: '${boot_uuid}'). Cannot write a valid GRUB entry."
+        FAILED+=("GRUB Entry")
+        rm -rf "$temp_dir"
+        return 1
+    fi
+
+    # Build rootflags for btrfs subvolume if needed
+    rootflags=""
+    [[ -n "$root_subvol" ]] && rootflags=" rootflags=subvol=${root_subvol}"
+
+    if [[ -f /boot/amd-ucode.img ]]; then
+        microcode_img="/amd-ucode.img"
+    elif [[ -f /boot/intel-ucode.img ]]; then
+        microcode_img="/intel-ucode.img"
+    else
+        microcode_img=""
+    fi
+
+    local tab=$'\t'
+    if [[ -n "$microcode_img" ]]; then
+        initrd_line="initrd${tab}${microcode_img} /initramfs-linux.img"
+    else
+        initrd_line="initrd${tab}/initramfs-linux.img"
+    fi
+
+    # ── Write the single, clean GRUB entry ───────────────────────────────────
+    sudo tee /etc/grub.d/40_custom > /dev/null << EOF
+#!/bin/sh
+exec tail -n +3 \$0
+# Single GRUB entry — generated by arch-post-install
+menuentry '${entry_name}' --class arch --class gnu-linux --class gnu --class os {
+	load_video
+	set gfxpayload=keep
+	insmod gzio
+	insmod part_gpt
+	insmod fat
+	search --no-floppy --fs-uuid --set=root ${boot_uuid}
+	linux	/vmlinuz-linux root=${root_dev} rw quiet splash${rootflags}
+	${initrd_line}
+}
+EOF
+    sudo chmod +x /etc/grub.d/40_custom
+
+    log_info "GRUB entry '${entry_name}' written (root: ${root_dev}, boot UUID: ${boot_uuid})"
+
+    # ── Regenerate GRUB config ────────────────────────────────────────────────
+    if ! sudo grub-mkconfig -o /boot/grub/grub.cfg >> "$LOG_FILE" 2>&1; then
+        log_error "Failed to regenerate GRUB config"
+        FAILED+=("GRUB Config")
+        rm -rf "$temp_dir"
+        return 1
+    fi
+
+    rm -rf "$temp_dir"
+    log_success "GRUB theme installed — '${entry_name}' is the only menu entry"
+    INSTALLED+=("GRUB Theme")
+    return 0
+}
+
+install_sddm() {
+    log_info "Setting up SDDM with SilentSDDM theme..."
+
+    # Install SDDM
+    if ! pacman -Q sddm &>/dev/null; then
+        sudo pacman -S --noconfirm sddm qt6-declarative >> "$LOG_FILE" 2>&1 || {
+            log_error "Failed to install SDDM"
+            FAILED+=("SDDM")
+            return 1
+        }
+    fi
+
+    # Enable SDDM
+    sudo systemctl enable sddm >> "$LOG_FILE" 2>&1
+
+    # Install theme
+    local temp_dir=$(mktemp -d)
+    if git clone --depth=1 https://github.com/uiriansan/SilentSDDM "$temp_dir/SilentSDDM" >> "$LOG_FILE" 2>&1; then
+        if (cd "$temp_dir/SilentSDDM" && sudo ./install.sh >> "$LOG_FILE" 2>&1); then
+            log_success "SilentSDDM installed"
+            INSTALLED+=("SDDM")
+        else
+            log_warn "SilentSDDM install.sh failed; SDDM is enabled with default theme"
+            INSTALLED+=("SDDM (default theme)")
+        fi
+    else
+        log_warn "Failed to clone SilentSDDM; SDDM is enabled with default theme"
+        INSTALLED+=("SDDM (default theme)")
+    fi
+
+    rm -rf "$temp_dir"
+    return 0
+}
+
+install_extra_packages() {
+    echo
+    log_info "Extra package installation"
+    echo
+
+    # Get list of packages
+    local packages=()
+
+    local temp_file=$(mktemp)
+    gum write --placeholder="Enter package names (one per line, press Ctrl+D when done)" > "$temp_file"
+
+    if [[ -s "$temp_file" ]]; then
+        mapfile -t packages < "$temp_file"
+    fi
+    rm -f "$temp_file"
+
+    if [[ ${#packages[@]} -eq 0 ]]; then
+        log_info "No packages entered"
+        return 0
+    fi
+
+    # Categorize packages
+    local pacman_pkgs=()
+    local aur_pkgs=()
+
+    for pkg in "${packages[@]}"; do
+        pkg=$(echo "$pkg" | xargs)  # Trim whitespace
+        [[ -z "$pkg" ]] && continue
+
+        if [[ "$pkg" == aur:* ]]; then
+            aur_pkgs+=("${pkg#aur:}")
+        elif pacman -Si "$pkg" &>/dev/null 2>&1; then
+            pacman_pkgs+=("$pkg")
+        else
+            aur_pkgs+=("$pkg")
+        fi
+    done
+
+    # Install pacman packages
+    if [[ ${#pacman_pkgs[@]} -gt 0 ]]; then
+        echo
+        log_info "Installing official packages: ${pacman_pkgs[*]}"
+        if sudo pacman -S --noconfirm "${pacman_pkgs[@]}" >> "$LOG_FILE" 2>&1; then
+            log_success "Official packages installed"
+            INSTALLED+=("${pacman_pkgs[@]}")
+        else
+            log_warn "Some official packages failed"
+            FAILED+=("${pacman_pkgs[@]}")
+        fi
+    fi
+
+    # Install AUR packages
+    if [[ ${#aur_pkgs[@]} -gt 0 ]]; then
+        ensure_yay
+        echo
+        log_info "Installing AUR packages: ${aur_pkgs[*]}"
+        if yay -S --noconfirm "${aur_pkgs[@]}" >> "$LOG_FILE" 2>&1; then
+            log_success "AUR packages installed"
+            INSTALLED+=("${aur_pkgs[@]}")
+        else
+            log_warn "Some AUR packages failed"
+            FAILED+=("${aur_pkgs[@]}")
+        fi
+    fi
+}
+
+# =============================================================================
+# MAIN EXECUTION
+# =============================================================================
+
+main() {
+    check_sudo
+    show_header
+
+    # Create log file
+    touch "$LOG_FILE"
+    echo "=== Arch Linux Post-Install Log $(date) ===" > "$LOG_FILE"
+
+    # Pre-flight checks
+    preflight_check
+
+    # Welcome message
+    echo
+    show_border_message "Welcome to the Arch Linux Post-Install Configurator!"
+    echo
+
+    # Check if we should proceed
+    if ! ask_yes_no "Start installation?" "y"; then
+        log_info "Installation cancelled by ${USER}"
+        exit 0
+    fi
+
+    echo
+    log_info "Installation will now begin"
+    echo
+
+    # Installation steps
+    local steps=(
+        "Quickshell (AUR)"
+        "DMS Linux"
+        "Plymouth Boot Animation"
+        "GRUB Star Trek Theme"
+        "SDDM Display Manager"
+    )
+
+    local total_steps=${#steps[@]}
+    local current_step=0
+
+    # Step 1: Quickshell
+    current_step=$((current_step + 1))
+    show_progress $current_step $total_steps "${steps[$((current_step-1))]}"
+    install_quickshell
+
+    # Step 2: DMS Linux
+    current_step=$((current_step + 1))
+    show_progress $current_step $total_steps "${steps[$((current_step-1))]}"
+    install_dms
+
+    # Step 3: Plymouth
+    current_step=$((current_step + 1))
+    show_progress $current_step $total_steps "${steps[$((current_step-1))]}"
+    install_plymouth
+
+    # Step 4: GRUB Theme
+    current_step=$((current_step + 1))
+    show_progress $current_step $total_steps "${steps[$((current_step-1))]}"
+    install_grub_theme
+
+    # Step 5: SDDM
+    current_step=$((current_step + 1))
+    show_progress $current_step $total_steps "${steps[$((current_step-1))]}"
+    install_sddm
+
+    echo -e "\n"
+
+    # Extra packages (interactive)
+    if ask_yes_no "Install extra packages?" "n"; then
+        install_extra_packages
+    fi
+
+    # Show summary
+    echo
+    show_border_message "
+${GREEN}${BOLD}Installation Complete${RESET}
+
+${BLUE}${BOLD}✓ Installed:${RESET} ${#INSTALLED[@]} items
+${YELLOW}${BOLD}⚠ Failed:${RESET} ${#FAILED[@]} items
+
+${CYAN}Log file:${RESET} $LOG_FILE
+${CYAN}To reboot:${RESET} sudo reboot
+"
+
+    # Show details if any failures
+    if [[ ${#FAILED[@]} -gt 0 ]]; then
+        echo -e "${RED}${BOLD}Failed items:${RESET}"
+        printf '  • %s\n' "${FAILED[@]}"
+        echo
+        echo -e "Check the log for details: ${CYAN}$LOG_FILE${RESET}"
+    fi
+
+    # Ask for reboot
+    echo
+    if ask_yes_no "Reboot now?" "y"; then
+        log_info "Rebooting..."
+        sudo reboot
+    else
+        log_info "Remember to reboot later to apply changes"
+    fi
+}
+
+# Run main
+main "$@"

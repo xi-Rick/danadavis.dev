@@ -26,8 +26,8 @@ export const FOOTER_NAV_LINKS = [
   { href: '/blog', title: 'Blog' },
   { href: '/snippets', title: 'Snippets' },
   { href: '/projects', title: 'Projects' },
-  { href: '/tags', title: 'Tags' },
   { href: '/feed.xml', title: 'RSS Feed' },
+  { href: '/arch', title: 'Arch' },
 ]
 
 export const FOOTER_PERSONAL_STUFF = [
