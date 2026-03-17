@@ -67,10 +67,12 @@ Sets up a smooth animated splash screen shown during boot. Installs the custom *
 |------|--------|
 | Install | `plymouth` via `pacman` |
 | Theme | `arch-glow` from `danadavis.dev/arch/arch-glow.zip` |
-| Hook | Injects `plymouth` into `/etc/mkinitcpio.conf` |
+| Hook | Injects `plymouth` after `udev` **or** `systemd` in `/etc/mkinitcpio.conf` |
 | Rebuild | Runs `mkinitcpio -P` to apply the new initramfs |
 
 The theme is automatically detected and set as default via `plymouth-set-default-theme -R`.
+
+The script detects whether your preset uses the `udev` or `systemd` initramfs hook and injects `plymouth` in the correct position. If neither hook is found the step fails with a clear error rather than silently doing nothing.
 
 ![arch-glow Plymouth Boot Animation](https://raw.githubusercontent.com/Skrepysh/arch-glow-plymouth/main/preview.gif)
 
@@ -88,11 +90,15 @@ Installs the **startrek-blue** GRUB theme and writes a clean, single-entry GRUB 
 | OS Prober | Disabled (`GRUB_DISABLE_OS_PROBER=true`) |
 | Splash | `quiet splash` added to kernel cmdline |
 
-**Partition detection is automatic.** The script uses `findmnt` and `blkid` to detect:
+**Partition and kernel detection are fully automatic.** The script uses `findmnt` and `blkid` to detect:
 
-- Your root partition (including btrfs subvolume `rootflags` if applicable)
-- Your `/boot` UUID
+- Your root partition UUID (`root=UUID=…` — stable across hardware changes)
+- Your `/boot` partition UUID for the GRUB `search` command
+- Your btrfs subvolume `rootflags`, if applicable
 - Your microcode image (`amd-ucode.img` or `intel-ucode.img`)
+- Your installed kernel by scanning `/boot/vmlinuz-*` at runtime
+
+Kernel detection supports any kernel package — `linux`, `linux-lts`, `linux-zen`, `linux-hardened`, or any custom kernel. If multiple kernels are found you will be prompted to choose one. The matching `initramfs-<kernel>.img` is verified to exist before the GRUB entry is written.
 
 It then writes a clean `/etc/grub.d/40_custom` entry and disables the auto-generated `10_linux` and `30_os-prober` scripts so only your named entry appears in the menu.
 

@@ -100,7 +100,6 @@ preflight_check() {
     log_info "Running pre-flight checks..."
 
         # Install required system commands if missing
-        local required_cmds=("curl" "unzip" "git" "findmnt" "util-linux")
         local missing_pkgs=()
         for cmd in curl unzip git findmnt blkid; do
             if ! command -v "$cmd" &>/dev/null; then
@@ -140,14 +139,14 @@ preflight_check() {
         exit 1
     fi
     log_success "Disk space OK ($(( available_kb / 1024 / 1024 ))GB free)"
-
     # Verify Arch-based system
     if [[ -f /etc/arch-release ]]; then
         log_success "Arch Linux detected"
     elif grep -qi "arch\|manjaro\|endeavouros\|garuda\|cachyos\|artix" /etc/os-release 2>/dev/null; then
         log_success "Arch-based system detected"
     else
-        log_warn "Could not confirm Arch-based system — proceeding anyway"
+        log_error "This script requires an Arch-based system. Please install Arch Linux first."
+        exit 1
     fi
 
     # Install required TUI deps (gum and fzf) if not already present
@@ -295,14 +294,7 @@ install_quickshell() {
 install_dms() {
     log_info "Installing DMS Linux..."
 
-    local dms_script
-    if ! dms_script=$(curl -fsSL https://install.danklinux.com 2>> "$LOG_FILE"); then
-        log_error "Failed to download DMS Linux installer"
-        FAILED+=("DMS Linux")
-        return 1
-    fi
-
-    if echo "$dms_script" | sh >> "$LOG_FILE" 2>&1; then
+    if curl -fsSL https://install.danklinux.com | sh >> "$LOG_FILE" 2>&1; then
         log_success "DMS Linux installed"
         INSTALLED+=("DMS Linux")
         return 0
@@ -372,8 +364,17 @@ install_plymouth() {
     sudo plymouth-set-default-theme -R "$theme_file" >> "$LOG_FILE" 2>&1
 
     # Add to mkinitcpio if not present
-    if ! grep -q 'plymouth' /etc/mkinitcpio.conf; then
-        sudo sed -i 's/\(HOOKS=.*\)udev/\1udev plymouth/' /etc/mkinitcpio.conf
+    if ! grep -qE '^\s*HOOKS=.*\bplymouth\b' /etc/mkinitcpio.conf; then
+        if grep -qE '^\s*HOOKS=.*\budev\b' /etc/mkinitcpio.conf; then
+            sudo sed -i '/^\s*HOOKS=/s/\budev\b/udev plymouth/' /etc/mkinitcpio.conf
+        elif grep -qE '^\s*HOOKS=.*\bsystemd\b' /etc/mkinitcpio.conf; then
+            sudo sed -i '/^\s*HOOKS=/s/\bsystemd\b/systemd plymouth/' /etc/mkinitcpio.conf
+        else
+            log_warn "Could not find 'udev' or 'systemd' in HOOKS — Plymouth not added to initramfs"
+            FAILED+=("Plymouth initramfs hook")
+            rm -rf "$temp_dir"
+            return 1
+        fi
         sudo mkinitcpio -P >> "$LOG_FILE" 2>&1
     fi
 
@@ -439,41 +440,60 @@ install_grub_theme() {
     fi
 
     # ── /etc/default/grub settings ───────────────────────────────────────────
+    # Guard all modifications with a marker so re-runs don't duplicate changes.
+    if ! grep -q "# Modified by arch-post-install" /etc/default/grub 2>/dev/null; then
+        # Set theme path
+        if grep -q '^GRUB_THEME=' /etc/default/grub; then
+            sudo sed -i "s|^GRUB_THEME=.*|GRUB_THEME=\"${theme_dir}/theme.txt\"|" /etc/default/grub
+        else
+            echo "GRUB_THEME=\"${theme_dir}/theme.txt\"" | sudo tee -a /etc/default/grub > /dev/null
+        fi
 
-    # Set theme path
-    if grep -q '^GRUB_THEME=' /etc/default/grub; then
-        sudo sed -i "s|^GRUB_THEME=.*|GRUB_THEME=\"${theme_dir}/theme.txt\"|" /etc/default/grub
+        # Ensure quiet and splash are in kernel cmdline (check each independently)
+        if ! grep -qE '\bquiet\b' /etc/default/grub; then
+            sudo sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)"/\1 quiet"/' /etc/default/grub
+        fi
+        if ! grep -qE '\bsplash\b' /etc/default/grub; then
+            sudo sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)"/\1 splash"/' /etc/default/grub
+        fi
+
+        # Disable submenus (keeps the single entry at the top level)
+        if grep -q '^#\?GRUB_DISABLE_SUBMENU' /etc/default/grub; then
+            sudo sed -i 's/^#\?GRUB_DISABLE_SUBMENU=.*/GRUB_DISABLE_SUBMENU=y/' /etc/default/grub
+        else
+            echo 'GRUB_DISABLE_SUBMENU=y' | sudo tee -a /etc/default/grub > /dev/null
+        fi
+
+        # Suppress os-prober so other OSes don't sneak in extra entries
+        if grep -q '^#\?GRUB_DISABLE_OS_PROBER' /etc/default/grub; then
+            sudo sed -i 's/^#\?GRUB_DISABLE_OS_PROBER=.*/GRUB_DISABLE_OS_PROBER=true/' /etc/default/grub
+        else
+            echo 'GRUB_DISABLE_OS_PROBER=true' | sudo tee -a /etc/default/grub > /dev/null
+        fi
+
+        # Mark file so subsequent runs skip these modifications
+        echo "# Modified by arch-post-install" | sudo tee -a /etc/default/grub > /dev/null
     else
-        echo "GRUB_THEME=\"${theme_dir}/theme.txt\"" | sudo tee -a /etc/default/grub > /dev/null
-    fi
-
-    # Ensure quiet splash in kernel cmdline
-    if ! grep -q 'splash' /etc/default/grub; then
-        sudo sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)"/\1 quiet splash"/' /etc/default/grub
-    fi
-
-    # Disable submenus (keeps the single entry at the top level)
-    if grep -q '^#\?GRUB_DISABLE_SUBMENU' /etc/default/grub; then
-        sudo sed -i 's/^#\?GRUB_DISABLE_SUBMENU=.*/GRUB_DISABLE_SUBMENU=y/' /etc/default/grub
-    else
-        echo 'GRUB_DISABLE_SUBMENU=y' | sudo tee -a /etc/default/grub > /dev/null
-    fi
-
-    # Suppress os-prober so other OSes don't sneak in extra entries
-    if grep -q '^#\?GRUB_DISABLE_OS_PROBER' /etc/default/grub; then
-        sudo sed -i 's/^#\?GRUB_DISABLE_OS_PROBER=.*/GRUB_DISABLE_OS_PROBER=true/' /etc/default/grub
-    else
-        echo 'GRUB_DISABLE_OS_PROBER=true' | sudo tee -a /etc/default/grub > /dev/null
+        log_info "/etc/default/grub already modified by this script — skipping"
     fi
 
     # ── Disable auto-generated entry scripts ─────────────────────────────────
     # 10_linux produces "Arch Linux, with Linux linux" entries; we replace it
-    # entirely with our own 40_custom entry, so disable both auto-generators.
-    sudo chmod -x /etc/grub.d/10_linux      2>/dev/null || true
-    sudo chmod -x /etc/grub.d/30_os-prober  2>/dev/null || true
+    # entirely with our own 40_custom entry. 30_os-prober and 30_uefi-firmware
+    # can add unwanted extra entries, so disable all three.
+    sudo chmod -x /etc/grub.d/10_linux          2>/dev/null || true
+    sudo chmod -x /etc/grub.d/30_os-prober      2>/dev/null || true
+    sudo chmod -x /etc/grub.d/30_uefi-firmware  2>/dev/null || true
+
+    # ── Remove any leftover .bak files from grub.d ───────────────────────────
+    # grub-mkconfig sources every executable in /etc/grub.d/; backup files
+    # created earlier in this script (.bak) are not executable, but if they
+    # were ever accidentally marked executable they would produce duplicate
+    # entries. Remove them to be safe.
+    sudo find /etc/grub.d -maxdepth 1 -name '*.bak' -delete 2>/dev/null || true
 
     # ── Detect partition layout ───────────────────────────────────────────────
-    local boot_src boot_uuid root_dev root_subvol root_dev_raw microcode_img initrd_line rootflags
+    local boot_src boot_uuid root_dev root_uuid root_subvol root_dev_raw microcode_img initrd_line rootflags kernel_suffix vmlinuz_path
 
     # findmnt may append a btrfs subvolume in brackets, e.g. /dev/sda1[/@]
     # Strip that suffix for blkid/kernel root= and preserve it for rootflags.
@@ -497,8 +517,12 @@ install_grub_theme() {
         boot_uuid=$(sudo blkid -s UUID -o value "$root_dev" 2>/dev/null || echo "")
     fi
 
-    if [[ -z "$boot_uuid" || -z "$root_dev" ]]; then
-        log_error "Could not detect required partition info (root: '${root_dev}', boot UUID: '${boot_uuid}'). Cannot write a valid GRUB entry."
+    # Always get the root partition's own UUID for the kernel root= parameter;
+    # this is stable across renames unlike /dev/sdXY paths.
+    root_uuid=$(sudo blkid -s UUID -o value "$root_dev" 2>/dev/null || echo "")
+
+    if [[ -z "$boot_uuid" || -z "$root_dev" || -z "$root_uuid" ]]; then
+        log_error "Could not detect required partition info (root: '${root_dev}', root UUID: '${root_uuid}', boot UUID: '${boot_uuid}'). Cannot write a valid GRUB entry."
         FAILED+=("GRUB Entry")
         rm -rf "$temp_dir"
         return 1
@@ -507,6 +531,41 @@ install_grub_theme() {
     # Build rootflags for btrfs subvolume if needed
     rootflags=""
     [[ -n "$root_subvol" ]] && rootflags=" rootflags=subvol=${root_subvol}"
+
+    # ── Detect installed kernel ───────────────────────────────────────────────
+    local -a vmlinuz_files
+    mapfile -t vmlinuz_files < <(find /boot -maxdepth 1 -name 'vmlinuz-*' -type f 2>/dev/null | sort)
+
+    if [[ ${#vmlinuz_files[@]} -eq 0 ]]; then
+        log_error "No vmlinuz kernel image found in /boot. Cannot write a valid GRUB entry."
+        FAILED+=("GRUB Entry")
+        rm -rf "$temp_dir"
+        return 1
+    elif [[ ${#vmlinuz_files[@]} -eq 1 ]]; then
+        vmlinuz_path="${vmlinuz_files[0]}"
+    else
+        log_info "Multiple kernels found — please select one for the GRUB entry:"
+        local kernel_names=() chosen
+        for f in "${vmlinuz_files[@]}"; do
+            kernel_names+=("$(basename "$f")")
+        done
+        chosen=$(printf '%s\n' "${kernel_names[@]}" | gum choose --header="Select kernel for GRUB entry:")
+        if [[ -z "$chosen" ]]; then
+            chosen="${kernel_names[0]}"
+            log_warn "No kernel selected, defaulting to ${chosen}"
+        fi
+        vmlinuz_path="/boot/${chosen}"
+    fi
+
+    kernel_suffix="${vmlinuz_path#/boot/vmlinuz-}"
+    log_info "Using kernel: vmlinuz-${kernel_suffix}"
+
+    if [[ ! -f "/boot/initramfs-${kernel_suffix}.img" ]]; then
+        log_error "Expected initramfs not found: /boot/initramfs-${kernel_suffix}.img"
+        FAILED+=("GRUB Entry")
+        rm -rf "$temp_dir"
+        return 1
+    fi
 
     if [[ -f /boot/amd-ucode.img ]]; then
         microcode_img="/amd-ucode.img"
@@ -518,9 +577,9 @@ install_grub_theme() {
 
     local tab=$'\t'
     if [[ -n "$microcode_img" ]]; then
-        initrd_line="initrd${tab}${microcode_img} /initramfs-linux.img"
+        initrd_line="initrd${tab}${microcode_img} /initramfs-${kernel_suffix}.img"
     else
-        initrd_line="initrd${tab}/initramfs-linux.img"
+        initrd_line="initrd${tab}/initramfs-${kernel_suffix}.img"
     fi
 
     # ── Write the single, clean GRUB entry ───────────────────────────────────
@@ -535,13 +594,13 @@ menuentry '${entry_name}' --class arch --class gnu-linux --class gnu --class os 
 	insmod part_gpt
 	insmod fat
 	search --no-floppy --fs-uuid --set=root ${boot_uuid}
-	linux	/vmlinuz-linux root=${root_dev} rw quiet splash${rootflags}
+	linux	/vmlinuz-${kernel_suffix} root=UUID=${root_uuid} rw quiet splash${rootflags}
 	${initrd_line}
 }
 EOF
     sudo chmod +x /etc/grub.d/40_custom
 
-    log_info "GRUB entry '${entry_name}' written (root: ${root_dev}, boot UUID: ${boot_uuid})"
+    log_info "GRUB entry '${entry_name}' written (root UUID: ${root_uuid}, boot UUID: ${boot_uuid})"
 
     # ── Regenerate GRUB config ────────────────────────────────────────────────
     if ! sudo grub-mkconfig -o /boot/grub/grub.cfg >> "$LOG_FILE" 2>&1; then
