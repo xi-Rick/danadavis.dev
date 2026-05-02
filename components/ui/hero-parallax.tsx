@@ -3,13 +3,14 @@ import {
   type MotionValue,
   motion,
   useMotionValue,
+  useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
 } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useRef } from 'react'
 
 export const HeroParallax = ({
   projects,
@@ -32,165 +33,83 @@ export const HeroParallax = ({
     [projects],
   )
 
-  // Duplicate projects for infinite scroll effect
-  const duplicatedProjects = useMemo(
-    () => [...safeProjects, ...safeProjects, ...safeProjects],
-    [safeProjects],
-  )
+  // Cycle through items to always fill 12 slots, preserving the row overlap pattern
+  const filledProjects = useMemo(() => {
+    if (safeProjects.length === 0) return []
+    return Array.from(
+      { length: 12 },
+      (_, i) => safeProjects[i % safeProjects.length],
+    )
+  }, [safeProjects])
 
-  const firstRow = useMemo(
-    () => duplicatedProjects?.slice(0, 15),
-    [duplicatedProjects],
-  )
-  const secondRow = useMemo(
-    () => duplicatedProjects?.slice(5, 20),
-    [duplicatedProjects],
-  )
-  const thirdRow = useMemo(
-    () => duplicatedProjects?.slice(10, 25),
-    [duplicatedProjects],
-  )
+  const firstRow = useMemo(() => filledProjects.slice(0, 6), [filledProjects])
+  const secondRow = useMemo(() => filledProjects.slice(3, 9), [filledProjects])
+  const thirdRow = useMemo(() => filledProjects.slice(6, 12), [filledProjects])
 
-  const ref = React.useRef(null)
+  const ref = useRef(null)
   const { scrollYProgress } = useScroll({
+    target: ref,
     offset: ['start start', 'end start'],
   })
 
   const springConfig = { stiffness: 300, damping: 30, bounce: 100 }
 
-  // Infinite scroll animation values
-  const baseX = useMotionValue(0)
-  const baseXReverse = useMotionValue(0)
-  const baseXMobile = useMotionValue(0)
-  const baseXReverseMobile = useMotionValue(0)
-
-  // Desktop parallax values combined with infinite scroll
+  // Parallax values without infinite scroll combination
   const translateX = useSpring(
-    useTransform(scrollYProgress, [0, 1], [0, 1000]),
+    useTransform(scrollYProgress, [0, 1], [0, 800]),
     springConfig,
   )
   const translateXReverse = useSpring(
-    useTransform(scrollYProgress, [0, 1], [0, -1000]),
+    useTransform(scrollYProgress, [0, 1], [0, -800]),
     springConfig,
   )
-
-  // Mobile parallax values combined with infinite scroll
   const translateXMobile = useSpring(
-    useTransform(scrollYProgress, [0, 1], [0, 200]),
+    useTransform(scrollYProgress, [0, 1], [0, 150]),
     springConfig,
   )
   const translateXReverseMobile = useSpring(
-    useTransform(scrollYProgress, [0, 1], [0, -200]),
+    useTransform(scrollYProgress, [0, 1], [0, -150]),
     springConfig,
   )
 
-  // Infinite scroll animation
-  useEffect(() => {
-    let animationFrame: number
-    let lastTime = performance.now()
-    const mountedRef = { current: true }
-
-    const speed = 0.1 // px/ms
-    const cardWidth = 40 * 16 + 80 // 40rem + 20rem spacing in px (approximate)
-    const cardWidthMobile = 14 * 16 + 12 // 14rem + 3rem spacing in px (approximate)
-
-    // Calculate the total width of one set of cards (not all duplicates)
-    const singleSetWidth = cardWidth * (safeProjects.length || 1)
-    const singleSetWidthMobile = cardWidthMobile * (safeProjects.length || 1)
-
-    function animate() {
-      if (!mountedRef.current) return
-
-      const now = performance.now()
-      const delta = now - lastTime
-      lastTime = now
-
-      // Desktop - use modulo for seamless looping
-      const nextX = baseX.get() + speed * delta
-      baseX.set(nextX % singleSetWidth)
-
-      const nextXReverse = baseXReverse.get() - speed * delta
-      baseXReverse.set(
-        (((nextXReverse % singleSetWidth) + singleSetWidth) % singleSetWidth) -
-          singleSetWidth,
-      )
-
-      // Mobile - use modulo for seamless looping
-      const nextXMobile = baseXMobile.get() + speed * 0.6 * delta
-      baseXMobile.set(nextXMobile % singleSetWidthMobile)
-
-      const nextXReverseMobile = baseXReverseMobile.get() - speed * 0.6 * delta
-      baseXReverseMobile.set(
-        (((nextXReverseMobile % singleSetWidthMobile) + singleSetWidthMobile) %
-          singleSetWidthMobile) -
-          singleSetWidthMobile,
-      )
-
-      animationFrame = requestAnimationFrame(animate)
-    }
-
-    animationFrame = requestAnimationFrame(animate)
-    return () => {
-      mountedRef.current = false
-      cancelAnimationFrame(animationFrame)
-    }
-  }, [
-    baseX,
-    baseXReverse,
-    baseXMobile,
-    baseXReverseMobile,
-    safeProjects.length,
-  ])
-
-  // Combine infinite scroll with parallax
-  const combinedTranslateX = useTransform(
-    [baseX, translateX],
-    (latest: number[]) => latest[0] + latest[1],
-  )
-  const combinedTranslateXReverse = useTransform(
-    [baseXReverse, translateXReverse],
-    (latest: number[]) => latest[0] + latest[1],
-  )
-  const combinedTranslateXMobile = useTransform(
-    [baseXMobile, translateXMobile],
-    (latest: number[]) => latest[0] + latest[1],
-  )
-  const combinedTranslateXReverseMobile = useTransform(
-    [baseXReverseMobile, translateXReverseMobile],
-    (latest: number[]) => latest[0] + latest[1],
-  )
-
+  // Tilt values - cards face forward toward viewer
   const rotateX = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [15, 0]),
+    useTransform(scrollYProgress, [0, 0.3], [15, 0]),
     springConfig,
   )
   const opacity = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [0.2, 1]),
+    useTransform(scrollYProgress, [0, 0.2], [0.6, 1]),
     springConfig,
   )
   const rotateZ = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [20, 0]),
+    useTransform(scrollYProgress, [0, 0.3], [8, 0]),
     springConfig,
   )
   const translateY = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [-700, 500]),
+    useTransform(scrollYProgress, [0, 0.3], [-700, 400]),
     springConfig,
   )
-
-  // Mobile translateY (reduced movement)
   const translateYMobile = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [-100, 50]),
+    useTransform(scrollYProgress, [0, 0.3], [-150, 50]),
+    springConfig,
+  )
+  const rotateXMobile = useSpring(
+    useTransform(scrollYProgress, [0, 0.3], [12, 3]),
+    springConfig,
+  )
+  const rotateZMobile = useSpring(
+    useTransform(scrollYProgress, [0, 0.3], [8, 0]),
     springConfig,
   )
 
   return (
     <div
       ref={ref}
-      className="relative flex h-auto min-h-screen w-full flex-col self-auto overflow-hidden py-10 antialiased [perspective:1000px] [transform-style:preserve-3d] sm:h-[2400px] md:h-[2800px]"
+      className="relative flex h-auto min-h-screen w-full flex-col self-auto overflow-hidden py-10 antialiased [perspective:1000px] [transform-style:preserve-3d] sm:h-[2000px] md:h-[2400px]"
     >
       <Header name={admin.name} introduction={admin.introduction} />
 
-      {/* Desktop version */}
+      {/* Desktop version with tilted perspective */}
       <motion.div
         style={{
           rotateX,
@@ -201,34 +120,37 @@ export const HeroParallax = ({
         className="hidden pb-20 sm:block"
       >
         {firstRow.length > 0 && (
-          <motion.div className="mb-20 flex flex-row-reverse space-x-20 space-x-reverse">
+          <motion.div className="mb-16 flex flex-row-reverse space-x-12 space-x-reverse">
             {firstRow.map((product, index) => (
               <ProductCard
                 product={product}
-                translate={combinedTranslateX}
-                key={`first-${product.title}-${index}`}
+                translate={translateX}
+                delay={index * 0.1}
+                key={`first-${product.link}-${index}`}
               />
             ))}
           </motion.div>
         )}
         {secondRow.length > 0 && (
-          <motion.div className="mb-20 flex flex-row space-x-20">
+          <motion.div className="mb-16 flex flex-row space-x-12">
             {secondRow.map((product, index) => (
               <ProductCard
                 product={product}
-                translate={combinedTranslateXReverse}
-                key={`second-${product.title}-${index}`}
+                translate={translateXReverse}
+                delay={0.6 + index * 0.1}
+                key={`second-${product.link}-${index}`}
               />
             ))}
           </motion.div>
         )}
         {thirdRow.length > 0 && (
-          <motion.div className="mb-20 flex flex-row-reverse space-x-20 space-x-reverse">
+          <motion.div className="flex flex-row-reverse space-x-12 space-x-reverse">
             {thirdRow.map((product, index) => (
               <ProductCard
                 product={product}
-                translate={combinedTranslateX}
-                key={`third-${product.title}-${index}`}
+                translate={translateX}
+                delay={1.2 + index * 0.1}
+                key={`third-${product.link}-${index}`}
               />
             ))}
           </motion.div>
@@ -238,48 +160,45 @@ export const HeroParallax = ({
       {/* Mobile version */}
       <motion.div
         style={{
-          rotateX: useSpring(
-            useTransform(scrollYProgress, [0, 0.2], [5, 0]),
-            springConfig,
-          ),
-          rotateZ: useSpring(
-            useTransform(scrollYProgress, [0, 0.2], [5, 0]),
-            springConfig,
-          ),
+          rotateX: rotateXMobile,
+          rotateZ: rotateZMobile,
           translateY: translateYMobile,
           opacity,
         }}
         className="block pb-10 sm:hidden"
       >
         {firstRow.length > 0 && (
-          <motion.div className="mb-4 flex flex-row-reverse space-x-3 space-x-reverse px-2">
-            {firstRow.slice(0, 9).map((product, index) => (
+          <motion.div className="mb-5 flex flex-row-reverse space-x-4 space-x-reverse px-2">
+            {firstRow.slice(0, 5).map((product, index) => (
               <ProductCardMobile
                 product={product}
-                translate={combinedTranslateXMobile}
-                key={`mobile-first-${product.title}-${index}`}
+                translate={translateXMobile}
+                delay={index * 0.1}
+                key={`mobile-first-${product.link}-${index}`}
               />
             ))}
           </motion.div>
         )}
         {secondRow.length > 0 && (
-          <motion.div className="mb-4 flex flex-row space-x-3 px-2">
-            {secondRow.slice(0, 9).map((product, index) => (
+          <motion.div className="mb-5 flex flex-row space-x-4 px-2">
+            {secondRow.slice(0, 5).map((product, index) => (
               <ProductCardMobile
                 product={product}
-                translate={combinedTranslateXReverseMobile}
-                key={`mobile-second-${product.title}-${index}`}
+                translate={translateXReverseMobile}
+                delay={0.5 + index * 0.1}
+                key={`mobile-second-${product.link}-${index}`}
               />
             ))}
           </motion.div>
         )}
         {thirdRow.length > 0 && (
-          <motion.div className="flex flex-row-reverse space-x-3 space-x-reverse px-2">
-            {thirdRow.slice(0, 9).map((product, index) => (
+          <motion.div className="flex flex-row-reverse space-x-4 space-x-reverse px-2">
+            {thirdRow.slice(0, 5).map((product, index) => (
               <ProductCardMobile
                 product={product}
-                translate={combinedTranslateXMobile}
-                key={`mobile-third-${product.title}-${index}`}
+                translate={translateXMobile}
+                delay={1.0 + index * 0.1}
+                key={`mobile-third-${product.link}-${index}`}
               />
             ))}
           </motion.div>
@@ -296,7 +215,7 @@ export const Header = ({
   name: string
   introduction: string
 }) => {
-  const [isHovered, setIsHovered] = useState(false)
+  const [isHovered, setIsHovered] = React.useState(false)
 
   // Extract first name only
   const firstName = name.split(' ')[0]
@@ -307,7 +226,15 @@ export const Header = ({
   const springX = useSpring(mouseX, { stiffness: 100, damping: 20 })
   const springY = useSpring(mouseY, { stiffness: 100, damping: 20 })
 
-  useEffect(() => {
+  const [hasHover, setHasHover] = React.useState(false)
+  const prefersReducedMotion = useReducedMotion()
+
+  React.useEffect(() => {
+    setHasHover(window.matchMedia('(hover: hover)').matches)
+  }, [])
+
+  React.useEffect(() => {
+    if (!hasHover) return
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX / window.innerWidth - 0.5)
       mouseY.set(e.clientY / window.innerHeight - 0.5)
@@ -315,7 +242,7 @@ export const Header = ({
 
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [mouseX, mouseY])
+  }, [mouseX, mouseY, hasHover])
 
   // Create dynamic grid of interactive elements - reduced for performance
   const gridElements = useMemo(
@@ -362,7 +289,7 @@ export const Header = ({
       </motion.div>
 
       <motion.div
-        className="relative z-10"
+        className="relative z-10 sm:bg-background/40 sm:backdrop-blur-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
@@ -442,14 +369,22 @@ export const Header = ({
               <motion.span
                 key={index}
                 className={`text-foreground relative inline-block ${index === 0 ? 'uppercase' : ''}`}
-                initial={{ opacity: 0, y: 50, rotateX: -90 }}
+                initial={
+                  prefersReducedMotion
+                    ? false
+                    : { opacity: 0, y: 50, rotateX: -90 }
+                }
                 animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                transition={{
-                  duration: 0.6,
-                  delay: 1.0 + index * 0.1,
-                  type: 'spring',
-                  stiffness: 200,
-                }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0 }
+                    : {
+                        duration: 0.6,
+                        delay: 1.0 + index * 0.1,
+                        type: 'spring',
+                        stiffness: 200,
+                      }
+                }
                 whileHover={{
                   y: -8,
                   rotateZ: [0, 5, -5, 0],
@@ -574,17 +509,17 @@ export const Header = ({
               {/* Accent lines with themed colors */}
               <motion.div
                 className="absolute top-0.5 -left-0.5 h-3 w-0.5 bg-gradient-to-b from-orange-500/70 to-transparent sm:h-4 sm:top-1 sm:-left-1 md:h-5 lg:h-6 dark:from-green-500/70"
-                initial={{ height: 0 }}
-                animate={{ height: 12 }}
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
                 transition={{ delay: 3.4, duration: 0.8 }}
-                style={{ height: 'clamp(12px, 1.25rem, 24px)' }}
+                style={{ transformOrigin: 'top' }}
               />
               <motion.div
                 className="absolute bottom-0.5 -left-0.5 h-3 w-0.5 bg-gradient-to-t from-orange-500/70 to-transparent sm:h-4 sm:bottom-1 sm:-left-1 md:h-5 lg:h-6 dark:from-green-500/70"
-                initial={{ height: 0 }}
-                animate={{ height: 12 }}
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
                 transition={{ delay: 3.6, duration: 0.8 }}
-                style={{ height: 'clamp(12px, 1.25rem, 24px)' }}
+                style={{ transformOrigin: 'bottom' }}
               />
             </motion.div>
           </motion.div>
@@ -605,6 +540,7 @@ export const Header = ({
                   <motion.p
                     key={sentenceIndex}
                     className="relative"
+                    aria-label={`${sentence.trim()}.`}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
@@ -620,12 +556,23 @@ export const Header = ({
                         <motion.span
                           key={wordIndex}
                           className="mr-1 inline-block"
-                          initial={{ opacity: 0, filter: 'blur(4px)' }}
+                          initial={
+                            prefersReducedMotion
+                              ? false
+                              : { opacity: 0, filter: 'blur(4px)' }
+                          }
                           animate={{ opacity: 1, filter: 'blur(0px)' }}
-                          transition={{
-                            duration: 0.4,
-                            delay: 3.8 + sentenceIndex * 0.3 + wordIndex * 0.05,
-                          }}
+                          transition={
+                            prefersReducedMotion
+                              ? { duration: 0 }
+                              : {
+                                  duration: 0.4,
+                                  delay:
+                                    3.8 +
+                                    sentenceIndex * 0.3 +
+                                    wordIndex * 0.05,
+                                }
+                          }
                           whileHover={{
                             transition: { duration: 0.2 },
                           }}
@@ -717,17 +664,17 @@ export const Header = ({
               {/* Accent lines with themed colors */}
               <motion.div
                 className="absolute top-0.5 -right-0.5 h-3 w-0.5 bg-gradient-to-b from-orange-500/70 to-transparent sm:h-4 sm:top-1 sm:-right-1 md:h-5 lg:h-6 dark:from-green-500/70"
-                initial={{ height: 0 }}
-                animate={{ height: 12 }}
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
                 transition={{ delay: 5.4, duration: 0.8 }}
-                style={{ height: 'clamp(12px, 1.25rem, 24px)' }}
+                style={{ transformOrigin: 'top' }}
               />
               <motion.div
                 className="absolute bottom-0.5 -right-0.5 h-3 w-0.5 bg-gradient-to-t from-orange-500/70 to-transparent sm:h-4 sm:bottom-1 sm:-right-1 md:h-5 lg:h-6 dark:from-green-500/70"
-                initial={{ height: 0 }}
-                animate={{ height: 12 }}
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
                 transition={{ delay: 5.6, duration: 0.8 }}
-                style={{ height: 'clamp(12px, 1.25rem, 24px)' }}
+                style={{ transformOrigin: 'bottom' }}
               />
             </motion.div>
           </motion.div>
@@ -740,6 +687,7 @@ export const Header = ({
 export const ProductCard = ({
   product,
   translate,
+  delay = 0,
 }: {
   product: {
     title: string
@@ -748,33 +696,46 @@ export const ProductCard = ({
     type?: 'project' | 'blog'
   }
   translate: MotionValue<number>
+  delay?: number
 }) => {
+  const prefersReducedMotion = useReducedMotion()
   return (
     <motion.div
       style={{
         x: translate,
       }}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: -60 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={
+        prefersReducedMotion
+          ? { duration: 0 }
+          : { type: 'spring', stiffness: 260, damping: 22, delay }
+      }
       whileHover={{
-        y: -20,
+        y: -16,
       }}
       key={product.title}
-      className="group/product relative h-96 w-[40rem] flex-shrink-0"
+      className="group/product relative h-56 w-72 flex-shrink-0 rounded-2xl overflow-hidden bg-muted"
     >
       <Link
         href={product.link}
         className="block group-hover/product:shadow-2xl"
+        target={product.link.startsWith('http') ? '_blank' : undefined}
+        rel={
+          product.link.startsWith('http') ? 'noopener noreferrer' : undefined
+        }
       >
         <Image
           src={product.thumbnail}
-          height="600"
-          width="600"
+          fill
+          sizes="(max-width: 640px) 0px, 288px"
           priority={false}
           loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover object-left-top"
+          className="object-cover object-left-top"
           alt={product.title}
         />
       </Link>
-      <div className="pointer-events-none absolute inset-0 h-full w-full bg-black opacity-0 group-hover/product:opacity-60 dark:group-hover/product:opacity-40" />
+      <div className="pointer-events-none absolute inset-0 h-full w-full rounded-2xl bg-black opacity-0 group-hover/product:opacity-60 dark:group-hover/product:opacity-40" />
       {product.type && (
         <div className="absolute top-4 right-4 rounded-full bg-white/20 px-2 py-1 text-xs font-semibold text-white backdrop-blur-sm">
           {product.type === 'blog' ? '📝 Blog' : '🚀 Project'}
@@ -790,6 +751,7 @@ export const ProductCard = ({
 export const ProductCardMobile = ({
   product,
   translate,
+  delay = 0,
 }: {
   product: {
     title: string
@@ -798,26 +760,42 @@ export const ProductCardMobile = ({
     type?: 'project' | 'blog'
   }
   translate: MotionValue<number>
+  delay?: number
 }) => {
+  const prefersReducedMotion = useReducedMotion()
   return (
     <motion.div
       style={{
         x: translate,
       }}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: -40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={
+        prefersReducedMotion
+          ? { duration: 0 }
+          : { type: 'spring', stiffness: 260, damping: 22, delay }
+      }
       whileHover={{
-        y: -10,
+        y: -8,
       }}
       key={product.title}
-      className="group/product relative h-40 w-56 flex-shrink-0"
+      className="group/product relative h-32 w-48 flex-shrink-0 bg-muted"
     >
-      <Link href={product.link} className="block group-hover/product:shadow-xl">
+      <Link
+        href={product.link}
+        className="block group-hover/product:shadow-xl"
+        target={product.link.startsWith('http') ? '_blank' : undefined}
+        rel={
+          product.link.startsWith('http') ? 'noopener noreferrer' : undefined
+        }
+      >
         <Image
           src={product.thumbnail}
-          height="300"
-          width="300"
+          fill
+          sizes="(max-width: 640px) 50vw, 192px"
           priority={false}
           loading="lazy"
-          className="absolute inset-0 h-full w-full rounded-lg object-cover object-left-top"
+          className="rounded-lg object-cover object-left-top"
           alt={product.title}
         />
       </Link>

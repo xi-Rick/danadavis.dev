@@ -145,6 +145,7 @@ module.exports = () => {
         },
       ],
       unoptimized,
+      qualities: [75, 80, 85, 90, 95, 100],
     },
     async redirects() {
       return [

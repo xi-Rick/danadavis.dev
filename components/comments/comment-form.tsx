@@ -104,10 +104,10 @@ export function CommentForm({
 
   if (!isAuthenticated) {
     return (
-      <RadiantCard className="p-8 md:p-10">
-        <div className="text-center space-y-6">
-          <div className="space-y-3">
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+      <RadiantCard className="p-5 sm:p-8 md:p-10">
+        <div className="text-center space-y-4 sm:space-y-6">
+          <div className="space-y-2 sm:space-y-3">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
               Join the conversation
             </h3>
           </div>
@@ -216,8 +216,8 @@ export function CommentForm({
       animate="show"
       exit="exit"
     >
-      <RadiantCard className="p-8 md:p-10">
-        <div className="space-y-6">
+      <RadiantCard className="p-5 sm:p-8 md:p-10">
+        <div className="space-y-4 sm:space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {user?.picture ? (

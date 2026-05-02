@@ -537,18 +537,6 @@
   position: relative;
 }
 
-.project-content p:first-of-type::first-letter {
-  float: left;
-  font-size: 4.5rem;
-  line-height: 4rem;
-  padding-right: 0.75rem;
-  padding-top: 0.5rem;
-  font-weight: 900;
-  color: #000000;
-  font-family: ui-serif, Georgia, serif;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 .project-content a {
   color: #000000;
   text-decoration: underline;
@@ -712,6 +700,11 @@
   overflow-x: auto;
   margin: 2rem 0;
   text-align: left;
+}
+
+.project-content table {
+  display: block;
+  overflow-x: auto;
 }
 
 .project-content pre code {

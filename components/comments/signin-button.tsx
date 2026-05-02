@@ -53,12 +53,12 @@ export function SignInButton({
   }
 
   return (
-    <div className="flex flex-col w-full max-w-md mx-auto">
+    <div className="mx-auto">
       <LoginLink
         className={`
           flex items-center justify-center gap-3 
-          px-6 py-4 
-          font-semibold text-base
+          px-5 py-3 sm:px-6 sm:py-4
+          font-semibold text-sm sm:text-base
           rounded-xl 
           transition-all duration-200 
           shadow-lg hover:shadow-xl 
