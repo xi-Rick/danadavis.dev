@@ -52,7 +52,7 @@ export const HeroParallax = ({
     offset: ['start start', 'end start'],
   })
 
-  const springConfig = { stiffness: 300, damping: 30, bounce: 100 }
+  const springConfig = { stiffness: 300, damping: 30 }
 
   // Parallax values without infinite scroll combination
   const translateX = useSpring(
@@ -226,23 +226,26 @@ export const Header = ({
   const springX = useSpring(mouseX, { stiffness: 100, damping: 20 })
   const springY = useSpring(mouseY, { stiffness: 100, damping: 20 })
 
+  const bgTranslateX = useTransform(springX, [-0.5, 0.5], [-20, 20])
+  const bgTranslateY = useTransform(springY, [-0.5, 0.5], [-20, 20])
+  const titleTranslateX = useTransform(springX, [-0.5, 0.5], [-10, 10])
+  const emojiTranslateX = useTransform(springX, [-0.5, 0.5], [-15, 15])
+  const emojiTranslateY = useTransform(springY, [-0.5, 0.5], [-15, 15])
+
   const [hasHover, setHasHover] = React.useState(false)
   const prefersReducedMotion = useReducedMotion()
 
   React.useEffect(() => {
-    setHasHover(window.matchMedia('(hover: hover)').matches)
-  }, [])
-
-  React.useEffect(() => {
-    if (!hasHover) return
+    const mq = window.matchMedia('(hover: hover)')
+    setHasHover(mq.matches)
+    if (!mq.matches) return
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX / window.innerWidth - 0.5)
       mouseY.set(e.clientY / window.innerHeight - 0.5)
     }
-
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [mouseX, mouseY, hasHover])
+  }, [mouseX, mouseY])
 
   // Create dynamic grid of interactive elements - reduced for performance
   const gridElements = useMemo(
@@ -261,9 +264,10 @@ export const Header = ({
       {/* Interactive background grid */}
       <motion.div
         className="pointer-events-none absolute inset-0 opacity-30"
+        aria-hidden="true"
         style={{
-          x: useTransform(springX, [-0.5, 0.5], [-20, 20]),
-          y: useTransform(springY, [-0.5, 0.5], [-20, 20]),
+          x: bgTranslateX,
+          y: bgTranslateY,
         }}
       >
         {gridElements.map((element) => (
@@ -346,7 +350,7 @@ export const Header = ({
             <motion.span
               className="text-foreground/70 text-xl font-light sm:text-3xl md:text-4xl lg:text-5xl"
               style={{
-                x: useTransform(springX, [-0.5, 0.5], [-10, 10]),
+                x: titleTranslateX,
               }}
             >
               I&apos;m
@@ -463,8 +467,8 @@ export const Header = ({
               }}
               style={{
                 cursor: 'default',
-                x: useTransform(springX, [-0.5, 0.5], [-15, 15]),
-                y: useTransform(springY, [-0.5, 0.5], [-15, 15]),
+                x: emojiTranslateX,
+                y: emojiTranslateY,
               }}
             >
               👋🏾
@@ -714,7 +718,6 @@ export const ProductCard = ({
       whileHover={{
         y: -16,
       }}
-      key={product.title}
       className="group/product relative h-56 w-72 flex-shrink-0 rounded-2xl overflow-hidden bg-muted"
     >
       <Link
@@ -778,8 +781,7 @@ export const ProductCardMobile = ({
       whileHover={{
         y: -8,
       }}
-      key={product.title}
-      className="group/product relative h-32 w-48 flex-shrink-0 bg-muted"
+      className="group/product relative h-32 w-48 flex-shrink-0 rounded-lg bg-muted"
     >
       <Link
         href={product.link}
