@@ -6,8 +6,9 @@ import 'css/twemoji.css'
 import type { Metadata } from 'next'
 import {
   Geist_Mono,
+  Inter,
   JetBrains_Mono,
-  Nunito,
+  Lora,
   Playpen_Sans,
 } from 'next/font/google'
 import 'react-medium-image-zoom/dist/styles.css'
@@ -35,12 +36,21 @@ const FONT_PLAYPEN_SANS = Playpen_Sans({
   preload: false,
 })
 
-const FONT_NUNITO = Nunito({
+const FONT_INTER = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  style: ['normal'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  variable: '--font-inter',
+  preload: true,
+})
+
+const FONT_LORA = Lora({
   subsets: ['latin'],
   display: 'swap',
   style: ['normal', 'italic'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-nunito',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-lora',
   preload: true,
 })
 
@@ -152,8 +162,9 @@ export default async function RootLayout({
     <html
       lang={SITE_METADATA.language}
       className={clsx(
-        'w-full overflow-x-hidden scroll-smooth antialiased lowercase',
-        FONT_NUNITO.variable,
+        'w-full overflow-x-hidden scroll-smooth antialiased',
+        FONT_INTER.variable,
+        FONT_LORA.variable,
         FONT_JETBRAINS_MONO.variable,
         FONT_PLAYPEN_SANS.variable,
         FONT_GEIST.variable,

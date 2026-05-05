@@ -4,8 +4,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif,
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif: var(--font-lora), ui-serif, Georgia, Cambria, "Times New Roman",
+    Times, serif;
   --font-greeting: var(--font-playpen-sans);
   --font-jetbrains-mono: var(--font-jetbrains-mono), ui-monospace,
     SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
