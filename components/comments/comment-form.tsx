@@ -114,24 +114,19 @@ export function CommentForm({
           <div className="flex justify-center">
             <SignInButton />
           </div>
-          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Your comments help build a better community. Let&apos;s discuss!
-              💬
-            </p>
-            <p className="pt-1 text-sm text-gray-500 dark:text-gray-400">
-              Powered by&nbsp;
-              <Link
-                href="https://kinde.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className="normal-case">
-                  Kinde <Twemoji emoji="lock" />
-                </span>
-              </Link>
-            </p>
-          </div>
+
+          <p className="pt-1 text-sm text-gray-500 dark:text-gray-400">
+            Powered by&nbsp;
+            <Link
+              href="https://kinde.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="normal-case">
+                Kinde <Twemoji emoji="lock" />
+              </span>
+            </Link>
+          </p>
         </div>
       </RadiantCard>
     )
