@@ -128,7 +128,7 @@ export default function ArchPage() {
   return (
     <div>
       {/* ── HERO ── */}
-      <div className="relative overflow-hidden bg-black">
+      <div className="relative overflow-hidden bg-gray-50 dark:bg-black">
         <GritBackground className="inset-0 opacity-60" />
 
         {/* Top gradient line */}
@@ -170,13 +170,15 @@ export default function ArchPage() {
                   dana@archlinux
                 </span>
                 <span>~</span>
-                <span className="text-gray-600">$</span>
-                <span className="text-gray-400">cat README.md</span>
+                <span className="text-gray-500 dark:text-gray-600">$</span>
+                <span className="text-gray-500 dark:text-gray-400">
+                  cat README.md
+                </span>
               </div>
-              <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl md:text-6xl">
+              <h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl">
                 Arch Linux
               </h1>
-              <p className="max-w-md text-base text-gray-400 leading-relaxed">
+              <p className="max-w-md text-base text-gray-600 dark:text-gray-400 leading-relaxed">
                 My daily driver. Minimal, fast, and exactly the way I want it. A
                 breakdown of the current setup, dotfiles, and everything in
                 between.
@@ -194,7 +196,7 @@ export default function ArchPage() {
                   href="https://wiki.archlinux.org"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-md border border-white/20 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10 transition-all"
+                  className="inline-flex items-center gap-2 rounded-md border border-gray-300 dark:border-white/20 px-4 py-2 text-sm font-semibold text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-all"
                 >
                   󰈙 Arch Wiki
                 </a>
