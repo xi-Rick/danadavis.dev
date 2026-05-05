@@ -1,19 +1,26 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 
+const SESSION_KEY = 'opening_audio_played'
+
 export default function AutoPlayAudio() {
   const audioRef = useRef<HTMLAudioElement>(null)
-  const [hasPlayed, setHasPlayed] = useState(false)
+  const [hasPlayed, setHasPlayed] = useState(
+    () =>
+      typeof window !== 'undefined' && !!sessionStorage.getItem(SESSION_KEY),
+  )
 
   useEffect(() => {
     const audio = audioRef.current
     if (!audio || hasPlayed) return
+    if (sessionStorage.getItem(SESSION_KEY)) return
 
     // Handle user interaction to enable audio
     const handleUserInteraction = async () => {
       if (!hasPlayed && audio) {
         try {
           await audio.play()
+          sessionStorage.setItem(SESSION_KEY, '1')
           setHasPlayed(true)
         } catch (error) {
           console.log('Audio play failed:', error)
@@ -31,6 +38,7 @@ export default function AutoPlayAudio() {
     const playAudio = async () => {
       try {
         await audio.play()
+        sessionStorage.setItem(SESSION_KEY, '1')
         setHasPlayed(true)
       } catch {
         // Auto-play blocked, waiting for user interaction
