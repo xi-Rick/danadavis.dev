@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { MDX_COMPONENTS } from '~/components/mdx'
 import { MDXLayoutRenderer } from '~/components/mdx/layout-renderer'
 import { SITE_METADATA } from '~/data/site-metadata'
+import { prisma } from '~/db'
 import { PostBanner } from '~/layouts/post-banner'
 import { PostLayout } from '~/layouts/post-layout'
 import { PostSimple } from '~/layouts/post-simple'
@@ -81,10 +82,26 @@ export default async function Page(props: {
 }) {
   const params = await props.params
   const slug = decodeURI(params.slug.join('/'))
-  // Filter out drafts in production
+  // Cross-reference Prisma for draft status — DB wins over MDX frontmatter
+  let dbDraft: boolean | undefined
+  try {
+    const dbPost = await prisma.post.findUnique({
+      where: { slug },
+      select: { draft: true },
+    })
+    if (dbPost) dbDraft = dbPost.draft
+  } catch {}
+
   const sortedCoreContents = allCoreContent(sortPosts(allBlogs))
   const postIndex = sortedCoreContents.findIndex((p) => p.slug === slug)
   if (postIndex === -1) {
+    return notFound()
+  }
+
+  // If in DB and marked draft, treat as not found
+  const isDraft =
+    dbDraft !== undefined ? dbDraft : sortedCoreContents[postIndex].draft
+  if (isDraft) {
     return notFound()
   }
 

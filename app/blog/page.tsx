@@ -1,8 +1,11 @@
 import { genPageMetadata } from 'app/seo'
 import { allBlogs } from 'contentlayer/generated'
+import { prisma } from '~/db'
 import { ListLayout } from '~/layouts/list-layout'
 import { POSTS_PER_PAGE } from '~/utils/const'
 import { sortPosts } from '~/utils/misc'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata = genPageMetadata({
   title: 'Blog',
@@ -11,7 +14,21 @@ export const metadata = genPageMetadata({
 })
 
 export default async function BlogPage() {
-  let posts = allBlogs.filter((post) => post.draft !== true)
+  // Cross-reference Prisma for draft status — DB wins over MDX frontmatter
+  let dbDraftMap = new Map<string, boolean>()
+  try {
+    const dbPosts = await prisma.post.findMany({
+      select: { slug: true, draft: true },
+    })
+    for (const p of dbPosts) {
+      dbDraftMap.set(p.slug, p.draft)
+    }
+  } catch {}
+
+  let posts = allBlogs.filter((post) => {
+    const dbDraft = dbDraftMap.get(post.slug)
+    return dbDraft !== undefined ? !dbDraft : post.draft !== true
+  })
   posts = sortPosts(posts)
   const pageNumber = 1
   const initialDisplayPosts = posts.slice(

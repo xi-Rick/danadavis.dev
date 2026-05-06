@@ -10,9 +10,21 @@ const MAX_POSTS_DISPLAY = 3
 const MAX_SNIPPETS_DISPLAY = 4
 
 export default async function HomePage() {
-  const publishedPosts = allCoreContent(sortPosts(allBlogs)).filter(
-    (post) => !post.draft,
-  )
+  // Cross-reference Prisma for draft status — DB wins over MDX frontmatter
+  let dbDraftMap = new Map<string, boolean>()
+  try {
+    const dbPosts = await prisma.post.findMany({
+      select: { slug: true, draft: true },
+    })
+    for (const p of dbPosts) {
+      dbDraftMap.set(p.slug, p.draft)
+    }
+  } catch {}
+
+  const publishedPosts = allCoreContent(sortPosts(allBlogs)).filter((post) => {
+    const dbDraft = dbDraftMap.get(post.slug)
+    return dbDraft !== undefined ? !dbDraft : !post.draft
+  })
   const publishedSnippets = allCoreContent(sortPosts(allSnippets)).filter(
     (snippet) => !snippet.draft,
   )
