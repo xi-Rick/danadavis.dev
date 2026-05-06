@@ -10,7 +10,7 @@ const ContentSecurityPolicy = `
   script-src 'self' 'unsafe-eval' 'unsafe-inline' https: https://*.disqus.com https://disqus.com analytics.umami.is cloud.umami.is *.eleavers.com *.vercel-scripts.com;
   style-src 'self' 'unsafe-inline';
   img-src * blob: data:;
-  media-src *.s3.amazonaws.com localhost:3434 danadavis.dev *.kinde.com;
+  media-src *.s3.amazonaws.com localhost:3434 danadavis.dev *.kinde.com github.com *.githubusercontent.com;
   connect-src *;
   font-src 'self';
   frame-src https://*.disqus.com https://disqus.com *.github.io *.youtube.com *.kinde.com;

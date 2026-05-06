@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "scripts": {
     "start": "PORT=3435 next dev",
-    "dev": "PORT=3434 cross-env INIT_CWD=$PWD next dev",
+    "dev": "PORT=3434 cross-env NODE_NO_WARNINGS=1 INIT_CWD=$PWD next dev",
     "build": "tsx ./scripts/post-build.ts",
     "build:verbose": "cross-env INIT_CWD=$PWD next build && cross-env NODE_OPTIONS='--experimental-json-modules' tsx ./scripts/post-build.ts",
     "generate-rss": "cross-env NODE_OPTIONS='--experimental-json-modules' node -e \"import('./scripts/rss.js').then(m => m.generateRssFeed())\"",

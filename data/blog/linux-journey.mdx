@@ -1,0 +1,79 @@
+---
+title: "My 15 Years on Linux: A Journey Through Distros, Ricing, and Tiling Compositors"
+date: "2026-05-05"
+tags: ["arch", "linux", "wayland", "ricing", "niri", "open-source"]
+authors: ["Dana Davis"]
+featured: true
+draft: true
+images: ["https://images.unsplash.com/photo-1642662069313-fc20c2c3a7ba?w=700&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGRpc3RybyUyMGxpbnV4JTIwZmxhc2glMjBkcml2ZXxlbnwwfHwwfHx8MA%3D%3D"]
+---
+
+I've been an avid Linux user for about 15 years now, and in that time I've watched distributions rise, fall, disappear, and sometimes come back stronger than ever. It's been quite a ride.
+
+## Where It All Started
+
+My story starts the week I bought my very first computer. That same week, I stumbled upon Linux — and that same week, I was already trying to put it on a flash drive. The tool I used was **UNetbootin** (short for *Universal Netboot Installer*), a cross-platform utility that can create live USB systems and load a variety of Linux distributions without a CD. There was also Pen Drive Linux kicking around back then.
+
+Using one of those tools, I managed to get Ubuntu onto a flash drive. The moment it booted — bypassing all the software configured on my machine and launching a full operating system straight from that little drive — was a genuine light-bulb moment.💡 It was the moment I truly understood how software interacted with hardware. That was **Ubuntu 9**, a long time ago.
+
+## The Distro-Hopping Years
+
+From there, I distro-hopped relentlessly:
+
+- **Ubuntu** — where it all began
+- **Fedora** — polished and reliable
+- **OpenSUSE** — solid but niche
+- **Solus** — a lesser-known gem worth trying
+
+But I always came back to **Arch Linux**, which remains my favorite distribution to this day. There's something about building your system from the ground up that never gets old.
+
+## Current Setup: Niri on Arch
+
+Today I'm running **Niri** as my Wayland compositor. Niri is a scrollable-tiling Wayland compositor where windows are arranged in columns on an infinite strip going to the right — opening a new window never causes existing windows to resize, and every monitor maintains its own separate window strip. It's a genuinely fresh take on window management.
+
+> Niri is available on Arch via `pacman` and has an active community on Matrix. Check out the [Arch Wiki page for Niri](https://wiki.archlinux.org/title/Niri) to get started.
+
+<video
+  src="https://github.com/niri-wm/niri/assets/1794388/bce834b0-f205-434e-a027-b373495f9729"
+  autoPlay
+  muted
+  loop
+  playsInline
+  controls
+  className="w-full max-w-full h-auto rounded-lg"
+/>
+
+## The Art of Linux Ricing
+
+Speaking of customization — Linux **ricing** has absolutely taken off.
+
+In the Linux world, "ricing" refers to the process of customizing your machine and creating a bespoke environment. The term originates from old internet slang meaning "to make it look nice," and the culture began soon after minimalist window managers like **i3** and **bspwm** started to emerge in the early Linux days.
+
+Today, ricing touches everything:
+
+- **GRUB** — your boot menu
+- **Plymouth** — boot animations
+- **Display manager** — login screen (SDDM, LightDM, etc.)
+- **Shell / bar** — the workspace you live in every day
+
+The volume of creative, open-source work the community has produced — all free — is finally getting the recognition it deserves. Communities like [r/unixporn](https://reddit.com/r/unixporn) and countless GitHub dotfile repos are proof of that.
+
+## Why Tiling Compositors Change Everything
+
+The big distinction worth understanding — especially if you're new to Linux — is that tools like **Niri** or **Hyprland** are designed to help you eventually scale *past* the point of needing a mouse.
+
+Niri is highly keyboard-driven and stands out from traditional tiling window managers like i3 or Sway due to its unique scrollable-tiling model, which can significantly boost productivity and focus.
+
+The goal is a workflow built entirely around keybindings — launching apps, switching windows, and managing your workspace without ever reaching for your mouse. You become the person clicking madly, hands flying across the keyboard like a focused machine, with a keybind for everything.
+
+Compare that to a full desktop environment like **KDE Plasma**, which prioritizes accessibility and visual familiarity. Neither approach is wrong — it comes down to what you're optimizing for.
+
+## A Note for New Linux Users
+
+If you're just getting started, don't feel overwhelmed. Start with something approachable — Ubuntu, Fedora, or Linux Mint — and let curiosity take you further. The distro-hopping, the ricing, the tiling compositors — all of that is waiting for you when you're ready.
+
+The Linux ecosystem is one of the most remarkable collaborative projects in the history of computing. Dive in.
+
+---
+
+*Written by a 15-year Linux user who still thinks the first flash drive boot was pure magic.*
