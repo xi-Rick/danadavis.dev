@@ -92,22 +92,23 @@ export default async function Page(props: {
     if (dbPost) dbDraft = dbPost.draft
   } catch {}
 
-  const sortedCoreContents = allCoreContent(sortPosts(allBlogs))
-  const postIndex = sortedCoreContents.findIndex((p) => p.slug === slug)
-  if (postIndex === -1) {
+  // Use allBlogs directly (unfiltered) so draft posts in DB can still be found
+  const allSorted = sortPosts(allBlogs)
+  const post = allSorted.find((p) => p.slug === slug) as Blog | undefined
+  if (!post) {
     return notFound()
   }
 
   // If in DB and marked draft, treat as not found
-  const isDraft =
-    dbDraft !== undefined ? dbDraft : sortedCoreContents[postIndex].draft
+  const isDraft = dbDraft !== undefined ? dbDraft : post.draft === true
   if (isDraft) {
     return notFound()
   }
 
+  const sortedCoreContents = allCoreContent(allSorted)
+  const postIndex = sortedCoreContents.findIndex((p) => p.slug === slug)
   const prev = sortedCoreContents[postIndex + 1]
   const next = sortedCoreContents[postIndex - 1]
-  const post = allBlogs.find((p) => p.slug === slug) as Blog
   const authorList = post?.authors || ['default']
   const authorDetails = authorList.map((author) => {
     const authorResults = allAuthors.find((p) => p.slug === author)
