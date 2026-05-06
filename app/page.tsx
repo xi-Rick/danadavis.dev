@@ -11,7 +11,7 @@ const MAX_SNIPPETS_DISPLAY = 4
 
 export default async function HomePage() {
   // Cross-reference Prisma for draft status — DB wins over MDX frontmatter
-  let dbDraftMap = new Map<string, boolean>()
+  const dbDraftMap = new Map<string, boolean>()
   try {
     const dbPosts = await prisma.post.findMany({
       select: { slug: true, draft: true },
