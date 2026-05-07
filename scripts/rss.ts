@@ -3,7 +3,7 @@ import path from 'node:path'
 import type { Blog, Snippet } from 'contentlayer/generated'
 import { slug } from 'github-slugger'
 import { SITE_METADATA } from '~/data/site-metadata'
-import tagData from '~/json/tag-data.json' assert { type: 'json' }
+import tagData from '~/json/tag-data.json' with { type: 'json' }
 import { escape } from '~/utils/html-escaper'
 import { sortPosts } from '~/utils/misc'
 

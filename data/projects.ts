@@ -3,6 +3,22 @@ import type { Project } from '~/types/data'
 export const PROJECTS: Project[] = [
   {
     type: 'work',
+    title: 'Linux Switch',
+    description:
+      'A resource hub for users switching to Linux — covering distros, package managers, ricing, terminal commands, desktop environments, and more. Built with Zola and a custom theme.',
+    imgSrc:
+      'https://res.cloudinary.com/dfjq9qvoz/image/upload/v1778164661/Screenshot_from_2026-05-07_10-37-17_goov2f.png',
+    repo: 'https://github.com/xi-Rick/linux-switch',
+    builtWith: ['Zola', 'SASS', 'JavaScript', 'Vercel'],
+    links: [
+      {
+        title: 'Demo',
+        url: 'https://linuxswitch.us/',
+      },
+    ],
+  },
+  {
+    type: 'work',
     title: 'The Greek Myth API',
     description:
       'A comprehensive REST API providing detailed information about Greek mythology, including gods, titans, monsters, and heroes with 200+ entries and multiple endpoints.',
@@ -21,8 +37,7 @@ export const PROJECTS: Project[] = [
   },
   {
     type: 'self',
-    title:
-      'From Rock Bottom to React: How I Turned My Card Game Into a Web App',
+    title: 'Margin Match',
     description:
       'A personal journey of turning a card game invented during a difficult time into a modern web application using Next.js, complete with animations and mobile support.',
     imgSrc:
@@ -177,18 +192,6 @@ export const PROJECTS: Project[] = [
   },
   {
     type: 'self',
-    title: 'DevSetup',
-    description:
-      '🚀 A cross-platform development environment setup script. Transform any Linux distro into a modern web development powerhouse with Node.js, Docker, IDEs, and more. Supports Arch, Ubuntu, Fedora, openSUSE.',
-    imgSrc:
-      'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHxjb2RpbmclMjBkZXZlbG9wbWVudHxlbnwwfHx8fDE3MDczNjgzNjR8MA&ixlib=rb-4.0.3&q=80&w=2000',
-    repo: 'https://github.com/xi-Rick/devsetup',
-    builtWith: ['Shell', 'Linux', 'Node.js', 'Docker', 'Automation'],
-    content:
-      '🚀 A cross-platform development environment setup script. Transform any Linux distro into a modern web development powerhouse with Node.js, Docker, IDEs, and more. Supports Arch, Ubuntu, Fedora, openSUSE.',
-  },
-  {
-    type: 'self',
     title: 'Dock App Demo',
     description:
       "This project showcases a MacOS-inspired Dock component built with NextJS 14's App Router and Cult/UI's libraries. It integrates Progressive Web App (PWA) functionality using @ducanh2912/next-pwa.",
@@ -234,29 +237,5 @@ export const PROJECTS: Project[] = [
     builtWith: ['Next.js', 'TypeScript', 'MongoDB', 'NextUI', 'PWA'],
     content:
       'A robust starter template for Next.js 13 applications featuring NextUI for UI design, MongoDB for data management, and Next-PWA for Progressive Web App capabilities.',
-  },
-  {
-    type: 'self',
-    title: 'What If Anime',
-    description:
-      '⚡ A revolutionary platform where anime enthusiasts become architects of alternative realities. Create, vote on, and discuss compelling "what if" scenarios that reimagine your favorite anime stories with different outcomes and character arcs.',
-    imgSrc:
-      'https://images.unsplash.com/photo-1578662996442-48f60103fc96?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfGFuaW1lfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000',
-    repo: 'https://github.com/xi-Rick/anime',
-    builtWith: [
-      'Next.js 15',
-      'React 19',
-      'TypeScript',
-      'Supabase',
-      'PostgreSQL',
-    ],
-    links: [
-      {
-        title: 'Demo',
-        url: 'https://whatifanime.vercel.app/',
-      },
-    ],
-    content:
-      '⚡ A revolutionary platform where anime enthusiasts become architects of alternative realities. Create, vote on, and discuss compelling "what if" scenarios that reimagine your favorite anime stories with different outcomes and character arcs.',
   },
 ]

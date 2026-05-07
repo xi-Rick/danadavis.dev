@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { Prisma } from '@prisma/client'
 import csv from 'csv-parser'
 import Parser from 'rss-parser'
 import { SITE_METADATA } from '~/data/site-metadata'
@@ -7,6 +8,7 @@ import { prisma } from '~/db'
 import { upsertBooks } from '~/db/queries'
 import { type InsertBook, insertBookSchema } from '~/db/schema'
 import type { GoodreadsBook, GoodreadsCsvBook } from '~/types/data'
+import projectsData from '../json/projects.json'
 
 const parser = new Parser<{ [key: string]: unknown }, GoodreadsBook>({
   customFields: {
@@ -256,6 +258,53 @@ export async function seedBooksByParsingCSV() {
   }
 }
 
+export async function seedProjects() {
+  console.log(`Seeding ${projectsData.length} projects...`)
+
+  for (const p of projectsData) {
+    const imgSrc =
+      Array.isArray(p.images) && p.images.length > 0 ? p.images[0] : ''
+
+    const updateData = {
+      slug: p.slug,
+      title: p.title,
+      type: p.type ?? 'self',
+      description: p.summary ?? null,
+      imgSrc,
+      url: p.demo ?? null,
+      repo: p.github ?? null,
+      links: p.demo ? [{ title: 'Demo', url: p.demo }] : Prisma.JsonNull,
+      builtWith: p.technologies ?? [],
+      content: p.content ?? null,
+      draft: p.draft ?? false,
+      featured: p.featured ?? false,
+      date: new Date(p.date),
+    }
+
+    // Check by ID first — handles slug renames where ID already exists in DB
+    const byId = await prisma.project.findUnique({ where: { id: p.id } })
+    if (byId) {
+      await prisma.project.update({ where: { id: p.id }, data: updateData })
+    } else {
+      const bySlug = await prisma.project.findUnique({
+        where: { slug: p.slug },
+      })
+      if (bySlug) {
+        await prisma.project.update({
+          where: { slug: p.slug },
+          data: updateData,
+        })
+      } else {
+        await prisma.project.create({
+          data: { id: p.id, authorId: p.authorId, ...updateData },
+        })
+      }
+    }
+
+    console.log(`  ✓ ${p.title} (${p.slug})`)
+  }
+}
+
 export async function seedSiteSettings() {
   try {
     console.log('Setting up site settings...')
@@ -347,6 +396,7 @@ export async function seedShopItems() {
 
 async function seed() {
   await seedSiteSettings()
+  await seedProjects()
   await seedBooksUsingRssFeed()
   await seedShopItems()
   // await seedBooksByParsingCSV()

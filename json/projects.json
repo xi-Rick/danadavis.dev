@@ -1,5 +1,30 @@
 [
   {
+    "id": "cmgqreu0i0013zzfjlinuxsw1",
+    "title": "Linux Switch",
+    "type": "work",
+    "slug": "linux-switch",
+    "summary": "A resource hub for users switching to Linux — covering distros, package managers, ricing, terminal commands, desktop environments, and more. Built with Zola and a custom theme.",
+    "content": "A resource hub for users switching to Linux — covering distros, package managers, ricing, terminal commands, desktop environments, and more. Built with Zola and a custom theme.",
+    "date": "2026-05-07T00:00:00.000Z",
+    "lastmod": "2026-05-07T00:00:00.000Z",
+    "tags": ["Linux", "Zola", "Open Source", "Ricing", "Documentation"],
+    "categories": ["web-app"],
+    "images": [
+      "https://res.cloudinary.com/dfjq9qvoz/image/upload/v1778164661/Screenshot_from_2026-05-07_10-37-17_goov2f.png"
+    ],
+    "authors": ["Dana Davis"],
+    "draft": false,
+    "featured": true,
+    "layout": null,
+    "github": "https://github.com/xi-Rick/linux-switch",
+    "demo": "https://linuxswitch.us/",
+    "technologies": ["Zola", "SASS", "JavaScript", "Vercel"],
+    "createdAt": "2026-05-07T00:00:00.000Z",
+    "updatedAt": "2026-05-07T00:00:00.000Z",
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+  },
+  {
     "id": "cmgqreu0i0014zzfjk5nloa1p",
     "title": "The Greek Myth API",
     "type": "work",
@@ -26,8 +51,8 @@
   },
   {
     "id": "cmgqreu9a0016zzfj0sp0whhg",
-    "title": "From Rock Bottom to React: How I Turned My Card Game Into a Web App",
-    "slug": "from-rock-bottom-to-react-how-i-turned-my-card-game-into-a-web-app",
+    "title": "Margin Match",
+    "slug": "margin-match",
     "summary": "A personal journey of turning a card game invented during a difficult time into a modern web application using Next.js, complete with animations and mobile support.",
     "content": "<h1 id=\"\"></h1><p>Sometimes the best ideas come from the darkest places. About 15 years ago, I was in one of those places—a really low point where all I had was time and a deck of cards. What started as mindless card flipping became something unexpected: a game I'd eventually call <strong>Margin Match</strong>.</p><h2 id=\"the-birth-of-margin-match\">The Birth of Margin Match</h2><p>Picture this: me, sitting alone, pulling cards one from the top of the deck, one from the bottom, discarding them, and repeating. But then I started noticing patterns and asking myself questions. What if the left card I drew could only \"play\" on the right card if their values were within a specific margin?</p><p>The rule became simple: the left card can only match the right card if it's plus one, minus one, or exactly the same value. A 7 matches with a 6, 7, or 8. Nothing else. If they don't match, you discard both cards, shuffle everything back together, and try again.</p><p>It sounds almost trivial, but this little constraint turned a mindless activity into something genuinely engaging. The decisions started mattering. When do you play? When do you discard? How do you strategically work through your deck?</p><h2 id=\"%F0%9F%A7%91%F0%9F%8F%BC%E2%80%8D%F0%9F%A4%9D%E2%80%8D%F0%9F%A7%91%F0%9F%8F%BE-a-late-night-conversation\">🧑🏼‍🤝‍🧑🏾 A Late-Night Conversation </h2><p>Fast forward to recently. I was talking to someone who mentioned she was up at 2 AM playing solitaire, and naturally, I told her about this weird game I'd invented years ago. But here's the thing about card games—they're nearly impossible to explain without actually showing someone. She asked for a visual, and that simple request lit a fire under me.</p><p>I had to build this thing.</p><h2 id=\"%F0%9F%91%A8%F0%9F%8F%BE%E2%80%8D%F0%9F%92%BB-building-margin-match-the-tech-stack\">👨🏾‍💻 Building Margin Match: The Tech Stack</h2><p>When I decided to bring Margin Match to life digitally, I wanted to use modern tools that would let me create something polished and professional. Here's what I landed on:</p><p><strong>Next.js 15</strong> became my foundation—the latest version with all the performance improvements and developer experience enhancements. There's something satisfying about building on cutting-edge tech.</p><p><strong>Framer Motion</strong> handles all the card animations. When you draw cards or play matches, everything flows smoothly. Cards slide, flip, and transition in ways that make the digital version feel almost tactile.</p><p><strong>Capacitor</strong> lets me export the web app as an Android build. Sure, there are always a few quirks with Capacitor builds (they tend to lag behind the web version), but being able to take a web application and turn it into a native mobile app still feels like magic.</p><p>For the visual polish, I incorporated <strong>Lucide and React Icons</strong> for crisp, modern iconography. The interface needed to feel clean and intuitive—after all, the game's complexity should come from the strategy, not from figuring out how to use the app.</p><h2 id=\"the-details-that-matter\">The Details That Matter</h2><p>One thing I'm particularly proud of is integrating <strong>ElevenLabs sound effects</strong>—completely free—that give the game audio feedback. There's something deeply satisfying about hearing cards flip and matches register.</p><p>The whole thing is hosted on <strong>Vercel</strong> because, honestly, the deployment process is so smooth it almost feels like cheating. Push to GitHub, and within minutes, the updated version is live.</p><p>I even set it up as a <strong>Progressive Web App</strong>, so it can be installed on phones and desktops, giving it that native app feel without requiring app store distribution.</p><h2 id=\"%F0%9F%8E%AE-the-game-rules-in-case-you-want-to-try\">🎮 The Game Rules (In Case You Want to Try)</h2><p>Here's how Margin Match actually works:</p><p>🌀 <strong>Begin Your Journey</strong>: Hit 'Start Game' to get your first hand from the deck.</p><p>🎲 <strong>Draw with Intent</strong>: Tap 'Draw Cards' to pull one from the top, one from the bottom.</p><p>🔁 <strong>Play with Precision</strong>: The left card must align with the right board card—it must be +1, 0, or -1 in value (with Aces looping to Kings and vice versa).</p><p>🃏 <strong>Make Your Move</strong>: If they match, hit 'Play' to make your move.</p><p>❌ <strong>When Fate Frowns</strong>: No match? Press 'Discard' to send both cards to the discard pile.</p><p>♻️ <strong>A Deck Reborn</strong>: When you run out of cards, the discard pile gets shuffled back into the deck.</p><p>🏆 <strong>Victory or Defeat</strong>: Win by clearing all cards, or lose if no more plays are possible.</p><h2 id=\"why-this-matters-to-me\">Why This Matters to Me</h2><p>What started as a way to pass time during a really difficult period became something I'm genuinely proud of. There's something beautiful about taking an idea that existed only in my head and as scattered cards on a table, and turning it into something other people can experience.</p><p>The technical challenge was fun—figuring out card game logic, smooth animations, mobile responsiveness, and audio integration. But more than that, it represents a full circle moment. From that low place where I had nothing but time and cards, to now having the skills and tools to build something real and share it with the world.</p><p>Sometimes the best projects aren't the ones we plan meticulously, but the ones that emerge from genuine personal experience and the simple desire to share something meaningful with others.</p><p>Now, when someone asks me about that weird card game I invented, I don't have to struggle with explanations. I can just send them a link.</p><p><strong>Check out the game here via the web:</strong><br><a href=\"https://marginmatch.app/\">https://marginmatch.app/</a></p>",
     "date": "2025-05-26T01:47:00.000Z",
@@ -136,6 +161,7 @@
   {
     "id": "cmgrf8qe000010ufh1ytw7ag5",
     "title": "VoteWise",
+    "type": "work",
     "slug": "votewise",
     "summary": "A political web application that allows users to track their local representatives' voting records and legislation using the Congress.gov API for increased civic engagement.",
     "content": "A political web application that allows users to track their local representatives' voting records and legislation using the Congress.gov API for increased civic engagement.",
@@ -143,13 +169,15 @@
     "lastmod": "2025-10-15T03:18:35.882Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": ["/static/images/votewise.jpg"],
+    "images": [
+      "https://images.unsplash.com/photo-1555848962-6e79363ec58f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHxwb2xpdGljYWx8ZW58MHx8fHwxNzA3MzY4MzY0fDA&ixlib=rb-4.0.3&q=80&w=2000"
+    ],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": "ProjectLayout",
     "github": "https://github.com/xi-rick/votewise",
-    "demo": null,
+    "demo": "https://ivotewise.com",
     "technologies": [
       "Next.js 15",
       "React 19",
@@ -170,13 +198,15 @@
     "lastmod": "2025-10-15T03:18:36.405Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": ["/static/images/break-the-wall.jpg"],
+    "images": [
+      "https://images.unsplash.com/photo-1552664730-d307ca884978?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDJ8fGJ1c2luZXNzfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000"
+    ],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
     "layout": "ProjectLayout",
     "github": "https://github.com/xi-Rick/break-the-wall",
-    "demo": null,
+    "demo": "https://breakthewall.us",
     "technologies": [
       "Next.js",
       "TypeScript",
@@ -198,7 +228,9 @@
     "lastmod": "2025-10-15T03:18:36.569Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": ["/static/images/steam-insight.jpg"],
+    "images": [
+      "https://images.unsplash.com/photo-1511512578047-dfb367046420?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHx2aWRlbyUyMGdhbWVzfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000"
+    ],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -213,6 +245,7 @@
   {
     "id": "cmgrf8r2900070ufhbwxxix5s",
     "title": "Captain's Log",
+    "type": "work",
     "slug": "captains-log",
     "summary": "A voice-powered Progressive Web App inspired by One Piece and Star Trek that uses OpenAI's Whisper technology to transcribe speech into text, creating a personal digital logbook with AI-powered summarization.",
     "content": "A voice-powered Progressive Web App inspired by One Piece and Star Trek that uses OpenAI's Whisper technology to transcribe speech into text, creating a personal digital logbook with AI-powered summarization.",
@@ -220,7 +253,9 @@
     "lastmod": "2025-10-15T03:18:36.747Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": ["/static/images/captains-log.jpg"],
+    "images": [
+      "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHx2b2ljZSUyMHJlY29yZGluZ3xlbnwwfHx8fDE3MDczNjgzNjR8MA&ixlib=rb-4.0.3&q=80&w=2000"
+    ],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -252,7 +287,9 @@
     "lastmod": "2025-10-15T03:18:36.923Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": ["/static/images/archgaming.jpg"],
+    "images": [
+      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHxnYW1pbmd8ZW58MHx8fHwxNzA3MzY4MzY0fDA&ixlib=rb-4.0.3&q=80&w=2000"
+    ],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -265,28 +302,6 @@
     "authorId": "cmgqrczwd0000zzfjqkoasu1o"
   },
   {
-    "id": "cmgrf8rdz000b0ufhebborg9y",
-    "title": "DevSetup",
-    "slug": "devsetup",
-    "summary": "🚀 A cross-platform development environment setup script. Transform any Linux distro into a modern web development powerhouse with Node.js, Docker, IDEs, and more. Supports Arch, Ubuntu, Fedora, openSUSE.",
-    "content": "🚀 A cross-platform development environment setup script. Transform any Linux distro into a modern web development powerhouse with Node.js, Docker, IDEs, and more. Supports Arch, Ubuntu, Fedora, openSUSE.",
-    "date": "2025-10-15T03:18:37.173Z",
-    "lastmod": "2025-10-15T03:18:37.173Z",
-    "tags": [],
-    "categories": ["web-app"],
-    "images": ["/static/images/devsetup.jpg"],
-    "authors": ["Dana Davis"],
-    "draft": false,
-    "featured": true,
-    "layout": "ProjectLayout",
-    "github": "https://github.com/xi-Rick/devsetup",
-    "demo": null,
-    "technologies": ["Shell", "Linux", "Node.js", "Docker", "Automation"],
-    "createdAt": "2025-10-15T03:18:37.223Z",
-    "updatedAt": "2025-10-15T03:18:37.223Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
-  },
-  {
     "id": "cmgrf8ril000d0ufh70rkg2ax",
     "title": "Dock App Demo",
     "slug": "dock-app-demo",
@@ -296,7 +311,9 @@
     "lastmod": "2025-10-15T03:18:37.333Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": ["/static/images/dock-app-demo.jpg"],
+    "images": [
+      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfG1hY29zfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000"
+    ],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -318,7 +335,9 @@
     "lastmod": "2025-10-15T03:18:37.497Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": ["/static/images/my-sidebar-app.jpg"],
+    "images": [
+      "https://images.unsplash.com/photo-1551650975-87deedd944c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHVpfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000"
+    ],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -345,7 +364,9 @@
     "lastmod": "2025-10-15T03:18:37.655Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": ["/static/images/nextjs14-ghost-frontend.jpg"],
+    "images": [
+      "https://images.unsplash.com/photo-1627398242454-45a1465c2479?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHdlYnNpdGV8ZW58MHx8fHwxNzA3MzY4MzY0fDA&ixlib=rb-4.0.3&q=80&w=2000"
+    ],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": false,
@@ -367,7 +388,9 @@
     "lastmod": "2025-10-15T03:18:37.825Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": ["/static/images/nextjs-pages-template.jpg"],
+    "images": [
+      "https://images.unsplash.com/photo-1555949963-aa79dcee981c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHRlbXBsYXRlfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000"
+    ],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": false,
@@ -377,34 +400,6 @@
     "technologies": ["Next.js", "TypeScript", "MongoDB", "NextUI", "PWA"],
     "createdAt": "2025-10-15T03:18:37.871Z",
     "updatedAt": "2025-10-15T03:18:37.871Z",
-    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
-  },
-  {
-    "id": "cmgrf8s0u000l0ufhdiyqzsf0",
-    "title": "What If Anime",
-    "slug": "what-if-anime",
-    "summary": "⚡ A revolutionary platform where anime enthusiasts become architects of alternative realities. Create, vote on, and discuss compelling \"what if\" scenarios that reimagine your favorite anime stories with different outcomes and character arcs.",
-    "content": "⚡ A revolutionary platform where anime enthusiasts become architects of alternative realities. Create, vote on, and discuss compelling \"what if\" scenarios that reimagine your favorite anime stories with different outcomes and character arcs.",
-    "date": "2025-10-15T03:18:37.998Z",
-    "lastmod": "2025-10-15T03:18:37.998Z",
-    "tags": [],
-    "categories": ["web-app"],
-    "images": ["/static/images/what-if-anime.jpg"],
-    "authors": ["Dana Davis"],
-    "draft": false,
-    "featured": true,
-    "layout": "ProjectLayout",
-    "github": "https://github.com/xi-Rick/anime",
-    "demo": null,
-    "technologies": [
-      "Next.js 15",
-      "React 19",
-      "TypeScript",
-      "Supabase",
-      "PostgreSQL"
-    ],
-    "createdAt": "2025-10-15T03:18:38.046Z",
-    "updatedAt": "2025-10-15T03:18:38.046Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o"
   }
 ]
