@@ -249,33 +249,6 @@ export default async function ProjectPage(props: {
 
             {/* Project Details */}
             <div className="lg:sticky lg:top-24 space-y-6">
-              {/* Themed project CTA */}
-              {demoUrl && (
-                <div className="p-5 rounded-xl border-2 border-orange-500 dark:border-green-500 bg-orange-50 dark:bg-green-950/20">
-                  <p className="text-xs font-mono uppercase tracking-widest text-orange-600 dark:text-green-400 mb-3">
-                    $ open project
-                  </p>
-                  <Link
-                    href={demoUrl}
-                    className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-lg bg-orange-500 dark:bg-green-500 text-white dark:text-black font-bold text-sm hover:bg-orange-600 dark:hover:bg-green-400 transition-all group"
-                  >
-                    <span>Launch Live Site</span>
-                    <ExternalLink
-                      size={16}
-                      className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
-                    />
-                  </Link>
-                  {repoUrl && (
-                    <Link
-                      href={repoUrl}
-                      className="flex items-center gap-2 mt-2 px-4 py-2 rounded-lg text-sm font-medium text-orange-700 dark:text-green-300 hover:text-orange-500 dark:hover:text-green-400 transition-colors"
-                    >
-                      <Github size={14} />
-                      View on GitHub
-                    </Link>
-                  )}
-                </div>
-              )}
               <div className="p-6 bg-orange-50 dark:bg-black rounded-xl border-2 border-black dark:border-white">
                 <h3 className="text-lg font-semibold mb-4 text-orange-600 dark:text-green-500">
                   Project Details
