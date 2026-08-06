@@ -238,4 +238,16 @@ export const PROJECTS: Project[] = [
     content:
       'A robust starter template for Next.js 13 applications featuring NextUI for UI design, MongoDB for data management, and Next-PWA for Progressive Web App capabilities.',
   },
+  {
+    type: 'self',
+    title: 'Icon Maker — Linux Icon Theme Packer',
+    description:
+      "A CLI tool that downloads icon sets from <a href='https://wallpapers-clan.com/app-icons/'>Wallpapers Clan</a> and automatically packages them into fully compliant, installable Linux icon themes.",
+    imgSrc:
+      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDl8fGljb258ZW58MHx8fHwxNzA3MzY4MzY0fDA&ixlib=rb-4.0.3&q=80&w=2000',
+    repo: 'https://github.com/xi-Rick/icon-maker',
+    builtWith: ['Bash', 'Python', 'curl', 'YAD/Zenity'],
+    content:
+      "Icon Maker is a shell script that builds custom Linux icon themes from downloaded icon packs. Point it at a <a href='https://wallpapers-clan.com/app-icons/'>Wallpapers Clan</a> app icon page (or another source), and it downloads the pack, sorts icons into the correct directory structure with symlinks for every standard size, and optionally applies rounded or circular shape masking. It uses a curated name database (with hash-based fallback) to map icons to the right apps, generates a standards-compliant index.theme file, and installs the finished theme straight to ~/.icons/.",
+  },
 ]

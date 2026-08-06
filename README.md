@@ -246,19 +246,6 @@ This will redirect to your callback page with an authorization code. Use this to
 </details>
 
 <details>
-<summary><strong>7. Stripe (Optional - For Store Feature) 💳</strong></summary>
-
-1. Go to <a href="https://stripe.com" target="_blank" rel="noopener" referrerpolicy="origin">stripe.com</a> and create an account
-2. Go to **Developers > API Keys**
-3. Copy your **Secret Key** (Test Mode) → `STRIPE_SECRET_KEY`
-
-**Environment Variables:**
-
-- `STRIPE_SECRET_KEY`
-
-</details>
-
-<details>
 <summary><strong>8. Deployment on Vercel ☁️</strong></summary>
 
 1. Go to <a href="https://vercel.com" target="_blank" rel="noopener" referrerpolicy="origin">vercel.com</a> and sign in with GitHub
@@ -275,7 +262,7 @@ This will redirect to your callback page with an authorization code. Use this to
 
 ### One Click Deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/xi-Rick/danadavis.dev&env=DATABASE_URL,ADMIN_EMAIL,KINDE_CLIENT_ID,KINDE_CLIENT_SECRET,KINDE_ISSUER_URL,KINDE_SITE_URL,KINDE_POST_LOGOUT_REDIRECT_URL,KINDE_POST_LOGIN_REDIRECT_URL,SITE_URL,STRIPE_SECRET_KEY,GITHUB_API_TOKEN,SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET,SPOTIFY_REFRESH_TOKEN,NEXT_UMAMI_ID,OPENAI_API_KEY&envDescription=Environment%20variables%20required%20to%20run%20the%20Dana%20Davis%20Dev%20Blog)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/xi-Rick/danadavis.dev&env=DATABASE_URL,ADMIN_EMAIL,KINDE_CLIENT_ID,KINDE_CLIENT_SECRET,KINDE_ISSUER_URL,KINDE_SITE_URL,KINDE_POST_LOGOUT_REDIRECT_URL,KINDE_POST_LOGIN_REDIRECT_URL,SITE_URL,GITHUB_API_TOKEN,SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET,SPOTIFY_REFRESH_TOKEN,NEXT_UMAMI_ID,OPENAI_API_KEY&envDescription=Environment%20variables%20required%20to%20run%20the%20Dana%20Davis%20Dev%20Blog)
 
 That's it! Your blog is now live. 🎉
 

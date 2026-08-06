@@ -9,9 +9,9 @@ import { SITE_METADATA } from '~/data/site-metadata'
 import type { GithubRepository } from '~/types/data'
 import { fetcher } from '~/utils/misc'
 
-const TIME_IS = 'https://time.is/Lansing'
-const MY_TIMEZONE = 'America/Detroit'
-const MY_TIMEZONE_OFFSET = -5 * -60 // UTC-5
+const TIME_IS = 'https://time.is/Arlington'
+const MY_TIMEZONE = 'America/Chicago'
+const MY_TIMEZONE_OFFSET = -6 * -60 // UTC-6
 
 function getTime() {
   const date = new Date()
@@ -61,14 +61,14 @@ export function FooterMeta() {
       <div className="flex items-center gap-2">
         <MapPin className="h-5 w-5" />
         <Link
-          href="https://www.google.com/maps/place/Lansing,+MI"
+          href="https://www.google.com/maps/place/Arlington,+TX"
           target="_blank"
         >
           <GrowingUnderline
             className="font-medium"
             data-umami-event="footer-location"
           >
-            Lansing, MI <Twemoji emoji="flag-us" className="h-4.5!" />
+            Arlington, TX <Twemoji emoji="flag-us" className="h-4.5!" />
           </GrowingUnderline>
         </Link>
       </div>

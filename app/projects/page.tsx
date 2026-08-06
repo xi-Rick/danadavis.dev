@@ -5,6 +5,7 @@ import { PageHeader } from '~/components/ui/page-header'
 import { PROJECTS } from '~/data/projects'
 import { prisma } from '~/db'
 import type { Project } from '~/types/data'
+import { fetchRepoData } from '~/utils/github'
 
 export const metadata = genPageMetadata({
   title: 'Projects',
@@ -13,6 +14,30 @@ export const metadata = genPageMetadata({
 })
 
 export const dynamic = 'force-dynamic'
+
+type ProjectWithStars = Project & { stars: number }
+
+async function sortProjectsByGithubStars(projects: Project[]) {
+  const projectsWithStars = await Promise.all(
+    projects.map(async (project) => {
+      if (!project.repo) {
+        return { project, stars: -1 }
+      }
+
+      try {
+        const repoData = await fetchRepoData({ repo: project.repo })
+        return { project, stars: repoData?.stargazerCount ?? -1 }
+      } catch (error) {
+        console.warn(`Failed to fetch GitHub stars for ${project.title}`, error)
+        return { project, stars: -1 }
+      }
+    }),
+  )
+
+  return projectsWithStars
+    .sort((a, b) => b.stars - a.stars)
+    .map(({ project }) => project)
+}
 
 export default async function Projects() {
   let projects: Project[] = PROJECTS
@@ -40,7 +65,9 @@ export default async function Projects() {
   }
 
   const workProjects = projects.filter((p: Project) => p.type === 'work')
-  const sideProjects = projects.filter((p: Project) => p.type === 'self')
+  const sideProjects = await sortProjectsByGithubStars(
+    projects.filter((p: Project) => p.type === 'self'),
+  )
 
   return (
     <Container className="pt-4 lg:pt-12">

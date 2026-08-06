@@ -401,5 +401,29 @@
     "createdAt": "2025-10-15T03:18:37.871Z",
     "updatedAt": "2025-10-15T03:18:37.871Z",
     "authorId": "cmgqrczwd0000zzfjqkoasu1o"
+  },
+  {
+    "id": "cmgrf8szi000j0ufh3abclmnk",
+    "title": "Icon Maker",
+    "slug": "icon-maker",
+    "summary": "A lightweight tool that downloads icon packs from Wallpapers Clan and packages them into polished, installable Linux icon themes.",
+    "content": "Icon Maker is a shell script that builds custom Linux icon themes from downloaded icon packs. Point it at a <a href='https://wallpapers-clan.com/app-icons/' target='_blank' rel='noreferrer noopener'>Wallpapers Clan</a> app icon page (or another source), and it downloads the pack, sorts icons into the correct directory structure with symlinks for every standard size, and optionally applies rounded or circular shape masking. It uses a curated name database (with hash-based fallback) to map icons to the right apps, generates a standards-compliant index.theme file, and installs the finished theme straight to ~/.icons/.",
+    "date": "2025-10-16T03:18:38.000Z",
+    "lastmod": "2025-10-16T03:18:38.000Z",
+    "tags": ["SVG", "Icon Design", "Open Source", "Tooling"],
+    "categories": ["web-app"],
+    "images": [
+      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDl8fGljb258ZW58MHx8fHwxNzA3MzY4MzY0fDA&ixlib=rb-4.0.3&q=80&w=2000"
+    ],
+    "authors": ["Dana Davis"],
+    "draft": false,
+    "featured": false,
+    "layout": "ProjectLayout",
+    "github": "https://github.com/xi-Rick/icon-maker",
+    "demo": null,
+    "technologies": ["Bash", "Python", "curl", "YAD/Zenity"],
+    "createdAt": "2025-10-16T03:18:38.000Z",
+    "updatedAt": "2025-10-16T03:18:38.000Z",
+    "authorId": "cmgqrczwd0000zzfjqkoasu1o"
   }
 ]
