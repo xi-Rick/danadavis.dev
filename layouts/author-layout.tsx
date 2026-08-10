@@ -3,7 +3,6 @@ import { CareerTimeline } from '~/components/author/career'
 import { SocialAccounts } from '~/components/author/social-accounts'
 import { Button } from '~/components/ui/button'
 import { Container } from '~/components/ui/container'
-import { Image } from '~/components/ui/image'
 import { LinkPreview } from '~/components/ui/link-preview'
 import { PageHeader } from '~/components/ui/page-header'
 import { Twemoji } from '~/components/ui/twemoji'
@@ -115,48 +114,94 @@ export function AuthorLayout({}: Props) {
             <div>
               <h3>Support</h3>
               <p>If you appreciate my work, consider supporting me:</p>
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-nowrap items-center gap-2 sm:gap-3">
                 <a
                   href={SITE_METADATA.support.buyMeACoffee}
                   target="_blank"
-                  className="[&_.image-container]:mx-0"
                   rel="noreferrer"
+                  className="flex min-h-[44px] flex-1 items-center justify-center gap-1.5 rounded-full bg-[#FFDD00] px-3 py-2.5 text-black shadow-sm transition-transform hover:scale-[1.03] active:scale-95 sm:flex-none sm:min-w-[170px] sm:px-4"
                 >
-                  <Image
-                    src="/static/images/bmc-button.png"
-                    alt="Buy Me A Coffee"
-                    width={213.7}
-                    height={60}
-                    style={{ height: 60 }}
-                  />
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4 shrink-0 sm:h-5 sm:w-5"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M3 9h15v4a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V9Z" />
+                    <path
+                      d="M18 10h1.5a2.5 2.5 0 0 1 0 5H18"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                    />
+                    <path
+                      d="M6 5.5c.4-1 1.5-1 1.3-2M10 5.5c.4-1 1.5-1 1.3-2"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.4"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <span className="whitespace-nowrap text-[11px] font-bold italic leading-none sm:text-sm">
+                    Buy me a coffee
+                  </span>
                 </a>
+
                 <a
                   href={SITE_METADATA.support.kofi}
                   target="_blank"
-                  className="[&_.image-container]:mx-0"
                   rel="noreferrer"
+                  className="flex min-h-[44px] flex-1 items-center justify-center gap-1.5 rounded-full border border-gray-300 bg-[#f5f5f5] px-3 py-2.5 text-black shadow-sm transition-transform hover:scale-[1.03] active:scale-95 dark:border-transparent sm:flex-none sm:min-w-[170px] sm:px-4"
                 >
-                  <Image
-                    src="/static/images/kofi.png"
-                    alt="Support me on Ko-fi"
-                    width={297}
-                    height={60}
-                    style={{ height: 60, width: 'auto' }}
-                  />
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4 shrink-0 sm:h-5 sm:w-5"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M4 6h11v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V6Z"
+                      fill="#FF5E5B"
+                    />
+                    <path
+                      d="M15 8h1.8a2 2 0 0 1 0 4H15"
+                      fill="none"
+                      stroke="#FF5E5B"
+                      strokeWidth="1.6"
+                    />
+                    <path
+                      d="M9.5 8.3c-.9-.9-2.3-.2-2.3.9 0 1.1 1.6 2.2 2.3 2.7.7-.5 2.3-1.6 2.3-2.7 0-1.1-1.4-1.8-2.3-.9Z"
+                      fill="#fff"
+                    />
+                  </svg>
+                  <span className="whitespace-nowrap text-[11px] font-semibold leading-none sm:text-sm">
+                    Support me on Ko-fi
+                  </span>
                 </a>
+
                 <a
                   href={SITE_METADATA.support.paypal}
                   target="_blank"
-                  className="flex h-15 w-[214px] items-center rounded-lg bg-primary-500/70 p-1"
                   rel="noreferrer"
+                  className="flex min-h-[44px] flex-1 items-center justify-center gap-1.5 rounded-full bg-primary-500/70 px-3 py-2.5 shadow-sm transition-transform hover:scale-[1.03] active:scale-95 sm:flex-none sm:min-w-[170px] sm:px-4"
                 >
-                  <Image
-                    src="/static/images/paypal-logo.png"
-                    alt="Donate via PayPal"
-                    width={225.88}
-                    height={60}
-                    style={{ height: 30, width: 'auto' }}
-                  />
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4 shrink-0 sm:h-5 sm:w-5"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M7 4h6.2c2.5 0 4 1.3 3.6 3.6-.4 2.7-2.3 4.2-5 4.2H9.4L8.5 17H5.8L7 4Z"
+                      fill="#003087"
+                    />
+                    <path
+                      d="M9.5 6.3h6c2.4 0 3.9 1.2 3.5 3.5-.4 2.6-2.2 4.1-4.8 4.1h-2.5l-.8 4.8H8.3l1.2-12.4Z"
+                      fill="#009cde"
+                      opacity="0.85"
+                    />
+                  </svg>
+                  <span className="whitespace-nowrap text-[11px] font-bold leading-none text-white sm:text-sm">
+                    PayPal
+                  </span>
                 </a>
               </div>
             </div>
