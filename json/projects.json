@@ -4,15 +4,13 @@
     "title": "Linux Switch",
     "type": "work",
     "slug": "linux-switch",
-    "summary": "A resource hub for users switching to Linux — covering distros, package managers, ricing, terminal commands, desktop environments, and more. Built with Zola and a custom theme.",
-    "content": "A resource hub for users switching to Linux — covering distros, package managers, ricing, terminal commands, desktop environments, and more. Built with Zola and a custom theme.",
+    "summary": "A resource hub for users switching to Linux \u2014 covering distros, package managers, ricing, terminal commands, desktop environments, and more. Built with Zola and a custom theme.",
+    "content": "A resource hub for users switching to Linux \u2014 covering distros, package managers, ricing, terminal commands, desktop environments, and more. Built with Zola and a custom theme.",
     "date": "2026-05-07T00:00:00.000Z",
     "lastmod": "2026-05-07T00:00:00.000Z",
     "tags": ["Linux", "Zola", "Open Source", "Ricing", "Documentation"],
     "categories": ["web-app"],
-    "images": [
-      "https://res.cloudinary.com/dfjq9qvoz/image/upload/v1778164661/Screenshot_from_2026-05-07_10-37-17_goov2f.png"
-    ],
+    "images": ["/static/images/linuxswitch.png"],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -35,9 +33,7 @@
     "lastmod": "2025-06-09T03:18:30.021Z",
     "tags": ["API", "Greek Mythology", "Vercel", "REST API", "Node.js"],
     "categories": ["api"],
-    "images": [
-      "https://res.cloudinary.com/dfjq9qvoz/image/upload/v1749439089/egglogwfguvb4npphhu8.webp"
-    ],
+    "images": ["/static/images/greekmythapi.png"],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -54,7 +50,7 @@
     "title": "Margin Match",
     "slug": "margin-match",
     "summary": "A personal journey of turning a card game invented during a difficult time into a modern web application using Next.js, complete with animations and mobile support.",
-    "content": "<h1 id=\"\"></h1><p>Sometimes the best ideas come from the darkest places. About 15 years ago, I was in one of those places—a really low point where all I had was time and a deck of cards. What started as mindless card flipping became something unexpected: a game I'd eventually call <strong>Margin Match</strong>.</p><h2 id=\"the-birth-of-margin-match\">The Birth of Margin Match</h2><p>Picture this: me, sitting alone, pulling cards one from the top of the deck, one from the bottom, discarding them, and repeating. But then I started noticing patterns and asking myself questions. What if the left card I drew could only \"play\" on the right card if their values were within a specific margin?</p><p>The rule became simple: the left card can only match the right card if it's plus one, minus one, or exactly the same value. A 7 matches with a 6, 7, or 8. Nothing else. If they don't match, you discard both cards, shuffle everything back together, and try again.</p><p>It sounds almost trivial, but this little constraint turned a mindless activity into something genuinely engaging. The decisions started mattering. When do you play? When do you discard? How do you strategically work through your deck?</p><h2 id=\"%F0%9F%A7%91%F0%9F%8F%BC%E2%80%8D%F0%9F%A4%9D%E2%80%8D%F0%9F%A7%91%F0%9F%8F%BE-a-late-night-conversation\">🧑🏼‍🤝‍🧑🏾 A Late-Night Conversation </h2><p>Fast forward to recently. I was talking to someone who mentioned she was up at 2 AM playing solitaire, and naturally, I told her about this weird game I'd invented years ago. But here's the thing about card games—they're nearly impossible to explain without actually showing someone. She asked for a visual, and that simple request lit a fire under me.</p><p>I had to build this thing.</p><h2 id=\"%F0%9F%91%A8%F0%9F%8F%BE%E2%80%8D%F0%9F%92%BB-building-margin-match-the-tech-stack\">👨🏾‍💻 Building Margin Match: The Tech Stack</h2><p>When I decided to bring Margin Match to life digitally, I wanted to use modern tools that would let me create something polished and professional. Here's what I landed on:</p><p><strong>Next.js 15</strong> became my foundation—the latest version with all the performance improvements and developer experience enhancements. There's something satisfying about building on cutting-edge tech.</p><p><strong>Framer Motion</strong> handles all the card animations. When you draw cards or play matches, everything flows smoothly. Cards slide, flip, and transition in ways that make the digital version feel almost tactile.</p><p><strong>Capacitor</strong> lets me export the web app as an Android build. Sure, there are always a few quirks with Capacitor builds (they tend to lag behind the web version), but being able to take a web application and turn it into a native mobile app still feels like magic.</p><p>For the visual polish, I incorporated <strong>Lucide and React Icons</strong> for crisp, modern iconography. The interface needed to feel clean and intuitive—after all, the game's complexity should come from the strategy, not from figuring out how to use the app.</p><h2 id=\"the-details-that-matter\">The Details That Matter</h2><p>One thing I'm particularly proud of is integrating <strong>ElevenLabs sound effects</strong>—completely free—that give the game audio feedback. There's something deeply satisfying about hearing cards flip and matches register.</p><p>The whole thing is hosted on <strong>Vercel</strong> because, honestly, the deployment process is so smooth it almost feels like cheating. Push to GitHub, and within minutes, the updated version is live.</p><p>I even set it up as a <strong>Progressive Web App</strong>, so it can be installed on phones and desktops, giving it that native app feel without requiring app store distribution.</p><h2 id=\"%F0%9F%8E%AE-the-game-rules-in-case-you-want-to-try\">🎮 The Game Rules (In Case You Want to Try)</h2><p>Here's how Margin Match actually works:</p><p>🌀 <strong>Begin Your Journey</strong>: Hit 'Start Game' to get your first hand from the deck.</p><p>🎲 <strong>Draw with Intent</strong>: Tap 'Draw Cards' to pull one from the top, one from the bottom.</p><p>🔁 <strong>Play with Precision</strong>: The left card must align with the right board card—it must be +1, 0, or -1 in value (with Aces looping to Kings and vice versa).</p><p>🃏 <strong>Make Your Move</strong>: If they match, hit 'Play' to make your move.</p><p>❌ <strong>When Fate Frowns</strong>: No match? Press 'Discard' to send both cards to the discard pile.</p><p>♻️ <strong>A Deck Reborn</strong>: When you run out of cards, the discard pile gets shuffled back into the deck.</p><p>🏆 <strong>Victory or Defeat</strong>: Win by clearing all cards, or lose if no more plays are possible.</p><h2 id=\"why-this-matters-to-me\">Why This Matters to Me</h2><p>What started as a way to pass time during a really difficult period became something I'm genuinely proud of. There's something beautiful about taking an idea that existed only in my head and as scattered cards on a table, and turning it into something other people can experience.</p><p>The technical challenge was fun—figuring out card game logic, smooth animations, mobile responsiveness, and audio integration. But more than that, it represents a full circle moment. From that low place where I had nothing but time and cards, to now having the skills and tools to build something real and share it with the world.</p><p>Sometimes the best projects aren't the ones we plan meticulously, but the ones that emerge from genuine personal experience and the simple desire to share something meaningful with others.</p><p>Now, when someone asks me about that weird card game I invented, I don't have to struggle with explanations. I can just send them a link.</p><p><strong>Check out the game here via the web:</strong><br><a href=\"https://marginmatch.app/\">https://marginmatch.app/</a></p>",
+    "content": "<h1 id=\"\"></h1><p>Sometimes the best ideas come from the darkest places. About 15 years ago, I was in one of those places\u2014a really low point where all I had was time and a deck of cards. What started as mindless card flipping became something unexpected: a game I'd eventually call <strong>Margin Match</strong>.</p><h2 id=\"the-birth-of-margin-match\">The Birth of Margin Match</h2><p>Picture this: me, sitting alone, pulling cards one from the top of the deck, one from the bottom, discarding them, and repeating. But then I started noticing patterns and asking myself questions. What if the left card I drew could only \"play\" on the right card if their values were within a specific margin?</p><p>The rule became simple: the left card can only match the right card if it's plus one, minus one, or exactly the same value. A 7 matches with a 6, 7, or 8. Nothing else. If they don't match, you discard both cards, shuffle everything back together, and try again.</p><p>It sounds almost trivial, but this little constraint turned a mindless activity into something genuinely engaging. The decisions started mattering. When do you play? When do you discard? How do you strategically work through your deck?</p><h2 id=\"%F0%9F%A7%91%F0%9F%8F%BC%E2%80%8D%F0%9F%A4%9D%E2%80%8D%F0%9F%A7%91%F0%9F%8F%BE-a-late-night-conversation\">\ud83e\uddd1\ud83c\udffc\u200d\ud83e\udd1d\u200d\ud83e\uddd1\ud83c\udffe A Late-Night Conversation </h2><p>Fast forward to recently. I was talking to someone who mentioned she was up at 2 AM playing solitaire, and naturally, I told her about this weird game I'd invented years ago. But here's the thing about card games\u2014they're nearly impossible to explain without actually showing someone. She asked for a visual, and that simple request lit a fire under me.</p><p>I had to build this thing.</p><h2 id=\"%F0%9F%91%A8%F0%9F%8F%BE%E2%80%8D%F0%9F%92%BB-building-margin-match-the-tech-stack\">\ud83d\udc68\ud83c\udffe\u200d\ud83d\udcbb Building Margin Match: The Tech Stack</h2><p>When I decided to bring Margin Match to life digitally, I wanted to use modern tools that would let me create something polished and professional. Here's what I landed on:</p><p><strong>Next.js 15</strong> became my foundation\u2014the latest version with all the performance improvements and developer experience enhancements. There's something satisfying about building on cutting-edge tech.</p><p><strong>Framer Motion</strong> handles all the card animations. When you draw cards or play matches, everything flows smoothly. Cards slide, flip, and transition in ways that make the digital version feel almost tactile.</p><p><strong>Capacitor</strong> lets me export the web app as an Android build. Sure, there are always a few quirks with Capacitor builds (they tend to lag behind the web version), but being able to take a web application and turn it into a native mobile app still feels like magic.</p><p>For the visual polish, I incorporated <strong>Lucide and React Icons</strong> for crisp, modern iconography. The interface needed to feel clean and intuitive\u2014after all, the game's complexity should come from the strategy, not from figuring out how to use the app.</p><h2 id=\"the-details-that-matter\">The Details That Matter</h2><p>One thing I'm particularly proud of is integrating <strong>ElevenLabs sound effects</strong>\u2014completely free\u2014that give the game audio feedback. There's something deeply satisfying about hearing cards flip and matches register.</p><p>The whole thing is hosted on <strong>Vercel</strong> because, honestly, the deployment process is so smooth it almost feels like cheating. Push to GitHub, and within minutes, the updated version is live.</p><p>I even set it up as a <strong>Progressive Web App</strong>, so it can be installed on phones and desktops, giving it that native app feel without requiring app store distribution.</p><h2 id=\"%F0%9F%8E%AE-the-game-rules-in-case-you-want-to-try\">\ud83c\udfae The Game Rules (In Case You Want to Try)</h2><p>Here's how Margin Match actually works:</p><p>\ud83c\udf00 <strong>Begin Your Journey</strong>: Hit 'Start Game' to get your first hand from the deck.</p><p>\ud83c\udfb2 <strong>Draw with Intent</strong>: Tap 'Draw Cards' to pull one from the top, one from the bottom.</p><p>\ud83d\udd01 <strong>Play with Precision</strong>: The left card must align with the right board card\u2014it must be +1, 0, or -1 in value (with Aces looping to Kings and vice versa).</p><p>\ud83c\udccf <strong>Make Your Move</strong>: If they match, hit 'Play' to make your move.</p><p>\u274c <strong>When Fate Frowns</strong>: No match? Press 'Discard' to send both cards to the discard pile.</p><p>\u267b\ufe0f <strong>A Deck Reborn</strong>: When you run out of cards, the discard pile gets shuffled back into the deck.</p><p>\ud83c\udfc6 <strong>Victory or Defeat</strong>: Win by clearing all cards, or lose if no more plays are possible.</p><h2 id=\"why-this-matters-to-me\">Why This Matters to Me</h2><p>What started as a way to pass time during a really difficult period became something I'm genuinely proud of. There's something beautiful about taking an idea that existed only in my head and as scattered cards on a table, and turning it into something other people can experience.</p><p>The technical challenge was fun\u2014figuring out card game logic, smooth animations, mobile responsiveness, and audio integration. But more than that, it represents a full circle moment. From that low place where I had nothing but time and cards, to now having the skills and tools to build something real and share it with the world.</p><p>Sometimes the best projects aren't the ones we plan meticulously, but the ones that emerge from genuine personal experience and the simple desire to share something meaningful with others.</p><p>Now, when someone asks me about that weird card game I invented, I don't have to struggle with explanations. I can just send them a link.</p><p><strong>Check out the game here via the web:</strong><br><a href=\"https://marginmatch.app/\">https://marginmatch.app/</a></p>",
     "date": "2025-05-26T01:47:00.000Z",
     "lastmod": "2025-05-26T20:46:31.000Z",
     "tags": [
@@ -65,9 +61,7 @@
       "Personal Project"
     ],
     "categories": ["web-app"],
-    "images": [
-      "https://images.unsplash.com/photo-1501003878151-d3cb87799705?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHxwbGF5aW5nJTIwY2FyZHxlbnwwfHx8fDE3NDc2MTg0MjV8MA&ixlib=rb-4.1.0&q=80&w=2000"
-    ],
+    "images": ["/static/images/marginmatch.png"],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -131,7 +125,7 @@
     "title": "Citadel",
     "slug": "citadel",
     "summary": "An AI-powered tool that generates detailed and unique backstories for characters from the TV show Rick and Morty.",
-    "content": "<h1 id=\"building-my-rick-and-morty-inspired-citadel-project\">Building My Rick and Morty-Inspired \"Citadel\" Project</h1><p>Hey fellow dimension-hoppers!</p><p>I'm thrilled to share my latest passion project – a website I've dubbed \"Citadel.\" It's a tribute to the mind-bending universe of Rick and Morty, blending my love for the show with my passion for web development and AI.</p><h2 id=\"the-concept\">The Concept</h2><p>Inspired by the show's \"Citadel of Ricks,\" my Citadel aims to be a vast interdimensional repository of Rick and Morty information. I'm leveraging the Rick and Morty API and integrating various OpenAI endpoints to generate unique content that even the Council of Ricks would approve of.</p><h2 id=\"current-features\">Current Features</h2><h3 id=\"1-web-interface\">1. Web Interface</h3><ul><li>Built with Next.js and Next UI</li><li>Basic but functional design (more intuitive interface coming soon!)</li></ul><h3 id=\"2-discord-bot\">2. Discord Bot</h3><ul><li>Offers similar functionality to the website</li><li>Perfect for discussing infinite timelines with your Discord crew</li></ul><h3 id=\"3-character-based-story-generation\">3. Character-Based Story Generation</h3><ul><li>Click on any character from the Rick and Morty API</li><li>Instantly generates a unique story about that character</li></ul><h3 id=\"4-ai-generated-illustrations\">4. AI-Generated Illustrations</h3><ul><li>Uses DALL-E 3 to create images based on story context</li><li>Warning: This feature can be as expensive as Kalaxian crystals, so it's not always active!</li></ul><h2 id=\"upcoming-features\">Upcoming Features</h2><h3 id=\"1-audio-narration\">1. Audio Narration</h3><ul><li>Working on adding voice narration for generated stories</li><li>Hoping for future OpenAI voice cloning support (Imagine Rick narrating his own adventures!)</li></ul><h3 id=\"2-mongodb-integration\">2. MongoDB Integration</h3><ul><li>Plan to store and organize user-generated stories</li><li>Create a collection of alternate universe Rick and Morty tales</li></ul><h2 id=\"the-big-picture\">The Big Picture</h2><p>This project is my way of combining multiple technologies to create something as unique as Pickle Rick. It's ambitious, sure, but so is stealing from the Galactic Federation!</p><h2 id=\"wrapping-up\">Wrapping Up</h2><p>Have you ever crafted a project inspired by your favorite TV show or movie? Drop your interdimensional cable in the comments below – I'd love to hear about it!</p><p>Until our paths cross in another dimension</p><p>P.S. Wubba lubba dub dub!</p><hr><h2 id=\"tech-stack-highlight\">Tech Stack Highlight</h2><ul><li>Frontend: Next.js, Next UI</li><li>Backend: Node.js</li><li>APIs: Rick and Morty API, OpenAI (GPT, DALL-E)</li><li>Database (Planned): MongoDB</li><li>Bot Platform: Discord</li></ul><hr><p>Remember, the multiverse is vast, and so are the possibilities for this project. Stay tuned for more updates as Citadel evolves!</p><div class=\"kg-card kg-button-card kg-align-center\"><a href=\"https://citadel.vercel.app\" class=\"kg-btn kg-btn-accent\">Go check out my project!</a></div>",
+    "content": "<h1 id=\"building-my-rick-and-morty-inspired-citadel-project\">Building My Rick and Morty-Inspired \"Citadel\" Project</h1><p>Hey fellow dimension-hoppers!</p><p>I'm thrilled to share my latest passion project \u2013 a website I've dubbed \"Citadel.\" It's a tribute to the mind-bending universe of Rick and Morty, blending my love for the show with my passion for web development and AI.</p><h2 id=\"the-concept\">The Concept</h2><p>Inspired by the show's \"Citadel of Ricks,\" my Citadel aims to be a vast interdimensional repository of Rick and Morty information. I'm leveraging the Rick and Morty API and integrating various OpenAI endpoints to generate unique content that even the Council of Ricks would approve of.</p><h2 id=\"current-features\">Current Features</h2><h3 id=\"1-web-interface\">1. Web Interface</h3><ul><li>Built with Next.js and Next UI</li><li>Basic but functional design (more intuitive interface coming soon!)</li></ul><h3 id=\"2-discord-bot\">2. Discord Bot</h3><ul><li>Offers similar functionality to the website</li><li>Perfect for discussing infinite timelines with your Discord crew</li></ul><h3 id=\"3-character-based-story-generation\">3. Character-Based Story Generation</h3><ul><li>Click on any character from the Rick and Morty API</li><li>Instantly generates a unique story about that character</li></ul><h3 id=\"4-ai-generated-illustrations\">4. AI-Generated Illustrations</h3><ul><li>Uses DALL-E 3 to create images based on story context</li><li>Warning: This feature can be as expensive as Kalaxian crystals, so it's not always active!</li></ul><h2 id=\"upcoming-features\">Upcoming Features</h2><h3 id=\"1-audio-narration\">1. Audio Narration</h3><ul><li>Working on adding voice narration for generated stories</li><li>Hoping for future OpenAI voice cloning support (Imagine Rick narrating his own adventures!)</li></ul><h3 id=\"2-mongodb-integration\">2. MongoDB Integration</h3><ul><li>Plan to store and organize user-generated stories</li><li>Create a collection of alternate universe Rick and Morty tales</li></ul><h2 id=\"the-big-picture\">The Big Picture</h2><p>This project is my way of combining multiple technologies to create something as unique as Pickle Rick. It's ambitious, sure, but so is stealing from the Galactic Federation!</p><h2 id=\"wrapping-up\">Wrapping Up</h2><p>Have you ever crafted a project inspired by your favorite TV show or movie? Drop your interdimensional cable in the comments below \u2013 I'd love to hear about it!</p><p>Until our paths cross in another dimension</p><p>P.S. Wubba lubba dub dub!</p><hr><h2 id=\"tech-stack-highlight\">Tech Stack Highlight</h2><ul><li>Frontend: Next.js, Next UI</li><li>Backend: Node.js</li><li>APIs: Rick and Morty API, OpenAI (GPT, DALL-E)</li><li>Database (Planned): MongoDB</li><li>Bot Platform: Discord</li></ul><hr><p>Remember, the multiverse is vast, and so are the possibilities for this project. Stay tuned for more updates as Citadel evolves!</p><div class=\"kg-card kg-button-card kg-align-center\"><a href=\"https://citadel.vercel.app\" class=\"kg-btn kg-btn-accent\">Go check out my project!</a></div>",
     "date": "2022-12-19T16:48:18.000Z",
     "lastmod": "2024-06-23T13:47:58.000Z",
     "tags": ["Next.js", "OpenAI", "Rick and Morty", "Discord Bot", "AI Art"],
@@ -169,9 +163,7 @@
     "lastmod": "2025-10-15T03:18:35.882Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": [
-      "https://images.unsplash.com/photo-1555848962-6e79363ec58f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHxwb2xpdGljYWx8ZW58MHx8fHwxNzA3MzY4MzY0fDA&ixlib=rb-4.0.3&q=80&w=2000"
-    ],
+    "images": ["/static/images/ivotewise.png"],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -198,9 +190,7 @@
     "lastmod": "2025-10-15T03:18:36.405Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": [
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDJ8fGJ1c2luZXNzfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000"
-    ],
+    "images": ["/static/images/breakthewall.png"],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -228,9 +218,7 @@
     "lastmod": "2025-10-15T03:18:36.569Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": [
-      "https://images.unsplash.com/photo-1511512578047-dfb367046420?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHx2aWRlbyUyMGdhbWVzfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000"
-    ],
+    "images": ["/static/images/steaminsight.png"],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -253,9 +241,7 @@
     "lastmod": "2025-10-15T03:18:36.747Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": [
-      "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHx2b2ljZSUyMHJlY29yZGluZ3xlbnwwfHx8fDE3MDczNjgzNjR8MA&ixlib=rb-4.0.3&q=80&w=2000"
-    ],
+    "images": ["/static/images/captainslog.png"],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -281,15 +267,13 @@
     "id": "cmgrf8r7b00090ufh442qzc2x",
     "title": "ArchGaming",
     "slug": "archgaming",
-    "summary": "🎮 Transform your Arch Linux system into a gaming powerhouse with intelligent hardware detection, performance optimization, and complete gaming stack installation. Supports 8+ Arch derivatives.",
-    "content": "🎮 Transform your Arch Linux system into a gaming powerhouse with intelligent hardware detection, performance optimization, and complete gaming stack installation. Supports 8+ Arch derivatives.",
+    "summary": "\ud83c\udfae Transform your Arch Linux system into a gaming powerhouse with intelligent hardware detection, performance optimization, and complete gaming stack installation. Supports 8+ Arch derivatives.",
+    "content": "\ud83c\udfae Transform your Arch Linux system into a gaming powerhouse with intelligent hardware detection, performance optimization, and complete gaming stack installation. Supports 8+ Arch derivatives.",
     "date": "2025-10-15T03:18:36.923Z",
     "lastmod": "2025-10-15T03:18:36.923Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": [
-      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHxnYW1pbmd8ZW58MHx8fHwxNzA3MzY4MzY0fDA&ixlib=rb-4.0.3&q=80&w=2000"
-    ],
+    "images": ["/static/images/archgaming.png"],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -335,9 +319,7 @@
     "lastmod": "2025-10-15T03:18:37.497Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": [
-      "https://images.unsplash.com/photo-1551650975-87deedd944c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHVpfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000"
-    ],
+    "images": ["/static/images/sidebarapp.png"],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": true,
@@ -388,9 +370,7 @@
     "lastmod": "2025-10-15T03:18:37.825Z",
     "tags": [],
     "categories": ["web-app"],
-    "images": [
-      "https://images.unsplash.com/photo-1555949963-aa79dcee981c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHRlbXBsYXRlfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000"
-    ],
+    "images": ["/static/images/nextjspages.png"],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": false,
@@ -412,9 +392,7 @@
     "lastmod": "2025-10-16T03:18:38.000Z",
     "tags": ["SVG", "Icon Design", "Open Source", "Tooling"],
     "categories": ["web-app"],
-    "images": [
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDl8fGljb258ZW58MHx8fHwxNzA3MzY4MzY0fDA&ixlib=rb-4.0.3&q=80&w=2000"
-    ],
+    "images": ["/static/images/iconmaker.png"],
     "authors": ["Dana Davis"],
     "draft": false,
     "featured": false,

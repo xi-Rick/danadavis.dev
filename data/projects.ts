@@ -6,8 +6,7 @@ export const PROJECTS: Project[] = [
     title: 'Linux Switch',
     description:
       'A resource hub for users switching to Linux — covering distros, package managers, ricing, terminal commands, desktop environments, and more. Built with Zola and a custom theme.',
-    imgSrc:
-      'https://res.cloudinary.com/dfjq9qvoz/image/upload/v1778164661/Screenshot_from_2026-05-07_10-37-17_goov2f.png',
+    imgSrc: '/static/images/linuxswitch.png',
     repo: 'https://github.com/xi-Rick/linux-switch',
     builtWith: ['Zola', 'SASS', 'JavaScript', 'Vercel'],
     links: [
@@ -22,8 +21,7 @@ export const PROJECTS: Project[] = [
     title: 'The Greek Myth API',
     description:
       'A comprehensive REST API providing detailed information about Greek mythology, including gods, titans, monsters, and heroes with 200+ entries and multiple endpoints.',
-    imgSrc:
-      'https://res.cloudinary.com/dfjq9qvoz/image/upload/v1749439089/egglogwfguvb4npphhu8.webp',
+    imgSrc: '/static/images/greekmythapi.png',
     repo: 'https://github.com/xi-Rick/thegreekmythapi',
     builtWith: ['Node.js', 'Vercel', 'REST API', 'JSON', 'Express.js'],
     links: [
@@ -40,8 +38,7 @@ export const PROJECTS: Project[] = [
     title: 'Margin Match',
     description:
       'A personal journey of turning a card game invented during a difficult time into a modern web application using Next.js, complete with animations and mobile support.',
-    imgSrc:
-      'https://images.unsplash.com/photo-1501003878151-d3cb87799705?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHxwbGF5aW5nJTIwY2FyZHxlbnwwfHx8fDE3NDc2MTg0MjV8MA&ixlib=rb-4.1.0&q=80&w=2000',
+    imgSrc: '/static/images/marginmatch.png',
     repo: 'https://github.com/xi-Rick/marginmatch',
     builtWith: [
       'Next.js 15',
@@ -113,8 +110,7 @@ export const PROJECTS: Project[] = [
     title: 'VoteWise',
     description:
       "A political web application that allows users to track their local representatives' voting records and legislation using the Congress.gov API for increased civic engagement.",
-    imgSrc:
-      'https://images.unsplash.com/photo-1555848962-6e79363ec58f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHxwb2xpdGljYWx8ZW58MHx8fHwxNzA3MzY4MzY0fDA&ixlib=rb-4.0.3&q=80&w=2000',
+    imgSrc: '/static/images/ivotewise.png',
     repo: 'https://github.com/xi-rick/votewise',
     builtWith: ['Next.js 15', 'React 19', 'TypeScript', 'Congress.gov API'],
     links: [
@@ -131,8 +127,7 @@ export const PROJECTS: Project[] = [
     title: 'Break the Wall',
     description:
       'A transparency tool that analyzes SEC filings and corporate data to expose corporate hierarchies and executive compensation, revealing the "wall" of positions designed to protect wealth rather than create value.',
-    imgSrc:
-      'https://images.unsplash.com/photo-1552664730-d307ca884978?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDJ8fGJ1c2luZXNzfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000',
+    imgSrc: '/static/images/breakthewall.png',
     repo: 'https://github.com/xi-Rick/break-the-wall',
     builtWith: ['Next.js', 'TypeScript', 'SEC EDGAR API', 'D3.js', 'Recharts'],
     links: [
@@ -149,8 +144,7 @@ export const PROJECTS: Project[] = [
     title: 'Steam Insight',
     description:
       'Steam Insight is a modern Steam game discovery platform built with Next.js and TypeScript. Explore thousands of games with intelligent search, detailed reviews, rich media, and advanced analytics.',
-    imgSrc:
-      'https://images.unsplash.com/photo-1511512578047-dfb367046420?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHx2aWRlbyUyMGdhbWVzfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000',
+    imgSrc: '/static/images/steaminsight.png',
     repo: 'https://github.com/xi-Rick/steam-insight',
     builtWith: ['Next.js', 'TypeScript', 'React', 'Steam API'],
     content:
@@ -161,8 +155,7 @@ export const PROJECTS: Project[] = [
     title: "Captain's Log",
     description:
       "A voice-powered Progressive Web App inspired by One Piece and Star Trek that uses OpenAI's Whisper technology to transcribe speech into text, creating a personal digital logbook with AI-powered summarization.",
-    imgSrc:
-      'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHx2b2ljZSUyMHJlY29yZGluZ3xlbnwwfHx8fDE3MDczNjgzNjR8MA&ixlib=rb-4.0.3&q=80&w=2000',
+    imgSrc: '/static/images/captainslog.png',
     repo: 'https://github.com/xi-Rick/captains-log',
     builtWith: [
       'Next.js 14',
@@ -183,8 +176,7 @@ export const PROJECTS: Project[] = [
     title: 'ArchGaming',
     description:
       '🎮 Transform your Arch Linux system into a gaming powerhouse with intelligent hardware detection, performance optimization, and complete gaming stack installation. Supports 8+ Arch derivatives.',
-    imgSrc:
-      'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHxnYW1pbmd8ZW58MHx8fHwxNzA3MzY4MzY0fDA&ixlib=rb-4.0.3&q=80&w=2000',
+    imgSrc: '/static/images/archgaming.png',
     repo: 'https://github.com/xi-Rick/archgaming',
     builtWith: ['Bash', 'Linux', 'Gaming', 'Automation'],
     content:
@@ -207,8 +199,7 @@ export const PROJECTS: Project[] = [
     title: 'My Sidebar App',
     description:
       "This starter template demonstrates how to build a functional Next.js 14 application featuring Aceternity UI's Sidebar component. It includes dark mode support and is mobile responsive.",
-    imgSrc:
-      'https://images.unsplash.com/photo-1551650975-87deedd944c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHVpfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000',
+    imgSrc: '/static/images/sidebarapp.png',
     repo: 'https://github.com/xi-Rick/my-sidebar-app',
     builtWith: ['Next.js', 'TypeScript', 'Aceternity UI', 'Responsive Design'],
     content:
@@ -231,8 +222,7 @@ export const PROJECTS: Project[] = [
     title: 'Next.js Pages Template',
     description:
       'A robust starter template for Next.js 13 applications featuring NextUI for UI design, MongoDB for data management, and Next-PWA for Progressive Web App capabilities.',
-    imgSrc:
-      'https://images.unsplash.com/photo-1555949963-aa79dcee981c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHRlbXBsYXRlfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000',
+    imgSrc: '/static/images/nextjspages.png',
     repo: 'https://github.com/xi-Rick/nextjs-pages-template',
     builtWith: ['Next.js', 'TypeScript', 'MongoDB', 'NextUI', 'PWA'],
     content:
@@ -243,8 +233,7 @@ export const PROJECTS: Project[] = [
     title: 'Icon Maker — Linux Icon Theme Packer',
     description:
       "A CLI tool that downloads icon sets from <a href='https://wallpapers-clan.com/app-icons/'>Wallpapers Clan</a> and automatically packages them into fully compliant, installable Linux icon themes.",
-    imgSrc:
-      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDl8fGljb258ZW58MHx8fHwxNzA3MzY4MzY0fDA&ixlib=rb-4.0.3&q=80&w=2000',
+    imgSrc: '/static/images/iconmaker.png',
     repo: 'https://github.com/xi-Rick/icon-maker',
     builtWith: ['Bash', 'Python', 'curl', 'YAD/Zenity'],
     content:
