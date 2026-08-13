@@ -1,14 +1,9 @@
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { type NextRequest, NextResponse } from 'next/server'
+import { requireAdmin } from '~/lib/session'
 
 export async function POST(request: NextRequest) {
   try {
-    const { getUser } = getKindeServerSession()
-    const user = await getUser()
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    await requireAdmin()
 
     const formData = await request.formData()
     const audioFile = formData.get('audio') as File

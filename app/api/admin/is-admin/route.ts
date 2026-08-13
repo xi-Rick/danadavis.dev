@@ -1,25 +1,23 @@
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { NextResponse } from 'next/server'
-import { normalizeEmail } from '~/utils/misc'
+import { isAdminLogin } from '~/lib/github-oauth'
+import { getSessionUser } from '~/lib/session'
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const adminEmail = normalizeEmail(process.env.ADMIN_EMAIL || '')
-    const { isAuthenticated, getUser } = getKindeServerSession()
-    const auth = await isAuthenticated()
-    let isAdmin = false
-    if (auth) {
-      const user = await getUser()
-      if (user?.email) {
-        isAdmin = normalizeEmail(user.email) === adminEmail
-      }
-    }
-    return NextResponse.json({ isAdmin, adminEmail })
+    const user = await getSessionUser()
+    const isAdmin = user !== null && isAdminLogin(user.login)
+    return NextResponse.json({
+      isAdmin,
+      user: user
+        ? {
+            login: user.login,
+            name: user.name,
+            avatarUrl: user.avatarUrl,
+          }
+        : null,
+    })
   } catch (err) {
     console.error('is-admin error', err)
-    return NextResponse.json(
-      { isAdmin: false, adminEmail: '' },
-      { status: 500 },
-    )
+    return NextResponse.json({ isAdmin: false, user: null }, { status: 500 })
   }
 }

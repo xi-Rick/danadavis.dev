@@ -2,16 +2,16 @@ import type { Blog } from 'contentlayer/generated'
 import type { ReactNode } from 'react'
 import { Banner } from '~/components/blog/banner'
 import { BlogMeta } from '~/components/blog/blog-meta'
-import Comments from '~/components/blog/comments'
 import { DiscussOnX } from '~/components/blog/discuss-on-x'
 import { EditOnGithub } from '~/components/blog/edit-on-github'
 import { PostTitle } from '~/components/blog/post-title'
 import { ScrollButtons } from '~/components/blog/scroll-buttons'
 import { TagsList } from '~/components/blog/tags'
+import Comments from '~/components/comments/giscus'
 import { Container } from '~/components/ui/container'
 import { SITE_METADATA } from '~/data/site-metadata'
-import { getCommentsBySlug } from '~/db/queries'
 import type { StatsType } from '~/db/schema'
+import { getGiscusConfig } from '~/lib/giscus'
 import type { CoreContent } from '~/types/data'
 
 interface LayoutProps {
@@ -34,7 +34,7 @@ export async function PostBanner({ content, children }: LayoutProps) {
     filePath,
   } = content
   const postUrl = `${SITE_METADATA.siteUrl}/${type.toLowerCase()}/${slug}`
-  const comments = await getCommentsBySlug(slug)
+  const giscusConfig = getGiscusConfig()
 
   return (
     <Container className="pt-4 lg:pt-12">
@@ -74,13 +74,7 @@ export async function PostBanner({ content, children }: LayoutProps) {
             </div>
             {/* <SocialShare postUrl={postUrl} title={title} /> */}
           </div>
-          <Comments
-            url={postUrl}
-            identifier={slug}
-            title={title}
-            postSlug={slug}
-            comments={comments}
-          />
+          {giscusConfig && <Comments config={giscusConfig} />}
         </div>
       </article>
     </Container>

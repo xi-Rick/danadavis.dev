@@ -2,7 +2,6 @@ import type { Author, Blog, Snippet } from 'contentlayer/generated'
 import type { ReactNode } from 'react'
 import { Banner } from '~/components/blog/banner'
 import { BlogMeta } from '~/components/blog/blog-meta'
-import Comments from '~/components/blog/comments'
 import { PostNav } from '~/components/blog/post-nav'
 import { PostTitle } from '~/components/blog/post-title'
 import { Reactions } from '~/components/blog/reactions'
@@ -10,12 +9,13 @@ import { ScrollButtons } from '~/components/blog/scroll-buttons'
 import { SocialShare } from '~/components/blog/social-share'
 import { TagsList } from '~/components/blog/tags'
 import { TableOfContents } from '~/components/blog/toc'
+import Comments from '~/components/comments/giscus'
 import { Brand, resolveBrandKey } from '~/components/ui/brand'
 import { Container } from '~/components/ui/container'
 import { GradientDivider } from '~/components/ui/gradient-divider'
 import { SITE_METADATA } from '~/data/site-metadata'
-import { getCommentsBySlug } from '~/db/queries'
 import type { StatsType } from '~/db/schema'
+import { getGiscusConfig } from '~/lib/giscus'
 import type { CoreContent } from '~/types/data'
 
 interface LayoutProps {
@@ -48,7 +48,7 @@ export async function PostLayout({
     framework,
   } = content as any
   const postUrl = `${SITE_METADATA.siteUrl}/${type.toLowerCase()}/${slug}`
-  const comments = await getCommentsBySlug(slug)
+  const giscusConfig = getGiscusConfig()
 
   return (
     <Container className="pt-4 lg:pt-12">
@@ -118,13 +118,7 @@ export async function PostLayout({
             prev={prev}
             prevLabel="Previous post"
           />
-          <Comments
-            url={postUrl}
-            identifier={slug}
-            title={title}
-            postSlug={slug}
-            comments={comments}
-          />
+          {giscusConfig && <Comments config={giscusConfig} />}
         </div>
       </article>
     </Container>

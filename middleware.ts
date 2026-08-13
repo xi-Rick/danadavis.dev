@@ -1,65 +1,34 @@
-import { withAuth } from '@kinde-oss/kinde-auth-nextjs/middleware'
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
-import { NextResponse } from 'next/server'
-import { normalizeEmail } from '~/utils/misc'
+import { type NextRequest, NextResponse } from 'next/server'
+import { SESSION_COOKIE, isAdminLogin, verifySession } from '~/lib/github-oauth'
 
-export default withAuth(
-  async function middleware(req) {
-    const res = NextResponse.next()
-    // Add CORS headers for auth routes
-    if (req.nextUrl.pathname.startsWith('/api/auth/')) {
-      res.headers.set('Access-Control-Allow-Origin', '*')
-      res.headers.set(
-        'Access-Control-Allow-Methods',
-        'GET, POST, PUT, DELETE, OPTIONS',
-      )
-      res.headers.set(
-        'Access-Control-Allow-Headers',
-        'Content-Type, Authorization',
-      )
-    }
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
 
-    // Check if user is authenticated and not the admin on admin paths
-    const { getUser } = getKindeServerSession()
-    const user = await getUser()
-    if (
-      req.nextUrl.pathname.startsWith('/admin') &&
-      user &&
-      normalizeEmail(user.email) !==
-        normalizeEmail(process.env.ADMIN_EMAIL || '')
-    ) {
-      // Redirect to logout and home
-      const logoutUrl = new URL('/api/auth/logout', req.url)
-      logoutUrl.searchParams.set('post_logout_redirect_url', '/')
-      return NextResponse.redirect(logoutUrl)
-    }
+  // Auth API routes manage their own cookies — let them through untouched.
+  if (pathname.startsWith('/api/auth/')) {
+    return NextResponse.next()
+  }
 
-    return res
-  },
-  {
-    publicPaths: [
-      '/',
-      '/blog',
-      '/about',
-      '/projects',
-      '/snippets',
-      '/books',
-      '/movies',
-      '/tags',
-      '/api/activities',
-      // Allow Kinde auth routes without requiring a session (login/register/callback)
-      '/api/auth/:path*',
-      '/audio/',
-    ],
-  },
-)
+  const session = verifySession(
+    request.cookies.get(SESSION_COOKIE)?.value,
+    Math.floor(Date.now() / 1000),
+  )
+  const isAdmin = session !== null && isAdminLogin(session.login)
+
+  if (pathname.startsWith('/admin') && !isAdmin) {
+    const loginUrl = new URL('/api/auth/github', request.url)
+    loginUrl.searchParams.set('next', pathname)
+    return NextResponse.redirect(loginUrl)
+  }
+
+  return NextResponse.next()
+}
 
 export const config = {
-  matcher: [
-    // Only run middleware for admin pages and auth API routes. This prevents
-    // the middleware from intercepting unknown (gibberish) paths so Next's
-    // custom 404 can render normally.
-    '/admin/:path*',
-    '/api/auth/:path*',
-  ],
+  // Only run middleware for admin pages and auth API routes. This prevents
+  // the middleware from intercepting unknown (gibberish) paths so Next's
+  // custom 404 can render normally.
+  matcher: ['/admin/:path*', '/api/auth/:path*'],
+  // HMAC verification needs node:crypto, which requires the Node.js runtime.
+  runtime: 'nodejs',
 }

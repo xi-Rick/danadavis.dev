@@ -1,15 +1,10 @@
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { type NextRequest, NextResponse } from 'next/server'
 import { prisma } from '~/db'
+import { requireAdmin } from '~/lib/session'
 
 export async function GET(request: NextRequest) {
   try {
-    const { getUser } = getKindeServerSession()
-    const user = await getUser()
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    await requireAdmin()
 
     const searchParams = request.nextUrl.searchParams
     const showPrivate = searchParams.get('showPrivate') === 'true'
@@ -33,12 +28,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { getUser } = getKindeServerSession()
-    const user = await getUser()
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    await requireAdmin()
 
     const body = await request.json()
     const {

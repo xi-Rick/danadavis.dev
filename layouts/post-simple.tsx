@@ -1,16 +1,16 @@
 import type { Blog, Snippet } from 'contentlayer/generated'
 import type { ReactNode } from 'react'
 import { BlogMeta } from '~/components/blog/blog-meta'
-import Comments from '~/components/blog/comments'
 import { PostTitle } from '~/components/blog/post-title'
 import { ScrollButtons } from '~/components/blog/scroll-buttons'
 import { TagsList } from '~/components/blog/tags'
+import Comments from '~/components/comments/giscus'
 import { Brand, resolveBrandKey } from '~/components/ui/brand'
 import { Container } from '~/components/ui/container'
 import { GradientDivider } from '~/components/ui/gradient-divider'
 import { SITE_METADATA } from '~/data/site-metadata'
-import { getCommentsBySlug } from '~/db/queries'
 import type { StatsType } from '~/db/schema'
+import { getGiscusConfig } from '~/lib/giscus'
 import type { CoreContent } from '~/types/data'
 
 interface PostSimpleProps {
@@ -34,7 +34,7 @@ export async function PostSimple({ content, children }: PostSimpleProps) {
     framework,
   } = content as any
   const postUrl = `${SITE_METADATA.siteUrl}/${type.toLowerCase()}/${slug}`
-  const comments = await getCommentsBySlug(slug)
+  const giscusConfig = getGiscusConfig()
 
   return (
     <Container className="pt-4 lg:pt-12">
@@ -81,13 +81,7 @@ export async function PostSimple({ content, children }: PostSimpleProps) {
             </div>
             <SocialShare postUrl={postUrl} filePath={filePath} title={title} />
           </div> */}
-          <Comments
-            url={postUrl}
-            identifier={slug}
-            title={title}
-            postSlug={slug}
-            comments={comments}
-          />
+          {giscusConfig && <Comments config={giscusConfig} />}
         </div>
       </article>
     </Container>

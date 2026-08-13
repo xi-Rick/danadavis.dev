@@ -1,14 +1,13 @@
 'use client'
 
 import { AdminNavigation } from '@/components/admin/admin-navigation'
-import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { Container } from '~/components/ui/container'
 import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { PageHeader } from '~/components/ui/page-header'
 import { RadiantCard } from '~/components/ui/radiant-card'
+import { useAuth } from '~/hooks/use-auth'
 
 interface SiteSettings {
   id: string
@@ -41,7 +40,7 @@ interface SiteSettings {
 }
 
 export default function SiteSettingsPage() {
-  const { isAuthenticated, isLoading } = useKindeBrowserClient()
+  const { isAuthenticated, isLoading, signIn } = useAuth()
   const [settings, setSettings] = useState<SiteSettings | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -143,9 +142,12 @@ export default function SiteSettingsPage() {
             className="border-b border-gray-200 dark:border-gray-700"
           />
           <div className="mt-8">
-            <LoginLink className="inline-block px-8 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
+            <a
+              href={signIn()}
+              className="inline-block px-8 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+            >
               Login to Admin
-            </LoginLink>
+            </a>
           </div>
         </div>
       </Container>

@@ -2,7 +2,6 @@
 
 import { AdminNavigation } from '@/components/admin/admin-navigation'
 import NovelEditor from '@/components/novel-editor'
-import { LoginLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
@@ -19,10 +18,11 @@ import {
 import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { PageHeader } from '~/components/ui/page-header'
 import { RadiantCard } from '~/components/ui/radiant-card'
+import { useAuth } from '~/hooks/use-auth'
 import { FADE_UP_ANIMATION_VARIANTS } from '~/lib/animations'
 
 export default function EditProjectPage() {
-  const { isAuthenticated, isLoading } = useKindeBrowserClient()
+  const { isAuthenticated, isLoading, signIn } = useAuth()
   const params = useParams()
   const router = useRouter()
   const slug = params.slug as string
@@ -222,9 +222,12 @@ export default function EditProjectPage() {
             className="border-b border-gray-200 dark:border-gray-700"
           />
           <div className="mt-8">
-            <LoginLink className="inline-block px-8 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
+            <a
+              href={signIn()}
+              className="inline-block px-8 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+            >
               Login to Admin
-            </LoginLink>
+            </a>
           </div>
         </div>
       </Container>

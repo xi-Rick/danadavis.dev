@@ -3,7 +3,6 @@
 import { AdminNavigation } from '@/components/admin/admin-navigation'
 import { PostPreviewModal } from '@/components/admin/post-preview-modal'
 import { LazyNovelEditor } from '@/components/lazy/lazy-novel-editor'
-import { LoginLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -11,6 +10,7 @@ import { Container } from '~/components/ui/container'
 import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { PageHeader } from '~/components/ui/page-header'
 import { RadiantCard } from '~/components/ui/radiant-card'
+import { useAuth } from '~/hooks/use-auth'
 import { FADE_UP_ANIMATION_VARIANTS } from '~/lib/animations'
 
 const motion = {
@@ -26,7 +26,7 @@ interface EditPostPageProps {
 }
 
 export default function EditPostPage({ params }: EditPostPageProps) {
-  const { isAuthenticated, isLoading } = useKindeBrowserClient()
+  const { isAuthenticated, isLoading, signIn } = useAuth()
   const router = useRouter()
   const [title, setTitle] = useState('')
   const [summary, setSummary] = useState('')
@@ -154,9 +154,12 @@ export default function EditPostPage({ params }: EditPostPageProps) {
             className="border-b border-gray-200 dark:border-gray-700"
           />
           <div className="mt-8">
-            <LoginLink className="inline-block px-8 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
+            <a
+              href={signIn()}
+              className="inline-block px-8 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+            >
               Login to Admin
-            </LoginLink>
+            </a>
           </div>
         </div>
       </Container>

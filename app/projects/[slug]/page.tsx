@@ -3,8 +3,8 @@ import { ExternalLink, Github } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { remark } from 'remark'
 import html from 'remark-html'
-import Comments from '~/components/blog/comments'
 import { ScrollButtons } from '~/components/blog/scroll-buttons'
+import Comments from '~/components/comments/giscus'
 import { Badge } from '~/components/ui/badge'
 import { Container } from '~/components/ui/container'
 import { GradientDivider } from '~/components/ui/gradient-divider'
@@ -14,8 +14,8 @@ import { PageHeader } from '~/components/ui/page-header'
 import { PROJECTS } from '~/data/projects'
 import { SITE_METADATA } from '~/data/site-metadata'
 import { prisma } from '~/db'
-import { getCommentsBySlug } from '~/db/queries'
 import { isDbEnabled } from '~/lib/data-source'
+import { getGiscusConfig } from '~/lib/giscus'
 import { jsonToMarkdown } from '~/lib/markdown-to-json'
 
 export async function generateStaticParams() {
@@ -179,7 +179,7 @@ export default async function ProjectPage(props: {
   const demoUrl = dbProject?.url ?? staticProject?.links?.[0]?.url ?? null
   const repoUrl = dbProject?.repo ?? staticProject?.repo ?? null
 
-  const comments = await getCommentsBySlug(`project-${params.slug}`)
+  const giscusConfig = getGiscusConfig()
 
   return (
     <Container className="pt-4 lg:pt-12">
@@ -293,14 +293,7 @@ export default async function ProjectPage(props: {
           {/* Comments Section - Full Width */}
           <div className="col-span-full mt-12">
             <GradientDivider className="mb-8" />
-            <Comments
-              url={`${SITE_METADATA.siteUrl}/projects/${params.slug}`}
-              identifier={`project-${params.slug}`}
-              title={title}
-              className="max-w-none"
-              postSlug={`project-${params.slug}`}
-              comments={comments}
-            />
+            {giscusConfig && <Comments config={giscusConfig} />}
           </div>
         </div>
       </div>

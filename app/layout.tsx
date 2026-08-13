@@ -25,7 +25,6 @@ import PageTransitionWrapper from '~/components/ui/page-transition-wrapper'
 import { TiltedGridBackground } from '~/components/ui/tilted-grid-background'
 import { SITE_METADATA } from '~/data/site-metadata'
 import { getSiteSettings } from '~/lib/site-settings'
-import { AuthProvider } from './auth-provider'
 import { ThemeProviders } from './theme-providers'
 
 const FONT_PLAYPEN_SANS = Playpen_Sans({
@@ -234,26 +233,24 @@ export default async function RootLayout({
       >
         <TiltedGridBackground className="inset-x-0 top-0 z-[-1] h-[50vh]" />
         <ThemeProviders>
-          <AuthProvider siteUrl={process.env.SITE_URL || SITE_METADATA.siteUrl}>
-            <AutoPlayAudio />
-            <Ascii />
-            <Analytics />
-            <UmamiAnalytics
-              websiteId={SITE_METADATA.analytics.umamiAnalytics.websiteId}
-            />
-            <KBarSearchProvider configs={SITE_METADATA.search.kbarConfigs}>
-              <Header />
-              <main className="mb-auto grow min-h-screen">
-                <Suspense fallback={<div className="min-h-[4px]" />}>
-                  <PageTransitionWrapper>{children}</PageTransitionWrapper>
-                </Suspense>
-              </main>
-            </KBarSearchProvider>
-            {/* Footer is controlled client-side so admin routes can delay it until
+          <AutoPlayAudio />
+          <Ascii />
+          <Analytics />
+          <UmamiAnalytics
+            websiteId={SITE_METADATA.analytics.umamiAnalytics.websiteId}
+          />
+          <KBarSearchProvider configs={SITE_METADATA.search.kbarConfigs}>
+            <Header />
+            <main className="mb-auto grow min-h-screen">
+              <Suspense fallback={<div className="min-h-[4px]" />}>
+                <PageTransitionWrapper>{children}</PageTransitionWrapper>
+              </Suspense>
+            </main>
+          </KBarSearchProvider>
+          {/* Footer is controlled client-side so admin routes can delay it until
                 the page transition finishes. This prevents the footer from
                 appearing before admin content finishes animating. */}
-            <FooterController />
-          </AuthProvider>
+          <FooterController />
         </ThemeProviders>
         <SpeedInsights />
       </body>

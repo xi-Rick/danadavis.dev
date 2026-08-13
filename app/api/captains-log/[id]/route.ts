@@ -1,6 +1,6 @@
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { type NextRequest, NextResponse } from 'next/server'
 import { prisma } from '~/db'
+import { requireAdmin } from '~/lib/session'
 
 export async function GET(
   request: NextRequest,
@@ -8,12 +8,7 @@ export async function GET(
 ) {
   const params = await context.params
   try {
-    const { getUser } = getKindeServerSession()
-    const user = await getUser()
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    await requireAdmin()
 
     const logEntry = await prisma.captainsLog.findUnique({
       where: { id: params.id },
@@ -39,12 +34,7 @@ export async function PATCH(
 ) {
   const params = await context.params
   try {
-    const { getUser } = getKindeServerSession()
-    const user = await getUser()
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    await requireAdmin()
 
     const body = await request.json()
     const {
@@ -84,12 +74,7 @@ export async function PUT(
 ) {
   const params = await context.params
   try {
-    const { getUser } = getKindeServerSession()
-    const user = await getUser()
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    await requireAdmin()
 
     const body = await request.json()
     const {
@@ -131,12 +116,7 @@ export async function DELETE(
 ) {
   const params = await context.params
   try {
-    const { getUser } = getKindeServerSession()
-    const user = await getUser()
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    await requireAdmin()
 
     await prisma.captainsLog.delete({
       where: { id: params.id },

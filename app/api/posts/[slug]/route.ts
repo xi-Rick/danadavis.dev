@@ -1,5 +1,5 @@
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { type NextRequest, NextResponse } from 'next/server'
+import { requireAdmin } from '~/lib/session'
 import { prisma } from '../../../../db'
 
 export async function GET(
@@ -7,11 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
-    const { isAuthenticated } = getKindeServerSession()
-    if (!(await isAuthenticated())) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
+    await requireAdmin()
     const { slug } = await params
 
     // Query from Prisma database instead of MDX files
@@ -58,11 +54,7 @@ export async function DELETE(
   { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
-    const { isAuthenticated } = getKindeServerSession()
-    if (!(await isAuthenticated())) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
+    await requireAdmin()
     const { slug } = await params
 
     // Delete from Prisma database instead of MDX files

@@ -264,8 +264,11 @@ export function AuthorLayout({}: Props) {
                     Novel.sh AI Editor
                   </LinkPreview>{' '}
                   with{' '}
-                  <LinkPreview url="https://kinde.com/" className="font-bold">
-                    Kinde Auth
+                  <LinkPreview
+                    url="https://docs.github.com/en/apps/oauth-apps"
+                    className="font-bold"
+                  >
+                    GitHub OAuth
                   </LinkPreview>{' '}
                   for secure admin access.
                 </li>

@@ -1,8 +1,6 @@
 'use client'
 
 import { AdminNavigation } from '@/components/admin/admin-navigation'
-import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -11,6 +9,7 @@ import { Container } from '~/components/ui/container'
 import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { PageHeader } from '~/components/ui/page-header'
 import { RadiantCard } from '~/components/ui/radiant-card'
+import { useAuth } from '~/hooks/use-auth'
 import { FADE_UP_ANIMATION_VARIANTS } from '~/lib/animations'
 
 interface Project {
@@ -30,7 +29,7 @@ interface Project {
 }
 
 export default function ManageProjectsPage() {
-  const { isAuthenticated, isLoading } = useKindeBrowserClient()
+  const { isAuthenticated, isLoading, signIn } = useAuth()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -97,9 +96,12 @@ export default function ManageProjectsPage() {
             className="border-b border-gray-200 dark:border-gray-700"
           />
           <div className="mt-8">
-            <LoginLink className="inline-block px-8 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
+            <a
+              href={signIn()}
+              className="inline-block px-8 py-3 accent-bg text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+            >
               Login to Admin
-            </LoginLink>
+            </a>
           </div>
         </div>
       </Container>

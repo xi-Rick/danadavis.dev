@@ -1,6 +1,6 @@
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { type NextRequest, NextResponse } from 'next/server'
 import { prisma } from '~/db'
+import { requireAdmin } from '~/lib/session'
 import { invalidateSiteSettingsCache } from '~/lib/site-settings'
 
 export async function GET() {
@@ -28,12 +28,7 @@ export async function GET() {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { getUser } = getKindeServerSession()
-    const user = await getUser()
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    await requireAdmin()
 
     const body = await request.json()
 

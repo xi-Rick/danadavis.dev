@@ -84,7 +84,7 @@ This blog is forked and heavily customized from <a href="https://github.com/hta2
 - **Themed CMS Admin Panel**: Full-featured dashboard for managing blog posts, media, and comments
   - Add/Edit/Delete posts with <span>Novel.sh</span> rich text editor
   - Post management with filtering and organization
-  - Built-in authentication with Kinde Auth for secure access
+  - Built-in authentication with GitHub OAuth for secure access
   - Comprehensive metadata management (tags, categories, images, canonical URLs)
   - Draft and featured post toggles for content workflow
 - **Captain's Log**: Voice-to-text note-taking system with AI-powered analysis
@@ -92,10 +92,9 @@ This blog is forked and heavily customized from <a href="https://github.com/hta2
   - AI summarization and content type classification (thought, idea, blog-draft, project-idea, note)
   - Automatic tagging and potential identification for blog posts and projects
   - Full editing capabilities with privacy controls and metadata tracking
-- **Comments**: User authentication via Kinde Auth for secure commenting
+- **Comments**: GitHub Discussions-powered commenting via Giscus
   - Threaded conversations with nested replies
-  - Like/reaction system for comment engagement
-  - Markdown support for rich text formatting
+  - Reactions and markdown support built into Giscus
 
 - **<a href="https://novel.sh" target="_blank" rel="noopener" referrerpolicy="origin">Novel.sh Editor</a>**: Advanced AI-powered WYSIWYG editor with support for formatting, links, images, code blocks, and slash commands
 - **Type-Safe Database**: PostgreSQL with Prisma ORM for dynamic content management and querying
@@ -139,29 +138,41 @@ Before deploying to production, you'll need to gather API credentials from vario
 </details>
 
 <details>
-<summary><strong>2. Authentication Setup 🔐</strong></summary>
+<summary><strong>2. Authentication & Comments Setup 🔐</strong></summary>
 
-#### Kinde Auth (Admin Dashboard Protection)
+#### GitHub OAuth (Admin Dashboard Protection)
 
-1. Visit <a href="https://kinde.com" target="_blank" rel="noopener" referrerpolicy="origin">kinde.com</a> and create a free account
-2. Go to **Settings > Applications** in your dashboard
-3. Click **"Create Application"** and name it (e.g., "My Blog")
-4. Copy these credentials:
-   - **Client ID** → `KINDE_CLIENT_ID`
-   - **Client Secret** → `KINDE_CLIENT_SECRET` (click "View Secret")
-5. Go to **Settings > Applications > Details**
-6. Under "Allowed callback URLs," add: `https://yourdomain.com/api/auth/kinde/callback`
-7. Under "Allowed logout redirect URLs," add: `https://yourdomain.com`
+1. Go to <a href="https://github.com/settings/developers" target="_blank" rel="noopener" referrerpolicy="origin">github.com/settings/developers</a> and click **"New OAuth App"**
+2. Create one app for production:
+   - **Application name:** "My Blog"
+   - **Homepage URL:** `https://yourdomain.com`
+   - **Authorization callback URL:** `https://yourdomain.com/api/auth/github/callback`
+3. Create a second app for local development (GitHub allows one callback URL per app):
+   - **Homepage URL:** `http://localhost:3000`
+   - **Authorization callback URL:** `http://localhost:3000/api/auth/github/callback`
+4. Copy each app's **Client ID** and generate a **Client Secret** (shown only once)
+5. Generate a session secret: `openssl rand -hex 32`
 
 **Environment Variables:**
 
-- `KINDE_CLIENT_ID`
-- `KINDE_CLIENT_SECRET`
-- `KINDE_ISSUER_URL` (format: `https://yourdomain.kinde.com`)
-- `KINDE_SITE_URL` (your production URL)
-- `KINDE_POST_LOGOUT_REDIRECT_URL`
-- `KINDE_POST_LOGIN_REDIRECT_URL`
+- `GITHUB_OAUTH_CLIENT_ID` (production app on Vercel, dev app locally)
+- `GITHUB_OAUTH_CLIENT_SECRET`
+- `AUTH_SESSION_SECRET` (same value on Vercel and locally)
+- `AUTH_ADMIN_GITHUB_LOGINS` (comma-separated GitHub logins allowed to access the admin, e.g. `octocat`)
 - `SITE_URL` (your production URL, e.g., `https://danadavis.dev`)
+
+#### Giscus Comments
+
+1. Enable **Discussions** on your repository (Settings > General > Features)
+2. Install the <a href="https://github.com/apps/giscus" target="_blank" rel="noopener" referrerpolicy="origin">Giscus GitHub App</a> for your repo
+3. Configure at <a href="https://giscus.app" target="_blank" rel="noopener" referrerpolicy="origin">giscus.app</a> and copy the generated values
+
+**Environment Variables:**
+
+- `PUBLIC_GISCUS_REPO` (e.g., `octocat/hello-world`)
+- `PUBLIC_GISCUS_REPOSITORY_ID`
+- `PUBLIC_GISCUS_CATEGORY`
+- `PUBLIC_GISCUS_CATEGORY_ID`
 
 </details>
 
@@ -274,16 +285,17 @@ That's it! Your blog is now live. 🎉
 # Database
 DATABASE_URL=
 
-# Admin Configuration
-ADMIN_EMAIL=
+# GitHub OAuth + Session
+GITHUB_OAUTH_CLIENT_ID=
+GITHUB_OAUTH_CLIENT_SECRET=
+AUTH_SESSION_SECRET=
+AUTH_ADMIN_GITHUB_LOGINS=
 
-# Kinde Authentication
-KINDE_CLIENT_ID=
-KINDE_CLIENT_SECRET=
-KINDE_ISSUER_URL=
-KINDE_SITE_URL=
-KINDE_POST_LOGOUT_REDIRECT_URL=
-KINDE_POST_LOGIN_REDIRECT_URL=
+# Giscus Comments
+PUBLIC_GISCUS_REPO=
+PUBLIC_GISCUS_REPOSITORY_ID=
+PUBLIC_GISCUS_CATEGORY=
+PUBLIC_GISCUS_CATEGORY_ID=
 
 # Site Configuration
 SITE_URL=

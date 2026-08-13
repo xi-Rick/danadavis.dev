@@ -1,18 +1,10 @@
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { type NextRequest, NextResponse } from 'next/server'
+import { requireAdmin } from '~/lib/session'
 import { prisma } from '../../../db'
 
 export async function POST(request: NextRequest) {
   try {
-    const { getUser, isAuthenticated } = getKindeServerSession()
-    if (!(await isAuthenticated())) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const user = await getUser()
-    if (!user || !user.id) {
-      return NextResponse.json({ error: 'User not found' }, { status: 401 })
-    }
+    const user = await requireAdmin()
 
     const {
       type,
@@ -65,7 +57,7 @@ export async function POST(request: NextRequest) {
         content,
         draft: draft || false,
         featured: featured || false,
-        authorId: user.id,
+        authorId: String(user.id),
       },
     })
 

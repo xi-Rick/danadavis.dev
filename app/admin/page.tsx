@@ -1,18 +1,16 @@
 'use client'
 
-import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import Link from 'next/link'
 import useSWR from 'swr'
 import { Container } from '~/components/ui/container'
 import { GrowingUnderline } from '~/components/ui/growing-underline'
 import { PageHeader } from '~/components/ui/page-header'
 import { RadiantCard } from '~/components/ui/radiant-card'
+import { useAuth } from '~/hooks/use-auth'
 import { fetcher } from '~/utils/misc'
 
 export default function AdminPage() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { isLoading, isAuthenticated: _isAuthenticated } =
-    useKindeBrowserClient()
+  const { isLoading } = useAuth()
 
   const { data: postsData, isLoading: postsLoading } = useSWR(
     '/api/posts',
