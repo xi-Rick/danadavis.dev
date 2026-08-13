@@ -286,6 +286,8 @@ export default function SiteSettingsPage() {
                       <Image
                         src={settings.faviconPath}
                         alt="Current favicon"
+                        width={32}
+                        height={32}
                         className="w-8 h-8"
                       />
                       <input
