@@ -15,6 +15,8 @@ export const PROJECTS: Project[] = [
         url: 'https://linuxswitch.us/',
       },
     ],
+    content:
+      '<h2 id="introducing-linux-switch-your-all-in-one-guide-to-making-the-move">Introducing Linux Switch: Your All-in-One Guide to Making the Move</h2><p>This Linux Switch application is really important to me. In the span of just a few years—and after a lot of mistakes made by Microsoft, which holds the largest market share of operating systems—we\'ve seen incredible gains in the number of users switching to Linux, including governments. Kudos to Germany and its brave stance on open source software.</p><h4 id="all-the-tools-you-need-to-make-the-switch">All the Tools You Need to Make the Switch</h4><p>My Linux Switch application has all the tools that most people are going to use if they decide to switch to a Linux system. It details the popular distros and desktop environments, window managers, and tiling managers. It even has an interactive terminal—a scary place for a lot of new users, but also where all the magic happens.</p><h4 id="built-with-a-few-unique-touches">Built with a Few Unique Touches</h4><p>The application itself is pretty nice, like the color schemes across the pages. I also built in a few unique pages, like the ricing page, which scrapes GitHub for popular rice across the many Linux distributions that exist, so people can have a nice custom setup if they want, made by trusted developers out there in the open source world.</p>',
   },
   {
     type: 'work',
@@ -23,7 +25,15 @@ export const PROJECTS: Project[] = [
       'A comprehensive REST API providing detailed information about Greek mythology, including gods, titans, monsters, and heroes with 200+ entries and multiple endpoints.',
     imgSrc: '/static/images/greekmythapi.png',
     repo: 'https://github.com/xi-Rick/thegreekmythapi',
-    builtWith: ['Node.js', 'Vercel', 'REST API', 'JSON', 'Express.js'],
+    builtWith: [
+      'NextJS',
+      'Node.js',
+      'Vercel',
+      'REST API',
+      'JSON',
+      'Express.js',
+      'TypeScript',
+    ],
     links: [
       {
         title: 'Demo',
@@ -41,7 +51,7 @@ export const PROJECTS: Project[] = [
     imgSrc: '/static/images/marginmatch.png',
     repo: 'https://github.com/xi-Rick/marginmatch',
     builtWith: [
-      'Next.js 15',
+      'NextJS',
       'React',
       'Framer Motion',
       'Capacitor',
@@ -88,7 +98,7 @@ export const PROJECTS: Project[] = [
       'https://images.unsplash.com/photo-1592564630984-7410f94db184?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDJ8fHJpY2slMjBhbmQlMjBtb3J0eXxlbnwwfHx8fDE2NzM2NzA5NzE&ixlib=rb-4.0.3&q=80&w=2000',
     repo: 'https://github.com/xi-Rick/citadel',
     builtWith: [
-      'Next.js',
+      'NextJS',
       'Next UI',
       'Node.js',
       'OpenAI',
@@ -112,7 +122,7 @@ export const PROJECTS: Project[] = [
       "A political web application that allows users to track their local representatives' voting records and legislation using the Congress.gov API for increased civic engagement.",
     imgSrc: '/static/images/ivotewise.png',
     repo: 'https://github.com/xi-rick/votewise',
-    builtWith: ['Next.js 15', 'React 19', 'TypeScript', 'Congress.gov API'],
+    builtWith: ['NextJS', 'React', 'TypeScript', 'Vercel', 'Congress.gov API'],
     links: [
       {
         title: 'Demo',
@@ -129,7 +139,7 @@ export const PROJECTS: Project[] = [
       'A transparency tool that analyzes SEC filings and corporate data to expose corporate hierarchies and executive compensation, revealing the "wall" of positions designed to protect wealth rather than create value.',
     imgSrc: '/static/images/breakthewall.png',
     repo: 'https://github.com/xi-Rick/break-the-wall',
-    builtWith: ['Next.js', 'TypeScript', 'SEC EDGAR API', 'D3.js', 'Recharts'],
+    builtWith: ['NextJS', 'TypeScript', 'SEC EDGAR API', 'D3.js', 'Recharts'],
     links: [
       {
         title: 'Demo',
@@ -137,7 +147,7 @@ export const PROJECTS: Project[] = [
       },
     ],
     content:
-      'A transparency tool that analyzes SEC filings and corporate data to expose corporate hierarchies and executive compensation, revealing the "wall" of positions designed to protect wealth rather than create value.',
+      '<h2 id="introducing-break-the-wall-exposing-corporate-hierarchies">Introducing Break the Wall: Exposing Corporate Hierarchies</h2><p>Break the Wall is a transparency tool that analyzes SEC filings and corporate data to expose the hierarchies and executive compensation hidden inside public companies. The name comes from the "wall" of positions that companies put in place—layers of roles designed to protect wealth rather than create value.</p><h4 id="pulling-back-the-curtain">Pulling Back the Curtain</h4><p>Most of us look at a company and see a name and a logo. Behind the scenes, there\'s usually a carefully stacked structure of executives and directors, each layer helping to shield those at the top. I built Break the Wall to pull back that curtain and show exactly who holds those positions and how much they\'re being paid.</p><h4 id="making-the-data-visual">Making the Data Visual</h4><p>By digging into SEC filings, the tool maps out corporate hierarchies and makes executive compensation easy to understand. Charts and visualizations built with D3.js and Recharts turn dry financial data into something you can actually see and explore, so the structure of power is clear at a glance.</p>',
   },
   {
     type: 'self',
@@ -146,9 +156,9 @@ export const PROJECTS: Project[] = [
       'Steam Insight is a modern Steam game discovery platform built with Next.js and TypeScript. Explore thousands of games with intelligent search, detailed reviews, rich media, and advanced analytics.',
     imgSrc: '/static/images/steaminsight.png',
     repo: 'https://github.com/xi-Rick/steam-insight',
-    builtWith: ['Next.js', 'TypeScript', 'React', 'Steam API'],
+    builtWith: ['NextJS', 'TypeScript', 'React', 'Steam API'],
     content:
-      'Steam Insight is a modern Steam game discovery platform built with Next.js and TypeScript. Explore thousands of games with intelligent search, detailed reviews, rich media, and advanced analytics.',
+      '<h2 id="introducing-steam-insight-a-fun-steam-discovery-project">Introducing Steam Insight: A Fun Steam Discovery Project</h2><p>Steam Insight is a modern Steam game discovery platform built with Next.js and TypeScript. It lets you explore thousands of games with intelligent search, detailed reviews, rich media, and advanced analytics—all wrapped in a fast, polished interface.</p><h4 id="just-a-fun-project">Just a Fun Project</h4><p>To be honest, this one was just a fun project I wanted to make for Steam. I wanted to play around with the Steam API a bit and have some fun with animations, and Steam Insight was the perfect excuse. It let me experiment with things I enjoy while building something genuinely useful.</p><h4 id="what-you-can-do-with-it">What You Can Do With It</h4><p>Search across thousands of games, dig into detailed reviews, and explore rich media and analytics that give you a better sense of what a game is really like before you decide to play. Whether you\'re hunting for your next big adventure or just browsing to see what\'s out there, Steam Insight makes the whole process a lot more fun.</p>',
   },
   {
     type: 'work',
@@ -158,10 +168,11 @@ export const PROJECTS: Project[] = [
     imgSrc: '/static/images/captainslog.png',
     repo: 'https://github.com/xi-Rick/captains-log',
     builtWith: [
-      'Next.js 14',
+      'NextJS',
       'React 18',
       'shadcn/ui',
       'OpenAI Whisper API',
+      'OpenAI',
       'MongoDB',
       'NextAuth.js',
       'Tailwind CSS',
@@ -180,7 +191,7 @@ export const PROJECTS: Project[] = [
     repo: 'https://github.com/xi-Rick/archgaming',
     builtWith: ['Bash', 'Linux', 'Gaming', 'Automation'],
     content:
-      '🎮 Transform your Arch Linux system into a gaming powerhouse with intelligent hardware detection, performance optimization, and complete gaming stack installation. Supports 8+ Arch derivatives.',
+      '<h2 id="introducing-archgaming-a-powerhouse-tool-for-linux-gamers">Introducing ArchGaming: A Powerhouse Tool for Linux Gamers</h2><p>My ArchGaming script is a powerhouse of a tool for users trying to set up an automated process for everything they need for gaming—from drivers to Steam to emulators. When I needed one, it didn\'t have a number of tools that I thought were pretty necessary for a complete gaming setup, and so I made one.</p><h4 id="covering-a-wide-range-of-gaming-needs">Covering a Wide Range of Gaming Needs</h4><p>It\'s doing pretty well on GitHub and does its best to cover a wide range of gaming needs—from people who want a retro-style setup to those who want enough to pack a punch and play AAA games.</p><h4 id="a-tui-that-stands-out">A TUI That Stands Out</h4><p>I\'m kind of proud of the TUI (text user interface), since a lot of scripts out there don\'t have a pretty menu for users who would prefer one. If you check it out, there\'s not one better.</p>',
   },
   {
     type: 'self',
@@ -190,7 +201,7 @@ export const PROJECTS: Project[] = [
     imgSrc:
       'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfG1hY29zfGVufDB8fHx8MTcwNzM2ODM2NHww&ixlib=rb-4.0.3&q=80&w=2000',
     repo: 'https://github.com/xi-Rick/dock-app-demo',
-    builtWith: ['Next.js', 'TypeScript', 'PWA', 'UI Components'],
+    builtWith: ['NextJS', 'TypeScript', 'PWA', 'UI Components'],
     content:
       "This project showcases a MacOS-inspired Dock component built with NextJS 14's App Router and Cult/UI's libraries. It integrates Progressive Web App (PWA) functionality using @ducanh2912/next-pwa.",
   },
@@ -201,7 +212,7 @@ export const PROJECTS: Project[] = [
       "This starter template demonstrates how to build a functional Next.js 14 application featuring Aceternity UI's Sidebar component. It includes dark mode support and is mobile responsive.",
     imgSrc: '/static/images/sidebarapp.png',
     repo: 'https://github.com/xi-Rick/my-sidebar-app',
-    builtWith: ['Next.js', 'TypeScript', 'Aceternity UI', 'Responsive Design'],
+    builtWith: ['NextJS', 'TypeScript', 'Aceternity UI', 'Responsive Design'],
     content:
       '<div class="space-y-4"><div class="inline-flex items-center rounded-md border text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80 capitalize p-2">web app</div><h1 class="text-3xl font-bold tracking-tighter capitalize sm:text-4xl">Building a Sidebar App with Aceternity UI</h1><p class="text-gray-500 dark:text-gray-400">― A demonstration of building a modern sidebar application using Aceternity UI components with Next.js 14, featuring dark mode toggle and responsive design.</p></div><div class="relative space-y-6" style="opacity: 1; transform: none;"><div class="w-16 h-px bg-foreground/30" style="width: 64px;"></div><div class="project-content" style="opacity: 1;"><h2 id="introduction">Introduction</h2><p>In my recent exploration of React UI libraries, I stumbled upon&nbsp;<a href="https://ui.aceternity.com/" rel="noreferrer"><strong>Aceternity UI</strong></a>. This library is a stunning collection of components that caught my attention, particularly the sidebar component. I decided to create a simple sidebar app demonstration using this library, and I\'m excited to share my experience!</p><h2 id="getting-started-with-nextjs-14">Getting Started with Next.js 14</h2><p>To build my application, I chose&nbsp;<strong>Next.js 14</strong>, a framework I\'m currently learning to master. The sidebar component from Aceternity UI seemed perfect for structuring the layout of my entire application. With its sleek design and functionality, I knew it would serve as a solid foundation.</p><h2 id="structuring-the-application">Structuring the Application</h2><p>Using the sidebar component, I structured a full application that includes several key pages: a&nbsp;<strong>dashboard</strong>,&nbsp;<strong>profile</strong>,&nbsp;<strong>settings</strong>, and a&nbsp;<strong>home page</strong>. The dynamic routing capabilities of Next.js made it easy to navigate between these pages seamlessly.</p><h2 id="implementing-dark-mode-with-tailwind">Implementing Dark Mode with Tailwind</h2><p>To enhance the user experience, I integrated&nbsp;<strong>Tailwind CSS</strong>&nbsp;to implement a dark mode feature. This allows users to toggle between dark mode and light mode effortlessly, adding a modern touch to the application.</p><h2 id="a-bare-bones-demonstration">A Bare Bones Demonstration</h2><p>This project was intended to be a bare bones demonstration of a sidebar application. My goal was to create something that didn\'t take too long to build while still providing a functional and visually appealing layout. It was a great opportunity to get some hands-on experience and practice my skills.</p><h2 id="open-source-contribution">Open Source Contribution</h2><p>One of the best aspects of this project is that it\'s open source! Anyone interested can find the repository, contribute, or even fork it to start their own project. Contributions are always welcome, and I encourage anyone to open a pull request if they have suggestions or improvements.</p><h2 id="conclusion">Conclusion</h2><p>If you\'re looking for unique and stylish components for your web applications, I highly recommend checking out&nbsp;<strong>Aceternity UI</strong>. Their component library is filled with beautiful options that can elevate your projects. I\'m excited about the potential of this library and look forward to using it in future applications!</p><p>Check out my project here : <a href="https://my-sidebar-app.vercel.app/">https://my-sidebar-app.vercel.app/</a><br>Source code: <a href="https://github.com/xi-Rick/my-sidebar-app">https://github.com/xi-Rick/my-sidebar-app</a></p><hr><p>Feel free to explore the <a href="https://ui.aceternity.com/" rel="noreferrer">Aceternity UI</a> library and see how it can enhance your own projects!</p></div></div>',
   },
@@ -213,7 +224,7 @@ export const PROJECTS: Project[] = [
     imgSrc:
       'https://images.unsplash.com/photo-1627398242454-45a1465c2479?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEwfHdlYnNpdGV8ZW58MHx8fHwxNzA3MzY4MzY0fDA&ixlib=rb-4.0.3&q=80&w=2000',
     repo: 'https://github.com/xi-Rick/nextjs14-ghost-frontend',
-    builtWith: ['Next.js', 'TypeScript', 'Ghost CMS', 'Aceternity UI'],
+    builtWith: ['NextJS', 'TypeScript', 'Ghost CMS', 'Aceternity UI'],
     content:
       'Transform your Ghost-powered blog into a visual masterpiece with this state-of-the-art NextJS 14 Ghost Frontend. Built with the robust capabilities of Next.js, TypeScript, and the Aceternity UI library.',
   },
@@ -224,7 +235,7 @@ export const PROJECTS: Project[] = [
       'A robust starter template for Next.js 13 applications featuring NextUI for UI design, MongoDB for data management, and Next-PWA for Progressive Web App capabilities.',
     imgSrc: '/static/images/nextjspages.png',
     repo: 'https://github.com/xi-Rick/nextjs-pages-template',
-    builtWith: ['Next.js', 'TypeScript', 'MongoDB', 'NextUI', 'PWA'],
+    builtWith: ['NextJS', 'TypeScript', 'MongoDB', 'NextUI', 'PWA'],
     content:
       'A robust starter template for Next.js 13 applications featuring NextUI for UI design, MongoDB for data management, and Next-PWA for Progressive Web App capabilities.',
   },
@@ -232,11 +243,11 @@ export const PROJECTS: Project[] = [
     type: 'self',
     title: 'Icon Maker — Linux Icon Theme Packer',
     description:
-      "A CLI tool that downloads icon sets from <a href='https://wallpapers-clan.com/app-icons/'>Wallpapers Clan</a> and automatically packages them into fully compliant, installable Linux icon themes.",
+      'A CLI tool that downloads icon sets from Wallpapers Clan and automatically packages them into fully compliant, installable Linux icon themes.',
     imgSrc: '/static/images/iconmaker.png',
     repo: 'https://github.com/xi-Rick/icon-maker',
     builtWith: ['Bash', 'Python', 'curl', 'YAD/Zenity'],
     content:
-      "Icon Maker is a shell script that builds custom Linux icon themes from downloaded icon packs. Point it at a <a href='https://wallpapers-clan.com/app-icons/'>Wallpapers Clan</a> app icon page (or another source), and it downloads the pack, sorts icons into the correct directory structure with symlinks for every standard size, and optionally applies rounded or circular shape masking. It uses a curated name database (with hash-based fallback) to map icons to the right apps, generates a standards-compliant index.theme file, and installs the finished theme straight to ~/.icons/.",
+      '<h2 id="introducing-icon-maker-a-linux-icon-theme-packer">Introducing Icon Maker: A Linux Icon Theme Packer</h2><p>This is a project that I really wanted to make happen for the Linux users out there. Most of us have learned to deal with—or cope with—just making things work, even though not a whole lot of support is given. While a lot of the icons on the website <a href="https://wallpapers-clan.com/app-icons/" target="_blank" rel="noopener noreferrer">Wallpapers Clan</a> are limited in the number of icons supported and are only for iOS, I understand that this is something that a lot of people want. They\'ll make do with just a good set of icons and try to get by with the rest.</p><h4 id="hash-based-distribution-for-missing-icons">Hash-Based Distribution for Missing Icons</h4><p>One of the unique things about this script is that it uses hash-based distribution to fill in the missing icons that aren\'t supported, or it creates a default one. So every app you have will have an icon made for it when you run the script. It may not be the perfect icon, but that\'s why I also included a picker—so you can pick and choose from the icons available to set one that works better for your needs.</p><h4 id="tested-and-ready-to-be-extended">Tested and Ready to Be Extended</h4><p>I\'ve tested it on the window manager of my preference, on desktop environments, and more, with great feedback. I hope that others see it and take the script even further—you know, add some other features that I probably won\'t add. I only made one comment, and that\'s all I plan on doing.</p>',
   },
 ]

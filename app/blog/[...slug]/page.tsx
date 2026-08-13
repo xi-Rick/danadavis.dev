@@ -9,6 +9,7 @@ import { prisma } from '~/db'
 import { PostBanner } from '~/layouts/post-banner'
 import { PostLayout } from '~/layouts/post-layout'
 import { PostSimple } from '~/layouts/post-simple'
+import { isDbEnabled } from '~/lib/data-source'
 import { allCoreContent, coreContent } from '~/utils/contentlayer'
 import { sortPosts } from '~/utils/misc'
 
@@ -84,13 +85,15 @@ export default async function Page(props: {
   const slug = decodeURI(params.slug.join('/'))
   // Cross-reference Prisma for draft status — DB wins over MDX frontmatter
   let dbDraft: boolean | undefined
-  try {
-    const dbPost = await prisma.post.findUnique({
-      where: { slug },
-      select: { draft: true },
-    })
-    if (dbPost) dbDraft = dbPost.draft
-  } catch {}
+  if (isDbEnabled()) {
+    try {
+      const dbPost = await prisma.post.findUnique({
+        where: { slug },
+        select: { draft: true },
+      })
+      if (dbPost) dbDraft = dbPost.draft
+    } catch {}
+  }
 
   // Use allBlogs directly (unfiltered) so draft posts in DB can still be found
   const allSorted = sortPosts(allBlogs)

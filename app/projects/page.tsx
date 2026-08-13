@@ -4,6 +4,7 @@ import { Container } from '~/components/ui/container'
 import { PageHeader } from '~/components/ui/page-header'
 import { PROJECTS } from '~/data/projects'
 import { prisma } from '~/db'
+import { isDbEnabled } from '~/lib/data-source'
 import type { Project } from '~/types/data'
 import { fetchRepoData } from '~/utils/github'
 
@@ -41,27 +42,29 @@ async function sortProjectsByGithubStars(projects: Project[]) {
 
 export default async function Projects() {
   let projects: Project[] = PROJECTS
-  try {
-    const dbProjects = await prisma.project.findMany({
-      orderBy: { date: 'desc' },
-    })
-    projects = dbProjects.map((p) => ({
-      title: p.title,
-      description: p.description ?? undefined,
-      content: p.content ?? undefined,
-      imgSrc: p.imgSrc,
-      url: p.url ?? undefined,
-      repo: p.repo ?? undefined,
-      builtWith: (p.builtWith as string[]) ?? [],
-      links: (p.links as { title: string; url: string }[]) ?? undefined,
-      type: (p.type as 'work' | 'self') ?? 'self',
-      // color not available in DB by default; keep undefined if not present
-    }))
-  } catch (error) {
-    console.warn(
-      'Failed to load projects from DB, falling back to static list',
-      error,
-    )
+  if (isDbEnabled()) {
+    try {
+      const dbProjects = await prisma.project.findMany({
+        orderBy: { date: 'desc' },
+      })
+      projects = dbProjects.map((p) => ({
+        title: p.title,
+        description: p.description ?? undefined,
+        content: p.content ?? undefined,
+        imgSrc: p.imgSrc,
+        url: p.url ?? undefined,
+        repo: p.repo ?? undefined,
+        builtWith: (p.builtWith as string[]) ?? [],
+        links: (p.links as { title: string; url: string }[]) ?? undefined,
+        type: (p.type as 'work' | 'self') ?? 'self',
+        // color not available in DB by default; keep undefined if not present
+      }))
+    } catch (error) {
+      console.warn(
+        'Failed to load projects from DB, falling back to static list',
+        error,
+      )
+    }
   }
 
   const workProjects = projects.filter((p: Project) => p.type === 'work')

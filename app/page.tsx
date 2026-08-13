@@ -1,6 +1,7 @@
 import { allBlogs, allSnippets } from 'contentlayer/generated'
 import { Home } from '~/components/home-page'
 import { prisma } from '~/db'
+import { isDbEnabled } from '~/lib/data-source'
 import { allCoreContent } from '~/utils/contentlayer'
 import { sortPosts } from '~/utils/misc'
 
@@ -12,14 +13,16 @@ const MAX_SNIPPETS_DISPLAY = 4
 export default async function HomePage() {
   // Cross-reference Prisma for draft status — DB wins over MDX frontmatter
   const dbDraftMap = new Map<string, boolean>()
-  try {
-    const dbPosts = await prisma.post.findMany({
-      select: { slug: true, draft: true },
-    })
-    for (const p of dbPosts) {
-      dbDraftMap.set(p.slug, p.draft)
-    }
-  } catch {}
+  if (isDbEnabled()) {
+    try {
+      const dbPosts = await prisma.post.findMany({
+        select: { slug: true, draft: true },
+      })
+      for (const p of dbPosts) {
+        dbDraftMap.set(p.slug, p.draft)
+      }
+    } catch {}
+  }
 
   const publishedPosts = allCoreContent(sortPosts(allBlogs)).filter((post) => {
     const dbDraft = dbDraftMap.get(post.slug)
@@ -37,10 +40,12 @@ export default async function HomePage() {
     slug: string
     imgSrc: string
   }> = []
-  try {
-    projects = await prisma.project.findMany({ orderBy: { date: 'desc' } })
-  } catch (err) {
-    console.warn('Failed to fetch projects from DB:', err)
+  if (isDbEnabled()) {
+    try {
+      projects = await prisma.project.findMany({ orderBy: { date: 'desc' } })
+    } catch (err) {
+      console.warn('Failed to fetch projects from DB:', err)
+    }
   }
 
   return (

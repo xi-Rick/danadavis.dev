@@ -21,7 +21,6 @@ export function ProjectCard({ project }: { project: (typeof PROJECTS)[0] }) {
     `/api/github?repo=${repo}`,
     fetcher,
   )
-  const lang = repository?.languages?.[0]
 
   return (
     <GradientBorder
@@ -60,8 +59,7 @@ export function ProjectCard({ project }: { project: (typeof PROJECTS)[0] }) {
       </p>
       <div
         className={clsx(
-          'mt-auto flex gap-6 sm:gap-9 md:grid md:gap-0',
-          repository ? 'grid-cols-3' : 'grid-cols-2',
+          'mt-auto flex gap-6 sm:gap-9 md:grid md:grid-cols-2 md:gap-0',
         )}
       >
         {repository ? (
@@ -119,21 +117,6 @@ export function ProjectCard({ project }: { project: (typeof PROJECTS)[0] }) {
             })}
           </div>
         </div>
-        {lang && (
-          <div className="space-y-1.5">
-            <div className="text-xs text-gray-600 dark:text-gray-400">
-              Language
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Brand
-                name={lang.name as keyof typeof BrandsMap}
-                as="icon"
-                className="h-4 w-4"
-              />
-              <span className="font-medium">{lang.name}</span>
-            </div>
-          </div>
-        )}
       </div>
     </GradientBorder>
   )
