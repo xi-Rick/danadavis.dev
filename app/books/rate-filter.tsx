@@ -64,10 +64,10 @@ export function RateFilter({ rate, shelf }: { rate: RateType; shelf: string }) {
           <MenuItems
             className={clsx([
               'absolute right-0 z-50',
-              'mt-2 w-36 origin-top-right rounded-lg text-right shadow-lg',
+              'mt-2 w-40 origin-top-right rounded-lg text-right shadow-lg',
               'bg-white dark:bg-black',
               'ring-1 ring-black/5 focus:outline-hidden',
-              'translate-x-[calc(50%-42px)]',
+              'translate-x-[calc(50%-50px)]',
             ])}
           >
             <div className="space-y-1 p-1">
@@ -99,7 +99,7 @@ export function RateFilter({ rate, shelf }: { rate: RateType; shelf: string }) {
                     >
                       <span>({label})</span>
                       <span>{description}</span>
-                      <Twemoji emoji={emoji} />
+                      <Twemoji emoji={emoji} className="shrink-0" />
                     </Link>
                   )}
                 </MenuItem>
