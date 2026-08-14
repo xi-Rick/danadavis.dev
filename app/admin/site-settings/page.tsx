@@ -36,7 +36,6 @@ interface SiteSettings {
   imdbRatingsList: string | null
   umamiWebsiteId: string | null
   umamiShareUrl: string | null
-  disqusShortname: string | null
 }
 
 export default function SiteSettingsPage() {
@@ -529,22 +528,6 @@ export default function SiteSettingsPage() {
                       }
                       className="themed-input"
                       placeholder="https://cloud.umami.is/share/..."
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="disqusShortname" className="themed-label">
-                      Disqus Shortname (optional)
-                    </label>
-                    <input
-                      id="disqusShortname"
-                      type="text"
-                      value={settings.disqusShortname || ''}
-                      onChange={(e) =>
-                        handleChange('disqusShortname', e.target.value)
-                      }
-                      className="themed-input"
-                      placeholder="your-site-shortname"
                     />
                   </div>
 

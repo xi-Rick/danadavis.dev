@@ -338,7 +338,6 @@ export async function seedSiteSettings() {
         imdbRatingsList: SITE_METADATA.imdbRatingsList,
         umamiWebsiteId: SITE_METADATA.analytics.umamiAnalytics.websiteId,
         umamiShareUrl: SITE_METADATA.analytics.umamiAnalytics.shareUrl,
-        disqusShortname: SITE_METADATA.comments.disqus.shortname,
       },
     })
     console.log('⚙️  Site settings initialized.')

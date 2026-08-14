@@ -38,11 +38,7 @@ export const SITE_METADATA = {
     provider: 'buttondown',
   },
   comments: {
-    // Disqus shortname is loaded from DISQUS_SHORTNAME env var
-    provider: 'disqus',
-    disqus: {
-      shortname: process.env.DISQUS_SHORTNAME || 'danadavis-dev',
-    },
+    provider: 'giscus',
   },
   search: {
     kbarConfigs: {

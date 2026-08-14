@@ -28,7 +28,6 @@ export interface SiteSettings {
   imdbRatingsList: string | null
   umamiWebsiteId: string | null
   umamiShareUrl: string | null
-  disqusShortname: string | null
 }
 
 let cachedSettings: SiteSettings | null = null
@@ -96,7 +95,6 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     imdbRatingsList: SITE_METADATA.imdbRatingsList,
     umamiWebsiteId: SITE_METADATA.analytics.umamiAnalytics.websiteId || null,
     umamiShareUrl: SITE_METADATA.analytics.umamiAnalytics.shareUrl || null,
-    disqusShortname: SITE_METADATA.comments.disqus.shortname || null,
   }
 }
 
