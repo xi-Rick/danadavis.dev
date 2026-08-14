@@ -143,6 +143,36 @@ const voiceCommands = {
   ],
 }
 
+async function getAudioRms(audioBlob: Blob): Promise<number | null> {
+  try {
+    const w = window as typeof window & {
+      webkitAudioContext?: typeof AudioContext
+    }
+    const AudioContextCtor = w.AudioContext || w.webkitAudioContext
+    if (!AudioContextCtor) return null
+
+    const audioContext = new AudioContextCtor()
+    const arrayBuffer = await audioBlob.arrayBuffer()
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
+    await audioContext.close()
+
+    let sum = 0
+    let count = 0
+    for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) {
+      const data = audioBuffer.getChannelData(channel)
+      for (let i = 0; i < data.length; i++) {
+        sum += data[i] * data[i]
+        count += 1
+      }
+    }
+    if (count === 0) return 0
+    return Math.sqrt(sum / count)
+  } catch (error) {
+    console.error('Audio level analysis failed:', error)
+    return null
+  }
+}
+
 export function CaptainsLog() {
   const [isRecording, setIsRecording] = useState(false)
   const [isTranscribing, setIsTranscribing] = useState(false)
@@ -167,6 +197,7 @@ export function CaptainsLog() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const audioChunksRef = useRef<Blob[]>([])
   const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const recordingStartedAtRef = useRef<number>(0)
   const commandRecognitionRef = useRef<SpeechRecognition | null>(null)
   const isRecordingRef = useRef<boolean>(false)
   const hasUserInteracted = useRef<boolean>(false)
@@ -175,6 +206,8 @@ export function CaptainsLog() {
   const restartTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const restartAttemptsRef = useRef<number>(0)
   const isMobileRef = useRef<boolean>(false)
+  const micEpochRef = useRef<number>(0)
+  const lastFinalResultAtRef = useRef<number>(0)
 
   const { toast } = useToast()
 
@@ -363,22 +396,29 @@ export function CaptainsLog() {
     }
   }, [voiceCommandsEnabled, microphonePermission, toast])
 
-  const stopCommandListening = useCallback(() => {
-    if (restartTimeoutRef.current) {
-      clearTimeout(restartTimeoutRef.current)
-      restartTimeoutRef.current = null
-    }
-
-    if (commandRecognitionRef.current && isListeningForCommands) {
-      try {
-        commandRecognitionRef.current.stop()
-        setIsListeningForCommands(false)
-        restartAttemptsRef.current = 0
-      } catch (_e) {
-        console.log('Command recognition already stopped')
+  const stopCommandListening = useCallback(
+    (options?: { forRecording?: boolean }) => {
+      if (restartTimeoutRef.current) {
+        clearTimeout(restartTimeoutRef.current)
+        restartTimeoutRef.current = null
       }
-    }
-  }, [isListeningForCommands])
+
+      if (options?.forRecording) {
+        micEpochRef.current += 1
+      }
+
+      if (commandRecognitionRef.current && isListeningForCommands) {
+        try {
+          commandRecognitionRef.current.stop()
+          setIsListeningForCommands(false)
+          restartAttemptsRef.current = 0
+        } catch (_e) {
+          console.log('Command recognition already stopped')
+        }
+      }
+    },
+    [isListeningForCommands],
+  )
 
   useEffect(() => {
     if (
@@ -398,6 +438,7 @@ export function CaptainsLog() {
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const transcript = event.results[i][0].transcript
           if (event.results[i].isFinal) {
+            lastFinalResultAtRef.current = Date.now()
             handleVoiceCommand(transcript)
           }
         }
@@ -445,19 +486,24 @@ export function CaptainsLog() {
           restartTimeoutRef.current = null
         }
 
+        const justSpoke = Date.now() - lastFinalResultAtRef.current < 15000
+        const maxAttempts = isMobileRef.current ? 3 : 10
         const shouldRestart =
           voiceCommandsEnabled &&
           !isRecordingRef.current &&
           hasUserInteracted.current &&
           microphonePermission === 'granted' &&
-          restartAttemptsRef.current < 10
+          restartAttemptsRef.current < maxAttempts &&
+          (!isMobileRef.current || justSpoke)
 
         if (shouldRestart) {
-          const restartDelay = isMobileRef.current ? 2000 : 1000
+          const restartDelay = isMobileRef.current ? 5000 : 1000
+          const epoch = micEpochRef.current
 
           restartTimeoutRef.current = setTimeout(() => {
             try {
               if (
+                micEpochRef.current === epoch &&
                 voiceCommandsEnabled &&
                 !isRecordingRef.current &&
                 hasUserInteracted.current &&
@@ -466,36 +512,15 @@ export function CaptainsLog() {
                 recognition.start()
                 setIsListeningForCommands(true)
                 restartAttemptsRef.current += 1
-
-                setTimeout(() => {
-                  if (restartAttemptsRef.current > 0) {
-                    restartAttemptsRef.current = 0
-                  }
-                }, 5000)
               }
             } catch (e) {
               const error = e as Error
               if (!error.message.includes('already started')) {
                 console.log('Could not restart recognition:', error.message)
-
-                if (isMobileRef.current && restartAttemptsRef.current < 5) {
-                  const backoffDelay = Math.min(
-                    5000,
-                    1000 * 2 ** restartAttemptsRef.current,
-                  )
-                  restartTimeoutRef.current = setTimeout(() => {
-                    try {
-                      recognition.start()
-                      setIsListeningForCommands(true)
-                    } catch (retryError) {
-                      console.log('Retry failed:', retryError)
-                    }
-                  }, backoffDelay)
-                }
               }
             }
           }, restartDelay)
-        } else if (restartAttemptsRef.current >= 10) {
+        } else if (restartAttemptsRef.current >= maxAttempts) {
           console.log('Voice command restart limit reached, resetting...')
           setTimeout(() => {
             restartAttemptsRef.current = 0
@@ -526,18 +551,17 @@ export function CaptainsLog() {
   const startRecording = useCallback(async () => {
     try {
       hasUserInteracted.current = true
-
-      if (commandRecognitionRef.current && isListeningForCommands) {
-        try {
-          commandRecognitionRef.current.stop()
-          setIsListeningForCommands(false)
-        } catch (e) {
-          console.log('Stopping command recognition:', e)
-        }
-      }
-
       isRecordingRef.current = true
       setIsRecording(true)
+
+      stopCommandListening({ forRecording: true })
+
+      // On Android the mic is exclusive to one API at a time. Give the OS
+      // time to release the microphone after stopping speech recognition,
+      // otherwise the captured track comes out silent.
+      if (isMobileRef.current) {
+        await new Promise((resolve) => setTimeout(resolve, 600))
+      }
 
       const audioConstraints = isMobileRef.current
         ? {
@@ -583,9 +607,11 @@ export function CaptainsLog() {
 
       mediaRecorder.onstop = () => {
         const audioBlob = new Blob(audioChunksRef.current, {
-          type: 'audio/webm',
+          type: mimeType,
         })
-        transcribeAudio(audioBlob)
+        const durationSeconds =
+          (Date.now() - recordingStartedAtRef.current) / 1000
+        transcribeAudio(audioBlob, durationSeconds)
 
         for (const track of stream.getTracks()) {
           track.stop()
@@ -599,7 +625,9 @@ export function CaptainsLog() {
           setTimeout(() => {
             if (!isRecordingRef.current) {
               restartAttemptsRef.current = 0
-              startCommandListening()
+              if (!isMobileRef.current) {
+                startCommandListening()
+              }
             }
           }, restartDelay)
         }
@@ -607,6 +635,7 @@ export function CaptainsLog() {
 
       mediaRecorder.start(1000)
       setRecordingTime(0)
+      recordingStartedAtRef.current = Date.now()
 
       timerRef.current = setInterval(() => {
         setRecordingTime((prev) => prev + 1)
@@ -630,12 +659,7 @@ export function CaptainsLog() {
         variant: 'destructive',
       })
     }
-  }, [
-    voiceCommandsEnabled,
-    startCommandListening,
-    isListeningForCommands,
-    toast,
-  ])
+  }, [voiceCommandsEnabled, startCommandListening, stopCommandListening, toast])
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current) {
@@ -665,10 +689,34 @@ export function CaptainsLog() {
     stopRecordingRef.current = stopRecording
   }, [startRecording, stopRecording])
 
-  const transcribeAudio = async (audioBlob: Blob) => {
+  const transcribeAudio = async (audioBlob: Blob, durationSeconds: number) => {
+    if (durationSeconds < 1.5) {
+      setIsRecording(false)
+      setIsTranscribing(false)
+      setRecordingTime(0)
+      toast({
+        title: 'Recording Too Short',
+        description:
+          'That was under 1.5 seconds. Hold the mic button and speak for a few seconds, Captain.',
+        variant: 'destructive',
+      })
+      return
+    }
+
     setIsTranscribing(true)
 
     try {
+      const rms = await getAudioRms(audioBlob)
+      if (rms !== null && rms < 0.01) {
+        toast({
+          title: 'No Audio Captured',
+          description:
+            'The microphone did not pick up any sound. Make sure the mic is in use and try again, Captain.',
+          variant: 'destructive',
+        })
+        return
+      }
+
       const formData = new FormData()
       formData.append('audio', audioBlob, 'recording.webm')
 
@@ -676,6 +724,18 @@ export function CaptainsLog() {
         method: 'POST',
         body: formData,
       })
+
+      if (response.status === 422) {
+        const data = await response.json()
+        toast({
+          title: 'No Speech Detected',
+          description:
+            data.error ||
+            'Make sure your microphone is on and selected as the input device, Captain.',
+          variant: 'destructive',
+        })
+        return
+      }
 
       if (!response.ok) {
         throw new Error('Transcription failed')

@@ -242,17 +242,16 @@ This will redirect to your callback page with an authorization code. Use this to
 </details>
 
 <details>
-<summary><strong>6. OpenAI API 🤖</strong></summary>
+<summary><strong>6. Groq API ⚡</strong></summary>
 
-#### OpenAI API Key (For Captain's Log Transcription)
+#### Groq API Key (For Captain's Log Transcription)
 
-1. Go to <a href="https://platform.openai.com" target="_blank" rel="noopener" referrerpolicy="origin">platform.openai.com</a> and sign in or create an account
-2. Navigate to **API Keys** in your account settings
-3. Click **"Create new secret key"**
-4. Name it "My Blog's - Captain's Log" and copy the key immediately (it won't show again)
-5. Note: You'll need to add credit to your OpenAI account to use the Whisper API for transcription
+1. Go to <a href="https://console.groq.com/keys" target="_blank" rel="noopener" referrerpolicy="origin">console.groq.com/keys</a> and sign in or create a free account
+2. Click **"Create API Key"**
+3. Name it "My Blog's - Captain's Log" and copy the key immediately (it won't show again)
+4. Groq's free tier covers transcription (`whisper-large-v3-turbo`) and analysis (`llama-3.3-70b-versatile`) — no credit card required
 
-**Environment Variable:** `OPENAI_API_KEY`
+**Environment Variable:** `GROQ_API_KEY`
 
 </details>
 
@@ -273,7 +272,7 @@ This will redirect to your callback page with an authorization code. Use this to
 
 ### One Click Deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/xi-Rick/danadavis.dev&env=DATABASE_URL,ADMIN_EMAIL,KINDE_CLIENT_ID,KINDE_CLIENT_SECRET,KINDE_ISSUER_URL,KINDE_SITE_URL,KINDE_POST_LOGOUT_REDIRECT_URL,KINDE_POST_LOGIN_REDIRECT_URL,SITE_URL,GITHUB_API_TOKEN,SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET,SPOTIFY_REFRESH_TOKEN,NEXT_UMAMI_ID,OPENAI_API_KEY&envDescription=Environment%20variables%20required%20to%20run%20the%20Dana%20Davis%20Dev%20Blog)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/xi-Rick/danadavis.dev&env=DATABASE_URL,ADMIN_EMAIL,KINDE_CLIENT_ID,KINDE_CLIENT_SECRET,KINDE_ISSUER_URL,KINDE_SITE_URL,KINDE_POST_LOGOUT_REDIRECT_URL,KINDE_POST_LOGIN_REDIRECT_URL,SITE_URL,GITHUB_API_TOKEN,SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET,SPOTIFY_REFRESH_TOKEN,NEXT_UMAMI_ID,GROQ_API_KEY&envDescription=Environment%20variables%20required%20to%20run%20the%20Dana%20Davis%20Dev%20Blog)
 
 That's it! Your blog is now live. 🎉
 
@@ -311,8 +310,8 @@ SPOTIFY_REFRESH_TOKEN=
 # Analytics
 NEXT_UMAMI_ID=
 
-# OpenAI
-OPENAI_API_KEY=
+# Groq
+GROQ_API_KEY=
 
 # Stripe (Optional)
 STRIPE_SECRET_KEY=

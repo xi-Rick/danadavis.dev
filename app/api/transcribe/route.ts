@@ -1,6 +1,23 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { requireAdmin } from '~/lib/session'
 
+const SILENCE_HALLUCINATIONS = new Set([
+  'thank you',
+  'thank you for watching',
+  'you',
+  'the',
+])
+
+function isDetectableSpeech(text: string) {
+  if (!text) return false
+  const normalized = text
+    .toLowerCase()
+    .replace(/[^\w\s]|_/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  return normalized.length > 0 && !SILENCE_HALLUCINATIONS.has(normalized)
+}
+
 export async function POST(request: NextRequest) {
   try {
     await requireAdmin()
@@ -12,19 +29,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No audio file' }, { status: 400 })
     }
 
-    // Call OpenAI Whisper API
-    const openaiFormData = new FormData()
-    openaiFormData.append('file', audioFile)
-    openaiFormData.append('model', 'whisper-1')
+    // Call Groq Whisper API (free tier)
+    const groqFormData = new FormData()
+    groqFormData.append('file', audioFile)
+    groqFormData.append('model', 'whisper-large-v3-turbo')
 
     const transcriptionResponse = await fetch(
-      'https://api.openai.com/v1/audio/transcriptions',
+      'https://api.groq.com/openai/v1/audio/transcriptions',
       {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
         },
-        body: openaiFormData,
+        body: groqFormData,
       },
     )
 
@@ -33,19 +50,29 @@ export async function POST(request: NextRequest) {
     }
 
     const transcriptionData = await transcriptionResponse.json()
-    const transcription = transcriptionData.text
+    const transcription = (transcriptionData.text || '').trim()
 
-    // Analyze the transcription with GPT
+    if (!isDetectableSpeech(transcription)) {
+      return NextResponse.json(
+        {
+          error:
+            'No speech detected. Make sure your microphone is on and selected as the input device, Captain.',
+        },
+        { status: 422 },
+      )
+    }
+
+    // Analyze the transcription with Groq
     const analysisResponse = await fetch(
-      'https://api.openai.com/v1/chat/completions',
+      'https://api.groq.com/openai/v1/chat/completions',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
         },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
+          model: 'llama-3.3-70b-versatile',
           messages: [
             {
               role: 'system',
